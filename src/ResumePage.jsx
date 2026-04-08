@@ -74,7 +74,7 @@ const PANEL_CONTENT = [
   }
 ];
 
-export default function ResumePage({ src }) {
+export default function ResumePage({ src, poster }) {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -98,9 +98,9 @@ export default function ResumePage({ src }) {
 
   return (
     <div id="menu-screen">
-      <video src={src} autoPlay loop muted playsInline />
+      <video src={src} poster={poster} autoPlay loop muted playsInline />
       <div className="resume-entry-mask" aria-hidden="true">
-        <video className="resume-entry-video" src={src} autoPlay loop muted playsInline />
+        <video className="resume-entry-video" src={src} poster={poster} autoPlay loop muted playsInline />
       </div>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&display=swap');

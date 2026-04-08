@@ -4,6 +4,7 @@ import char1 from "./assets/char1.png";
 import char2 from "./assets/char2.png";
 import char3 from "./assets/char3.png";
 import bgVideo from "./assets/main3.mp4";
+import bgPoster from "./assets/main3_poster.jpg";
 import newsign from "./assets/newsign.png";
 import icon1 from "./assets/icon1.png";
 import icon2 from "./assets/icon2.png";
@@ -121,7 +122,7 @@ export default function Certs() {
 
   return (
     <div id="menu-screen">
-      <video src={bgVideo} autoPlay loop muted playsInline />
+      <video src={bgVideo} poster={bgPoster} autoPlay loop muted playsInline />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&display=swap');
 
