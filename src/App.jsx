@@ -64,10 +64,10 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <>
+    <main>
       <TouchNav />
       <WelcomeModal />
       <AnimatedRoutes />
-    </>
+    </main>
   );
 }

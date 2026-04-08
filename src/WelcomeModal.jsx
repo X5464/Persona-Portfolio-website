@@ -181,7 +181,7 @@ export default function WelcomeModal() {
           font-size: 12.5px;
           font-weight: 600;
           letter-spacing: 0.5px;
-          color: #ff7a8a;
+          color: #ffb8c1;
           line-height: 1.5;
         }
 
@@ -264,7 +264,7 @@ export default function WelcomeModal() {
         .wm-btn-hint {
           font-family: 'Montserrat', sans-serif;
           font-size: 11px;
-          color: rgba(255,255,255,0.35);
+          color: rgba(255,255,255,0.7);
           letter-spacing: 1px;
           text-align: center;
           margin-top: 8px;
