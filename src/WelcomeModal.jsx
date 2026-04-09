@@ -312,28 +312,7 @@ export default function WelcomeModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            <div className="wm-section-title">// MOBILE / TOUCH CONTROLS</div>
 
-            <div className="wm-keys">
-              <div className="wm-key-row">
-                <div className="wm-keys-group">
-                  <span className="wm-key">↕</span>
-                </div>
-                <span className="wm-key-desc"><strong>Swipe Up/Down</strong> to navigate items</span>
-              </div>
-              <div className="wm-key-row">
-                <div className="wm-keys-group">
-                  <span className="wm-key">↔</span>
-                </div>
-                <span className="wm-key-desc"><strong>Swipe Left</strong> to go back · <strong>Right</strong> to enter panel</span>
-              </div>
-              <div className="wm-key-row">
-                <div className="wm-keys-group">
-                  <span className="wm-key">TAP</span>
-                </div>
-                <span className="wm-key-desc"><strong>Tap</strong> to confirm / open selected item</span>
-              </div>
-            </div>
 
             <div className="wm-divider" />
             <div style={{ textAlign: "center" }}>
