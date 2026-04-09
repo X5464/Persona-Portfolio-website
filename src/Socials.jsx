@@ -407,7 +407,7 @@ export default function Socials() {
         }
         .sc-right-nav .sc-nav-btn {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 100px;
+          font-size: clamp(40px, 8vw, 84px);
           letter-spacing: 3px;
           line-height: 1;
           user-select: none;
