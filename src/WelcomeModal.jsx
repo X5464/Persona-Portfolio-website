@@ -38,7 +38,7 @@ export default function WelcomeModal({ isOpen, onClose }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600&display=swap');
+        /* Fonts are now in index.html */
 
         .wm-overlay {
           position: fixed;

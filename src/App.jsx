@@ -21,17 +21,13 @@ function MenuScreen({ onOpenWelcome }) {
 
   return (
     <div id="menu-screen">
-      <div 
-        dangerouslySetInnerHTML={{ __html: `
-          <video 
-            src="${menuVideo}" 
-            poster="${menuPoster}"
-            autoplay 
-            loop 
-            muted 
-            playsinline
-          ></video>
-        `}} 
+      <video 
+        src={menuVideo} 
+        poster={menuPoster}
+        autoPlay 
+        loop 
+        muted 
+        playsInline
       />
       <div className="menu-top-bar">
         <button className="menu-welcome-btn" onClick={onOpenWelcome}>
