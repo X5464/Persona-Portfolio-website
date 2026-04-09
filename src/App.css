@@ -29,3 +29,44 @@ body {
   height: 100vh;
 }
 /* Sync refresh */
+
+.menu-top-bar {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  z-index: 1000;
+  pointer-events: all;
+  display: flex;
+  gap: 15px;
+}
+
+.menu-welcome-btn {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #fff;
+  background: rgba(196, 0, 26, 0.4);
+  border: 1px solid rgba(255, 184, 193, 0.3);
+  padding: 6px 20px;
+  cursor: pointer;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+.menu-welcome-btn:hover {
+  background: #c4001a;
+  transform: scale(1.05) skewX(-2deg);
+  box-shadow: 0 0 15px rgba(196, 0, 26, 0.4);
+}
+
+@media (max-width: 768px) {
+  .menu-top-bar {
+    top: 10px;
+    right: 10px;
+  }
+  .menu-welcome-btn {
+    font-size: 14px;
+    padding: 4px 12px;
+  }
+}

@@ -553,10 +553,10 @@ export default function Certs() {
         }
 
         .sc-back-btn {
-          position: absolute;
+          position: fixed;
           bottom: 40px;
           left: 40px;
-          z-index: 100;
+          z-index: 9999;
           color: white;
           font-family: 'Bebas Neue', sans-serif;
           font-size: 24px;
@@ -564,48 +564,43 @@ export default function Certs() {
           display: flex;
           align-items: center;
           gap: 10px;
-          background: rgba(0,0,0,0.5);
+          background: rgba(0,0,0,0.6);
           padding: 5px 15px;
           clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
           transition: all 0.2s;
           pointer-events: all;
+          border: 1px solid rgba(255,255,255,0.1);
         }
         .sc-back-btn:hover {
           background: #c4001a;
           transform: scale(1.1) skewX(-5deg);
         }
+
       `}</style>
 
-      <div 
-        className="sc-back-btn" 
-        onClick={(e) => {
-          e.stopPropagation();
-          if (focus === "right") setFocus("left");
-          else navigate('/');
-        }}
-      >
-        <span>◄</span> BACK
-      </div>
 
       <div className="ct-root" role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
             className={`ct-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onClick={() => {
-              if (active !== i) {
-                setActive(i);
-                setFocus("left");
-              } else if (focus === "left") {
-                setFocus("right");
-                setActiveInfoBar(0);
-                setScrollOffset(0);
-              }
-            }}
             onMouseEnter={() => setActive(i)}
           >
             <div className="ct-bar-red" />
-            <div className="ct-bar">
+            <div 
+              className="ct-bar"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (active !== i) {
+                  setActive(i);
+                  setFocus("left");
+                } else if (focus === "left") {
+                  setFocus("right");
+                  setActiveInfoBar(0);
+                  setScrollOffset(0);
+                }
+              }}
+            >
               <img className="ct-char" src={CHARS[i]} alt="" />
               <div className="ct-bar-fill" />
               <div className="ct-bar-content">
@@ -711,6 +706,16 @@ export default function Certs() {
         <div className="ct-footer-row"><span className="ct-footer-key">↑↓</span><span>SELECT</span></div>
         <div className="ct-footer-row"><span className="ct-footer-key">↵</span><span>OPEN PDF</span></div>
         <div className="ct-footer-row"><span className="ct-footer-key">ESC</span><span>BACK</span></div>
+      </div>
+      <div 
+        className="sc-back-btn" 
+        onClick={(e) => {
+          e.stopPropagation();
+          if (focus === "right") setFocus("left");
+          else navigate('/');
+        }}
+      >
+        <span>◄</span> BACK
       </div>
     </div>
   );

@@ -479,10 +479,10 @@ export default function ResumePage({ src, poster }) {
         }
 
         .sc-back-btn {
-          position: absolute;
+          position: fixed;
           bottom: 40px;
           left: 40px;
-          z-index: 100;
+          z-index: 9999;
           color: white;
           font-family: 'Bebas Neue', sans-serif;
           font-size: 24px;
@@ -490,27 +490,21 @@ export default function ResumePage({ src, poster }) {
           display: flex;
           align-items: center;
           gap: 10px;
-          background: rgba(0,0,0,0.5);
+          background: rgba(0,0,0,0.6);
           padding: 5px 15px;
           clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
           transition: all 0.2s;
           pointer-events: all;
+          border: 1px solid rgba(255,255,255,0.1);
         }
         .sc-back-btn:hover {
           background: #c4001a;
           transform: scale(1.1) skewX(-5deg);
         }
+
       `}</style>
 
-      <div 
-        className="sc-back-btn" 
-        onClick={(e) => {
-          e.stopPropagation();
-          navigate('/');
-        }}
-      >
-        <span>◄</span> BACK
-      </div>
+
 
       <div className="resume-overlay">
         <div className="resume-stack">
@@ -587,6 +581,15 @@ export default function ResumePage({ src, poster }) {
           </div>
         )}
 
+      </div>
+      <div 
+        className="sc-back-btn" 
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate('/');
+        }}
+      >
+        <span>◄</span> BACK
       </div>
     </div>
   );

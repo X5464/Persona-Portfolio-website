@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
 
-export default function WelcomeModal() {
-  const [visible, setVisible] = useState(false);
+export default function WelcomeModal({ isOpen, onClose }) {
   const [animOut, setAnimOut] = useState(false);
 
   useEffect(() => {
-    const dismissed = sessionStorage.getItem("welcome-dismissed");
-    if (!dismissed) setVisible(true);
-  }, []);
+    if (isOpen) setAnimOut(false);
+  }, [isOpen]);
 
   const dismiss = () => {
     setAnimOut(true);
     setTimeout(() => {
-      setVisible(false);
-      setAnimOut(false);
-      sessionStorage.setItem("welcome-dismissed", "1");
+      onClose();
     }, 400);
   };
 
@@ -25,7 +21,7 @@ export default function WelcomeModal() {
   };
 
   useEffect(() => {
-    if (!visible) return;
+    if (!isOpen) return;
     const onKey = (e) => {
       if (e.key === "Enter" || e.key === "Escape") {
         e.preventDefault();
@@ -33,40 +29,11 @@ export default function WelcomeModal() {
         dismiss();
       }
     };
-    window.addEventListener("keydown", onKey, true); // capture phase so it fires first
+    window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
-  }, [visible]);
+  }, [isOpen]);
 
-  if (!visible) return (
-    <button className="wm-trigger" onClick={reopen} title="Navigation Guide">
-      <style>{`
-        .wm-trigger {
-          position: fixed;
-          top: 14px;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 9000;
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 13px;
-          letter-spacing: 2px;
-          color: rgba(255,255,255,0.75);
-          background: rgba(8, 16, 46, 0.85);
-          border: 1px solid rgba(145,245,255,0.25);
-          border-bottom: 2px solid #c4001a;
-          padding: 5px 16px;
-          cursor: pointer;
-          clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-          transition: color 0.2s ease, background 0.2s ease;
-          backdrop-filter: blur(4px);
-        }
-        .wm-trigger:hover {
-          color: #fff;
-          background: rgba(196,0,26,0.6);
-        }
-      `}</style>
-      ? CONTROLS
-    </button>
-  );
+  if (!isOpen && !animOut) return null;
 
   return (
     <>
