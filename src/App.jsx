@@ -16,21 +16,18 @@ import WelcomeModal from './WelcomeModal'
 import TouchNav from './TouchNav'
 import './App.css'
 
-function MenuScreen({ onOpenWelcome }) {
+function MenuScreen() {
   const navigate = useNavigate()
 
   return (
     <div id="menu-screen">
       <video 
         src={menuVideo} 
-        poster={menuPoster}
         autoPlay 
         loop 
         muted 
         playsInline
-        disablePictureInPicture
-        controlsList="nodownload"
-        onCanPlay={(e) => e.currentTarget.play()}
+        preload="auto"
       />
 
       <P3Menu onNavigate={(page) => navigate(`/${page}`)} />
@@ -67,13 +64,22 @@ export default function App() {
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
 
   useEffect(() => {
-    const dismissed = sessionStorage.getItem("welcome-dismissed");
-    if (!dismissed) setIsWelcomeOpen(true);
+    try {
+      const dismissed = sessionStorage.getItem("welcome-dismissed");
+      if (!dismissed) setIsWelcomeOpen(true);
+    } catch (e) {
+      console.warn("Storage access failed:", e);
+      setIsWelcomeOpen(true); // Default to showing if we can't check
+    }
   }, []);
 
   const handleCloseWelcome = () => {
     setIsWelcomeOpen(false);
-    sessionStorage.setItem("welcome-dismissed", "1");
+    try {
+      sessionStorage.setItem("welcome-dismissed", "1");
+    } catch (e) {
+      console.warn("Storage write failed:", e);
+    }
   };
 
   const handleOpenWelcome = () => {

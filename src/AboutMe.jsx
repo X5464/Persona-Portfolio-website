@@ -126,14 +126,11 @@ export default function AboutMe() {
     <div id="menu-screen">
       <video 
         src={bgVideo} 
-        poster={bgPoster} 
         autoPlay 
         loop 
         muted 
         playsInline 
-        disablePictureInPicture
-        controlsList="nodownload"
-        onCanPlay={(e) => e.currentTarget.play()}
+        preload="auto"
       />
       {revealed && <div key={`dim-${active}`} className="sc-dim" />}
       {revealed && (
@@ -177,7 +174,7 @@ export default function AboutMe() {
           position: absolute;
           inset: 0;
           z-index: 6;
-          pointer-events: none;
+          pointer-events: all;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -776,6 +773,7 @@ export default function AboutMe() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
+            onMouseEnter={() => { if (!revealed) setActive(i); }}
           >
             <div className="sc-bar-red" />
             <div 

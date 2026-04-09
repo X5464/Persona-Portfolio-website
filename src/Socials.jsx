@@ -113,14 +113,11 @@ export default function Socials() {
     <div id="menu-screen">
       <video 
         src={bgVideo} 
-        poster={bgPoster} 
         autoPlay 
         loop 
         muted 
         playsInline 
-        disablePictureInPicture
-        controlsList="nodownload"
-        onCanPlay={(e) => e.currentTarget.play()}
+        preload="auto"
       />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,700;1,700&display=swap');
@@ -129,7 +126,7 @@ export default function Socials() {
           position: absolute;
           inset: 0;
           z-index: 10;
-          pointer-events: none;
+          pointer-events: all;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -637,6 +634,7 @@ export default function Socials() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
+            onMouseEnter={() => { if (focus === "left") setActive(i); }}
           >
             <div className="sc-bar-red" />
             <div 
