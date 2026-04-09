@@ -184,7 +184,8 @@ export default function AboutMe() {
           transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .sc-root.revealed {
-          transform: translateX(-8vw);
+          transform: translateX(-35vw);
+          opacity: 0.25;
         }
 
         .sc-dim {
@@ -251,7 +252,7 @@ export default function AboutMe() {
         .sc-main-portrait-shell {
           position: absolute;
           top: 0;
-          right: -3vw;
+          right: -8vw;
           z-index: 13;
           pointer-events: all;
           width: 43vw;
@@ -273,6 +274,10 @@ export default function AboutMe() {
           left: -6vw;
           width: 88vw;
           height: 56vh;
+          top: 38vh;
+          left: 12vw;
+          width: 72vw;
+          height: 60vh;
           z-index: 12;
           pointer-events: all;
           background:
@@ -420,12 +425,12 @@ export default function AboutMe() {
         .sc-right-nav {
           position: absolute;
           top: 1.5vh;
-          left: 4vw;
+          left: 16vw;
           display: flex;
           align-items: center;
           gap: 6px;
           pointer-events: all;
-          z-index: 14;
+          z-index: 1010;
           transform: translateX(-40px) rotate(-20deg);
           transform-origin: left bottom;
           animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
