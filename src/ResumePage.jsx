@@ -63,14 +63,13 @@ const PANEL_CONTENT = [
     rows: [
       { index: "01", title: "InLighnX (Offensive Cyber Intern)", status: "COMPLETE" },
       { index: "02", title: "Elevate Labs (Cyber Intern)", status: "COMPLETE" },
-      { index: "03", title: "AIG, MASTERCARD, TATA GROUP & DELOITTE (Cybersecurity)", status: "COMPLETE" },
+      { index: "03", title: "Forage: AIG, MASTERCARD, TATA GROUP & DELOITTE (Cybersecurity)", status: "COMPLETE" },
       { index: "04", title: "Teachnook / IIT Roorkee (Cyber Intern)", status: "COMPLETE" },
       { index: "05", title: "EDU-VERSITY & IIT GUWAHATI (Cyber Intern)", status: "COMPLETE" }
     ],
     details: [
       "* Over 4 active deployments in professional operational environments.",
       "Transitioned offensive hacking techniques into rigorous software triage, security auditing, and live threat feed management.",
-      "Architected cohesive web suites and custom Python tools for enterprise use."
     ]
   }
 ];
