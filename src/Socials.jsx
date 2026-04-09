@@ -639,7 +639,7 @@ export default function Socials() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onMouseEnter={() => { if (focus === "left") setActive(i); }}
+            onMouseEnter={() => { setActive(i); setFocus("left"); }}
           >
             <div className="sc-bar-red" />
             <div 

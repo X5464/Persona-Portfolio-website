@@ -626,12 +626,12 @@ export default function Certs() {
           <div
             key={item.id}
             className={`ct-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onMouseEnter={() => { if (focus === "left") setActive(i); }}
+            onMouseEnter={() => { setActive(i); setFocus("left"); }}
           >
             <div className="ct-bar-red" />
             <div 
               className="ct-bar"
-              onMouseEnter={() => { if (focus === "left") setActive(i); }}
+              onMouseEnter={() => { setActive(i); setFocus("left"); }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (active !== i) {
