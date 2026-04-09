@@ -181,14 +181,17 @@ export default function Certs() {
           position: absolute;
           inset: 0;
           z-index: 10;
-          pointer-events: all;
+          pointer-events: none;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
           justify-content: center;
           gap: 6px;
           padding-left: 0;
+          transition: opacity 0.3s ease;
         }
+        .ct-root.dimmed { opacity: 0.35; pointer-events: none; }
+
 
         .ct-bar-outer {
           position: relative;
@@ -605,8 +608,10 @@ export default function Certs() {
           padding: 5px 15px;
           clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
           transition: all 0.2s;
+          z-index: 9999;
           pointer-events: all;
           border: 1px solid rgba(255,255,255,0.1);
+
         }
         .sc-back-btn:hover {
           background: #c4001a;
@@ -616,7 +621,7 @@ export default function Certs() {
       `}</style>
 
 
-      <div className="ct-root" role="navigation">
+      <div className={`ct-root${focus === "right" ? " dimmed" : ""}`} role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
@@ -682,8 +687,9 @@ export default function Certs() {
         const thumbTop = Math.round((scrollOffset / totalBars) * (VISIBLE * 55));
         const hasMore = totalBars > VISIBLE;
         return mounted ? (
-          <>
+          <div className={`ct-info-panel-container${focus === "left" ? " dimmed" : ""}`}>
             {hasMore && (
+
               <>
                 <div className="ct-scroll-track">
                   <div className="ct-scroll-thumb" style={{ top: `${thumbTop}px`, height: `${thumbH}px` }} />

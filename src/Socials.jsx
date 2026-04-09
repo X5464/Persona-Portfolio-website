@@ -126,14 +126,17 @@ export default function Socials() {
           position: absolute;
           inset: 0;
           z-index: 10;
-          pointer-events: all;
+          pointer-events: none;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
           justify-content: center;
           gap: 6px;
           padding-left: 0;
+          transition: opacity 0.3s ease;
         }
+        .sc-root.dimmed { opacity: 0.35; pointer-events: none; }
+
 
         /* ── Each bar ── */
         .sc-bar {
@@ -618,8 +621,10 @@ export default function Socials() {
           padding: 5px 15px;
           clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
           transition: all 0.2s;
+          z-index: 9999;
           pointer-events: all;
           border: 1px solid rgba(255,255,255,0.1);
+
         }
         .sc-back-btn:hover {
           background: #c4001a;
@@ -629,7 +634,7 @@ export default function Socials() {
       `}</style>
 
 
-      <div className="sc-root" role="navigation">
+      <div className={`sc-root${focus === "right" ? " dimmed" : ""}`} role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
@@ -681,18 +686,21 @@ export default function Socials() {
       </div>
 
       {mounted && (
-        <div className="sc-right-nav" key={active}>
-          <span className="sc-nav-arrow left">◄</span>
-          <span className="sc-nav-btn">LB</span>
-          <span className="sc-nav-label">{ITEMS[active].label}</span>
-          <span className="sc-nav-btn">RB</span>
-          <span className="sc-nav-arrow right">►</span>
+        <div className={`sc-info-panel-container${focus === "left" ? " dimmed" : ""}`}>
+          <div className="sc-right-nav" key={active}>
+            <span className="sc-nav-arrow left">◄</span>
+            <span className="sc-nav-btn">LB</span>
+            <span className="sc-nav-label">{ITEMS[active].label}</span>
+            <span className="sc-nav-btn">RB</span>
+            <span className="sc-nav-arrow right">►</span>
+          </div>
         </div>
       )}
 
+
       {mounted && Array.from({ length: ITEMS[active].bars }).map((_, i) => (
         <div
-          className={`sc-info-bar-wrap${activeInfoBar === i ? " selected" : ""}`}
+          className={`sc-info-bar-wrap${activeInfoBar === i ? " selected" : ""}${focus === "left" ? " dimmed" : ""}`}
           key={`bar-${active}-${i}`}
           style={{ top: `${155 + i * 52}px`, animationDelay: `${i * 50}ms` }}
           onClick={() => {
@@ -700,7 +708,7 @@ export default function Socials() {
             const link = ITEMS[active].links[i]?.href;
             if (link) window.open(link, "_blank");
           }}
-          onMouseEnter={() => setActiveInfoBar(i)}
+          onMouseEnter={() => { if (focus === "right") setActiveInfoBar(i); }}
         >
           {ITEMS[active].newBars.includes(i) && (
             <img className="sc-info-bar-new" src={newsign} alt="" />
@@ -714,6 +722,7 @@ export default function Socials() {
           </div>
         </div>
       ))}
+
 
       <div className={`sc-footer${mounted ? " mounted" : ""}`}>
         <div className="sc-footer-row"><span className="sc-footer-key">↑↓</span><span>SELECT</span></div>
