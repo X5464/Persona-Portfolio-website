@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://persona-portfolio-website.vercel.app/sitemap.xml
-/* Sync refresh */
+# Sync refresh
