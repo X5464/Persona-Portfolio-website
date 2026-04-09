@@ -188,7 +188,7 @@ export default function AboutMe() {
           inset: 0;
           z-index: 12;
           background: rgba(40, 45, 54, 0.68);
-          pointer-events: all;
+          pointer-events: none;
           animation: sc-dim-in 0.32s ease-out;
         }
 
@@ -773,12 +773,12 @@ export default function AboutMe() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onMouseEnter={() => { if (!revealed) setActive(i); }}
+            onMouseEnter={() => { setActive(i); }}
           >
             <div className="sc-bar-red" />
             <div 
               className="sc-bar"
-              onMouseEnter={() => { if (!revealed) setActive(i); }}
+              onMouseEnter={() => { setActive(i); }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (active !== i) {
