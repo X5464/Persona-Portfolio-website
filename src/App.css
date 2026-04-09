@@ -36,7 +36,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 10000;
-  pointer-events: all;
+  pointer-events: none;
   display: flex;
   justify-content: center;
 }
@@ -51,6 +51,7 @@ body {
   border-bottom: 4px solid #c4001a;
   padding: 8px 40px;
   cursor: pointer;
+  pointer-events: all;
   clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
   transition: all 0.2s ease;
   backdrop-filter: blur(5px);

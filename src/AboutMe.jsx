@@ -173,7 +173,7 @@ export default function AboutMe() {
         .sc-root {
           position: absolute;
           inset: 0;
-          z-index: 6;
+          z-index: 1000;
           pointer-events: all;
           display: flex;
           flex-direction: column;
