@@ -131,12 +131,49 @@ export default function Certs() {
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+
+    const onWheel = (e) => {
+      if (focus === "right") {
+        const barCount = ITEMS[active].bars;
+        if (e.deltaY > 0) {
+          setActiveInfoBar(prev => {
+            const next = Math.min(barCount - 1, prev + 1);
+            setScrollOffset(off => next >= off + VISIBLE ? next - VISIBLE + 1 : off);
+            return next;
+          });
+        } else if (e.deltaY < 0) {
+          setActiveInfoBar(prev => {
+            const next = Math.max(0, prev - 1);
+            setScrollOffset(off => next < off ? next : off);
+            return next;
+          });
+        }
+      } else {
+        if (e.deltaY > 0) setActive(i => Math.min(ITEMS.length - 1, i + 1));
+        else if (e.deltaY < 0) setActive(i => Math.max(0, i - 1));
+      }
+    };
+    window.addEventListener("wheel", onWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("wheel", onWheel);
+    };
   }, [active, navigate, focus, activeInfoBar]);
 
   return (
     <div id="menu-screen">
-      <video src={bgVideo} poster={bgPoster} autoPlay loop muted playsInline />
+      <video 
+        src={bgVideo} 
+        poster={bgPoster} 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        disablePictureInPicture
+        controlsList="nodownload"
+        onCanPlay={(e) => e.currentTarget.play()}
+      />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&display=swap');
 
@@ -584,11 +621,12 @@ export default function Certs() {
           <div
             key={item.id}
             className={`ct-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onMouseEnter={() => setActive(i)}
+            onMouseEnter={() => { if (focus === "left") setActive(i); }}
           >
             <div className="ct-bar-red" />
             <div 
               className="ct-bar"
+              onMouseEnter={() => { if (focus === "left") setActive(i); }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (active !== i) {

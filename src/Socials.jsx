@@ -111,7 +111,17 @@ export default function Socials() {
 
   return (
     <div id="menu-screen">
-      <video src={bgVideo} poster={bgPoster} autoPlay loop muted playsInline />
+      <video 
+        src={bgVideo} 
+        poster={bgPoster} 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        disablePictureInPicture
+        controlsList="nodownload"
+        onCanPlay={(e) => e.currentTarget.play()}
+      />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,700;1,700&display=swap');
 
@@ -627,19 +637,11 @@ export default function Socials() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onClick={() => {
-              if (active !== i) {
-                setActive(i);
-                setFocus("left");
-              } else if (focus === "left") {
-                setFocus("right");
-              }
-            }}
-            onMouseEnter={() => setActive(i)}
           >
             <div className="sc-bar-red" />
             <div 
               className="sc-bar"
+              onMouseEnter={() => { if (focus === "left") setActive(i); }}
               onClick={() => {
                 if (active !== i) {
                   setActive(i);

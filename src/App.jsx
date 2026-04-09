@@ -28,12 +28,11 @@ function MenuScreen({ onOpenWelcome }) {
         loop 
         muted 
         playsInline
+        disablePictureInPicture
+        controlsList="nodownload"
+        onCanPlay={(e) => e.currentTarget.play()}
       />
-      <div className="menu-top-bar">
-        <button className="menu-welcome-btn" onClick={onOpenWelcome}>
-          CONTROLS GUIDE
-        </button>
-      </div>
+
       <P3Menu onNavigate={(page) => navigate(`/${page}`)} />
     </div>
   )
@@ -45,7 +44,7 @@ function AnimatedRoutes({ onOpenWelcome }) {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={
-          <PageTransition><MenuScreen onOpenWelcome={onOpenWelcome} /></PageTransition>
+          <PageTransition><MenuScreen /></PageTransition>
         } />
         <Route path="/about" element={
           <PageTransition variant="about"><AboutMe /></PageTransition>
@@ -84,6 +83,13 @@ export default function App() {
   return (
     <main>
       <TouchNav />
+      
+      <div className="global-controls-bar">
+        <button className="global-welcome-btn" onClick={handleOpenWelcome}>
+          ? CONTROLS
+        </button>
+      </div>
+
       <WelcomeModal isOpen={isWelcomeOpen} onClose={handleCloseWelcome} />
       <AnimatedRoutes onOpenWelcome={handleOpenWelcome} />
     </main>

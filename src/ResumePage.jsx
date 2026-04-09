@@ -98,9 +98,30 @@ export default function ResumePage({ src, poster }) {
 
   return (
     <div id="menu-screen">
-      <video src={src} poster={poster} autoPlay loop muted playsInline />
+      <video 
+        src={src} 
+        poster={poster} 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        disablePictureInPicture
+        controlsList="nodownload"
+        onCanPlay={(e) => e.currentTarget.play()}
+      />
       <div className="resume-entry-mask" aria-hidden="true">
-        <video className="resume-entry-video" src={src} poster={poster} autoPlay loop muted playsInline />
+        <video 
+          className="resume-entry-video" 
+          src={src} 
+          poster={poster} 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          disablePictureInPicture
+          controlsList="nodownload"
+          onCanPlay={(e) => e.currentTarget.play()}
+        />
       </div>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&display=swap');
