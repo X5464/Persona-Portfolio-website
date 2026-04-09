@@ -49,7 +49,7 @@ const PANEL_CONTENT = [
       { index: "02", title: "VARS AGRI NOVA (Offline IoT Hardware)", status: "AWARDED 2nd-runner up & 1ST" },
       { index: "03", title: "SPIDEY (Automated OSINT Crawler)", status: "OPERATIONAL" },
       { index: "04", title: "IC POKÉMON (Constitutional RPG)", status: "DEPLOYED" },
-      { index: "05", title: "SPIDERWEB (Port, Subdomain, Hash, PDF CRACKER AND LOCKER) ALL IN ONE", status: "OPERATIONAL" }
+      { index: "05", title: "SPIDERWEB (Port Scanner, Subdomain, Hash, PDF CRACKER AND LOCKER) ALL IN ONE", status: "OPERATIONAL" }
     ],
     details: [
       "* Translating theoretical vulnerabilities into actionable, scalable architecture.",
@@ -59,12 +59,13 @@ const PANEL_CONTENT = [
   {
     index: "04",
     title: "FIELD EXPERIENCE",
-    progress: "4/4",
+    progress: "5/5",
     rows: [
       { index: "01", title: "InLighnX (Offensive Cyber Intern)", status: "COMPLETE" },
-      { index: "02", title: "Elevate Labs (Blue Team Intern)", status: "COMPLETE" },
-      { index: "03", title: "Forage AIG/Mastercard (Security Analyst)", status: "COMPLETE" },
-      { index: "04", title: "Teachnook / IIT Roorkee (Mentee)", status: "COMPLETE" }
+      { index: "02", title: "Elevate Labs (Cyber Intern)", status: "COMPLETE" },
+      { index: "03", title: "AIG, MASTERCARD, TATA GROUP & DELOITTE (Cybersecurity)", status: "COMPLETE" },
+      { index: "04", title: "Teachnook / IIT Roorkee (Intern)", status: "COMPLETE" },
+      { index: "05", title: "EDU-VERSITY & IIT GUWAHATI (Cyber Intern)", status: "COMPLETE" }
     ],
     details: [
       "* Over 4 active deployments in professional operational environments.",
@@ -98,26 +99,26 @@ export default function ResumePage({ src, poster }) {
 
   return (
     <div id="menu-screen">
-      <video 
-        src={src} 
-        poster={poster} 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
+      <video
+        src={src}
+        poster={poster}
+        autoPlay
+        loop
+        muted
+        playsInline
         disablePictureInPicture
         controlsList="nodownload"
         onCanPlay={(e) => e.currentTarget.play()}
       />
       <div className="resume-entry-mask" aria-hidden="true">
-        <video 
-          className="resume-entry-video" 
-          src={src} 
-          poster={poster} 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
+        <video
+          className="resume-entry-video"
+          src={src}
+          poster={poster}
+          autoPlay
+          loop
+          muted
+          playsInline
           disablePictureInPicture
           controlsList="nodownload"
           onCanPlay={(e) => e.currentTarget.play()}
@@ -603,8 +604,8 @@ export default function ResumePage({ src, poster }) {
         )}
 
       </div>
-      <div 
-        className="sc-back-btn" 
+      <div
+        className="sc-back-btn"
         onClick={(e) => {
           e.stopPropagation();
           navigate('/');
