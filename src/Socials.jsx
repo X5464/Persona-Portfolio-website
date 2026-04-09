@@ -20,7 +20,7 @@ const ROLES = [
 
 const ITEMS = [
   {
-    id: "linkedin", label: "LINKEDIN", handle: "@rajarshi-cybersecurity", href: "https://www.linkedin.com/in/rajarshi-cybersecurity/", icon: "💼", barIcon: icon1, bars: 4, newBars: [0],
+    id: "linkedin", label: "LINKEDIN", handle: "@rajarshi-cybersecurity", href: "https://www.linkedin.com/in/rajarshi-cybersecurity/", icon: "", barIcon: icon1, bars: 4, newBars: [0],
     links: [
       { text: "LINKEDIN ACCOUNT", pillLabel: "STAT", pillValue: "ACTIVE", href: "https://www.linkedin.com/in/rajarshi-cybersecurity/" },
       { text: "PROFESSIONAL NETWORK & ENDORSEMENTS", pillLabel: "CON", pillValue: "840", href: null },
