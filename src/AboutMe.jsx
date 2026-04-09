@@ -102,11 +102,21 @@ export default function AboutMe() {
       if (e.key === "ArrowDown") setActive(i => Math.min(ITEMS.length - 1, i + 1));
       if (e.key === "Enter") setRevealed(true);
       if (e.key === "ArrowRight") setRevealed(true);
-      if (e.key === "ArrowLeft") {
-        if (revealed) setRevealed(false);
-        else navigate('/');
+      if (e.key === "ArrowLeft" && revealed) {
+        setRevealed(false);
+        return;
       }
-      if (e.key === "Escape" || e.key === "Backspace") navigate('/');
+      if (e.key === "Escape" || e.key === "Backspace") {
+        if (revealed) {
+          setRevealed(false);
+          return;
+        }
+        navigate('/');
+        return;
+      }
+      if (e.key === "ArrowLeft" && !revealed) {
+        navigate('/');
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -721,8 +731,43 @@ export default function AboutMe() {
           .sc-right-nav { top: 12px; left: 50%; transform: translateX(-50%); font-size: 14px; }
           .sc-footer { bottom: 8px; right: 8px; }
           .sc-footer-row { font-size: 10px; }
+          .sc-back-btn { bottom: 20px; left: 20px; font-size: 18px; }
+        }
+
+        .sc-back-btn {
+          position: absolute;
+          bottom: 40px;
+          left: 40px;
+          z-index: 100;
+          color: white;
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 24px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: rgba(0,0,0,0.5);
+          padding: 5px 15px;
+          clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+          transition: all 0.2s;
+          pointer-events: all;
+        }
+        .sc-back-btn:hover {
+          background: #c4001a;
+          transform: scale(1.1) skewX(-5deg);
         }
       `}</style>
+
+      <div 
+        className="sc-back-btn" 
+        onClick={(e) => {
+          e.stopPropagation();
+          if (revealed) setRevealed(false);
+          else navigate('/');
+        }}
+      >
+        <span>◄</span> BACK
+      </div>
 
       <div className="sc-root" role="navigation">
         {ITEMS.map((item, i) => (
@@ -730,7 +775,12 @@ export default function AboutMe() {
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
             onClick={() => {
-              setActive(i);
+              if (active !== i) {
+                setActive(i);
+                setRevealed(false);
+              } else {
+                setRevealed(!revealed);
+              }
             }}
             onMouseEnter={() => {
               setActive(i);

@@ -479,6 +479,16 @@ export default function ResumePage({ src, poster }) {
 
       `}</style>
 
+      <div 
+        className="sc-back-btn" 
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate('/');
+        }}
+      >
+        <span>◄</span> BACK
+      </div>
+
       <div className="resume-overlay">
         <div className="resume-stack">
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', paddingRight: '12px' }}>
