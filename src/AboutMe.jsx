@@ -252,8 +252,8 @@ export default function AboutMe() {
           position: absolute;
           top: 0;
           right: -8vw;
-          z-index: 13;
-          pointer-events: all;
+          z-index: 10;
+          pointer-events: none;
           width: 43vw;
           height: 100vh;
           overflow: hidden;
@@ -270,10 +270,10 @@ export default function AboutMe() {
         .sc-reveal-panel {
           position: absolute;
           top: 25vh;
-          left: 32vw;
-          width: 58vw;
+          left: 22vw;
+          width: 68vw;
           height: 62vh;
-          z-index: 12;
+          z-index: 20;
           pointer-events: all;
           background:
             linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(243,246,252,0.98) 100%);
