@@ -475,8 +475,31 @@ export default function ResumePage({ src, poster }) {
           .resume-card-wrap { margin-bottom: 4px; }
           .resume-detail-bullets { gap: 6px; }
           .resume-detail-bullet { font-size: 14px; }
+          .sc-back-btn { bottom: 20px; left: 20px; font-size: 18px; }
         }
 
+        .sc-back-btn {
+          position: absolute;
+          bottom: 40px;
+          left: 40px;
+          z-index: 100;
+          color: white;
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 24px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: rgba(0,0,0,0.5);
+          padding: 5px 15px;
+          clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+          transition: all 0.2s;
+          pointer-events: all;
+        }
+        .sc-back-btn:hover {
+          background: #c4001a;
+          transform: scale(1.1) skewX(-5deg);
+        }
       `}</style>
 
       <div 
