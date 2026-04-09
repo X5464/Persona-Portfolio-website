@@ -269,14 +269,10 @@ export default function AboutMe() {
 
         .sc-reveal-panel {
           position: absolute;
-          top: 40vh;
-          left: -6vw;
-          width: 88vw;
-          height: 56vh;
-          top: 38vh;
-          left: 12vw;
-          width: 72vw;
-          height: 60vh;
+          top: 25vh;
+          left: 32vw;
+          width: 58vw;
+          height: 62vh;
           z-index: 12;
           pointer-events: all;
           background:
@@ -287,13 +283,13 @@ export default function AboutMe() {
             18px 0 0 rgba(215, 13, 44, 0.82),
             28px 0 0 rgba(255,255,255,0.26);
           opacity: 0;
-          transform: translateX(-40px) rotate(-20deg);
-          transform-origin: left bottom;
-          transition: opacity 0.3s ease, transform 0.35s ease;
+          transform: translateX(40px) skewX(-12deg);
+          transform-origin: left center;
+          transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .sc-reveal-panel.mounted {
-          opacity: 0.92;
-          transform: translateX(0) rotate(-20deg);
+          opacity: 0.95;
+          transform: translateX(0) skewX(-12deg);
           animation: sc-reveal-bar-in 0.46s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .sc-reveal-panel::before {
