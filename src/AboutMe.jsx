@@ -415,7 +415,7 @@ export default function AboutMe() {
         }
         .sc-right-nav {
           position: absolute;
-          top: 6vh;
+          top: 1.5vh;
           left: 4vw;
           display: flex;
           align-items: center;
@@ -428,7 +428,7 @@ export default function AboutMe() {
         }
         .sc-right-nav .sc-nav-btn {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(40px, 8vw, 84px);
+          font-size: clamp(32px, 6vw, 64px);
           letter-spacing: 3px;
           line-height: 1;
           user-select: none;
