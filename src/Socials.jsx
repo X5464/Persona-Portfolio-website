@@ -644,7 +644,7 @@ export default function Socials() {
             <div className="sc-bar-red" />
             <div 
               className="sc-bar"
-              onMouseEnter={() => { if (focus === "left") setActive(i); }}
+              onMouseEnter={() => { setActive(i); setFocus("left"); }}
               onClick={() => {
                 if (active !== i) {
                   setActive(i);
