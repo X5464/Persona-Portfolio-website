@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import menuVideo from './assets/Mainn.mp4'
 import menuPoster from './assets/Mainn_poster.jpg'
