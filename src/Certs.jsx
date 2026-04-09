@@ -114,7 +114,7 @@ export default function Certs() {
         if (e.key === "ArrowLeft") setFocus("left");
         if (e.key === "Enter") window.open(ITEMS[active].links[activeInfoBar].href, "_blank");
       }
-      if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate(-1);
+      if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate('/');
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

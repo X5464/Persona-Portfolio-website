@@ -89,7 +89,7 @@ export default function Socials() {
           else window.open(ITEMS[active].href, "_blank");
         }
       }
-      if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate(-1);
+      if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate('/');
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

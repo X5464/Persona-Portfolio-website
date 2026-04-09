@@ -104,9 +104,9 @@ export default function AboutMe() {
       if (e.key === "ArrowRight") setRevealed(true);
       if (e.key === "ArrowLeft") {
         if (revealed) setRevealed(false);
-        else navigate(-1);
+        else navigate('/');
       }
-      if (e.key === "Escape" || e.key === "Backspace") navigate(-1);
+      if (e.key === "Escape" || e.key === "Backspace") navigate('/');
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

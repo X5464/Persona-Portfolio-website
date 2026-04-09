@@ -88,8 +88,8 @@ export default function ResumePage({ src, poster }) {
     const onKey = (e) => {
       if (e.key === "ArrowUp") setActive((i) => Math.max(0, i - 1));
       if (e.key === "ArrowDown") setActive((i) => Math.min(ITEMS.length - 1, i + 1));
-      if (e.key === "ArrowLeft") navigate(-1);
-      if (e.key === "Escape" || e.key === "Backspace") navigate(-1);
+      if (e.key === "ArrowLeft") navigate('/');
+      if (e.key === "Escape" || e.key === "Backspace") navigate('/');
     };
 
     window.addEventListener("keydown", onKey);
