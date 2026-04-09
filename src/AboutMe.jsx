@@ -181,6 +181,10 @@ export default function AboutMe() {
           justify-content: center;
           gap: 6px;
           padding-left: 0;
+          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .sc-root.revealed {
+          transform: translateX(-8vw);
         }
 
         .sc-dim {
@@ -265,7 +269,7 @@ export default function AboutMe() {
 
         .sc-reveal-panel {
           position: absolute;
-          top: 36vh;
+          top: 40vh;
           left: -6vw;
           width: 88vw;
           height: 56vh;
@@ -320,7 +324,7 @@ export default function AboutMe() {
 
         .sc-reveal-name-box {
           position: absolute;
-          top: 8%;
+          top: 11%;
           left: 0%;
           width: 100%;
           height: 18%;
@@ -768,7 +772,7 @@ export default function AboutMe() {
       `}</style>
 
 
-      <div className="sc-root" role="navigation">
+      <div className={`sc-root${revealed ? " revealed" : ""}`} role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
