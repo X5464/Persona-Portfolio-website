@@ -11,6 +11,7 @@ export default function WelcomeModal({ isOpen, onClose }) {
     setAnimOut(true);
     setTimeout(() => {
       onClose();
+      setAnimOut(false);
     }, 400);
   };
 
