@@ -188,7 +188,7 @@ export default function AboutMe() {
           inset: 0;
           z-index: 12;
           background: rgba(40, 45, 54, 0.68);
-          pointer-events: none;
+          pointer-events: all;
           animation: sc-dim-in 0.32s ease-out;
         }
 
@@ -249,7 +249,7 @@ export default function AboutMe() {
           top: 0;
           right: -3vw;
           z-index: 13;
-          pointer-events: none;
+          pointer-events: all;
           width: 43vw;
           height: 100vh;
           overflow: hidden;
@@ -270,7 +270,7 @@ export default function AboutMe() {
           width: 88vw;
           height: 56vh;
           z-index: 12;
-          pointer-events: none;
+          pointer-events: all;
           background:
             linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(243,246,252,0.98) 100%);
           clip-path: polygon(0 0, 100% 0, calc(100% - 88px) 100%, 0 100%);
@@ -420,7 +420,7 @@ export default function AboutMe() {
           display: flex;
           align-items: center;
           gap: 6px;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 14;
           transform: translateX(-40px) rotate(-20deg);
           transform-origin: left bottom;
@@ -506,7 +506,7 @@ export default function AboutMe() {
           opacity: 0;
           transition: opacity 0.2s ease;
           z-index: 0;
-          pointer-events: none;
+          pointer-events: all;
         }
         .sc-bar-outer.active .sc-bar-red { opacity: 1; }
 
@@ -532,7 +532,7 @@ export default function AboutMe() {
           width: 6%;
           background: linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
           z-index: 1;
-          pointer-events: none;
+          pointer-events: all;
           opacity: 0;
           transition: opacity 0.35s ease;
         }
@@ -546,7 +546,7 @@ export default function AboutMe() {
           height: 6px;
           background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
           z-index: 10;
-          pointer-events: none;
+          pointer-events: all;
         }
 
         /* content layout inside each bar */
@@ -685,7 +685,7 @@ export default function AboutMe() {
           max-width: 160px;
           object-fit: cover;
           object-position: top;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 3;
           clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
         }

@@ -134,7 +134,7 @@ export default function ResumePage({ src, poster }) {
           background: #0047FF;
           clip-path: circle(0 at 50% 50%);
           animation: resume-entry-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          pointer-events: none;
+          pointer-events: all;
         }
 
         .resume-entry-video {
@@ -154,7 +154,7 @@ export default function ResumePage({ src, poster }) {
           position: absolute;
           inset: 0;
           z-index: 10;
-          pointer-events: none;
+          pointer-events: all;
         }
 
         .resume-stack {
@@ -165,7 +165,7 @@ export default function ResumePage({ src, poster }) {
           display: flex;
           flex-direction: column;
           gap: 10px;
-          pointer-events: none;
+          pointer-events: all;
           transform: scale(0.9);
           transform-origin: top left;
         }
@@ -370,7 +370,7 @@ export default function ResumePage({ src, poster }) {
           background:
             linear-gradient(135deg, rgba(133, 244, 255, 0.08) 0 15%, transparent 15% 100%),
             linear-gradient(180deg, rgba(255,255,255,0.05), transparent 24%);
-          pointer-events: none;
+          pointer-events: all;
         }
         .resume-detail-top {
           position: relative;

@@ -181,7 +181,7 @@ export default function Certs() {
           position: absolute;
           inset: 0;
           z-index: 10;
-          pointer-events: none;
+          pointer-events: all;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -225,7 +225,7 @@ export default function Certs() {
           opacity: 0;
           transition: opacity 0.2s ease;
           z-index: 0;
-          pointer-events: none;
+          pointer-events: all;
         }
         .ct-bar-outer.active .ct-bar-red { opacity: 1; }
         .ct-bar-fill {
@@ -245,7 +245,7 @@ export default function Certs() {
           height: 6px;
           background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
           z-index: 10;
-          pointer-events: none;
+          pointer-events: all;
         }
         .ct-bar-content {
           position: relative;
@@ -287,7 +287,7 @@ export default function Certs() {
           max-width: 160px;
           object-fit: cover;
           object-position: top;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 3;
           clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
         }
@@ -380,13 +380,13 @@ export default function Certs() {
           flex-shrink: 0;
           margin-left: 14px;
           object-fit: contain;
-          pointer-events: none;
+          pointer-events: all;
         }
         .ct-info-bar-new {
           position: absolute;
           left: -40px; bottom: 0;
           height: 65%; width: auto;
-          pointer-events: none; z-index: 3;
+          pointer-events: all; z-index: 3;
         }
         .ct-info-bar-text {
           flex: 1;
@@ -440,7 +440,7 @@ export default function Certs() {
           position: fixed;
           top: 40px; right: 40px;
           display: flex; align-items: center; gap: 6px;
-          pointer-events: none; z-index: 50;
+          pointer-events: all; z-index: 50;
           font-family: 'Bebas Neue', sans-serif;
           font-size: 28px;
           letter-spacing: 3px;
@@ -471,7 +471,7 @@ export default function Certs() {
           position: fixed;
           left: 62%;
           right: 20px;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 61;
           display: flex;
           flex-direction: column;
@@ -506,7 +506,7 @@ export default function Certs() {
           position: fixed;
           left: 62%;
           right: 20px;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 61;
           display: flex;
           flex-direction: column;

@@ -175,7 +175,7 @@ export default function Socials() {
           opacity: 0;
           transition: opacity 0.2s ease;
           z-index: 0;
-          pointer-events: none;
+          pointer-events: all;
         }
         .sc-bar-outer.active .sc-bar-red { opacity: 1; }
 
@@ -201,7 +201,7 @@ export default function Socials() {
           width: 6%;
           background: linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
           z-index: 1;
-          pointer-events: none;
+          pointer-events: all;
           opacity: 0;
           transition: opacity 0.35s ease;
         }
@@ -215,7 +215,7 @@ export default function Socials() {
           height: 6px;
           background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
           z-index: 10;
-          pointer-events: none;
+          pointer-events: all;
         }
 
         /* content layout inside each bar */
@@ -380,7 +380,7 @@ export default function Socials() {
           max-width: 160px;
           object-fit: cover;
           object-position: top;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 3;
           clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
         }
@@ -398,7 +398,7 @@ export default function Socials() {
           display: flex;
           align-items: center;
           gap: 6px;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 50;
           animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
         }
@@ -476,7 +476,7 @@ export default function Socials() {
           bottom: 0;
           height: 65%;
           width: auto;
-          pointer-events: none;
+          pointer-events: all;
           z-index: 3;
         }
         .sc-info-bar-wrap.selected .sc-info-bar::before {
@@ -521,7 +521,7 @@ export default function Socials() {
           flex-shrink: 0;
           margin-left: 14px;
           object-fit: contain;
-          pointer-events: none;
+          pointer-events: all;
           user-select: none;
         }
 

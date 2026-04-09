@@ -51,7 +51,7 @@ export default function P3Menu({ onNavigate }) {
           display: flex;
           align-items: center;
           justify-content: center;
-          pointer-events: none;
+          pointer-events: all;
         }
 
         .p3-stripe  { position:absolute; right:0; top:0; bottom:0; width:5px; background:#c4001a; z-index:10; pointer-events:none; }
@@ -92,7 +92,7 @@ export default function P3Menu({ onNavigate }) {
           background: radial-gradient(ellipse at center, rgba(255,100,180,0.35) 0%, transparent 70%);
           filter: blur(18px);
           z-index: 0;
-          pointer-events: none;
+          pointer-events: all;
           opacity: 0;
           transition: opacity 0.3s ease;
         }
@@ -118,7 +118,7 @@ export default function P3Menu({ onNavigate }) {
           transform-origin: left center;
           background: rgba(235, 80, 120, 0.85);
           z-index: 1;
-          pointer-events: none;
+          pointer-events: all;
           transform: translateY(-40%) translateX(-12px) scaleX(0);
           transition: transform 0.18s ease;
         }
@@ -133,7 +133,7 @@ export default function P3Menu({ onNavigate }) {
           background: #ffffff;
           z-index: 2;
           transition: transform 0.22s cubic-bezier(0.22,1,0.36,1);
-          pointer-events: none;
+          pointer-events: all;
         }
 
         .p3-label-wrap {
@@ -204,7 +204,7 @@ export default function P3Menu({ onNavigate }) {
           transform: rotate(18deg);
           transform-origin: left top;
           user-select: none;
-          pointer-events: none;
+          pointer-events: all;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
