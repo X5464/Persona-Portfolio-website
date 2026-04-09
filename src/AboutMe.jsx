@@ -184,8 +184,7 @@ export default function AboutMe() {
           transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .sc-root.revealed {
-          transform: translateX(-35vw);
-          opacity: 0.25;
+          transform: translateX(-15vw);
         }
 
         .sc-dim {
@@ -217,7 +216,7 @@ export default function AboutMe() {
           }
           100% {
             opacity: 0.92;
-            transform: translateX(0) rotate(-20deg) scaleX(1);
+            transform: translateX(0) skewX(-12deg) scaleX(1);
           }
         }
 
@@ -422,16 +421,14 @@ export default function AboutMe() {
           65%  { opacity: 1; transform: scale(1.1) translateY(2px); }
           100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .sc-right-nav {
-          position: absolute;
           top: 1.5vh;
-          left: 16vw;
+          left: 4vw;
           display: flex;
           align-items: center;
           gap: 6px;
           pointer-events: all;
           z-index: 1010;
-          transform: translateX(-40px) rotate(-20deg);
+          transform: translateX(0) rotate(-10deg);
           transform-origin: left bottom;
           animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
         }

@@ -259,6 +259,28 @@ export default function WelcomeModal({ isOpen, onClose }) {
               </span>
             </div>
 
+            <div className="wm-section-title">// MOUSE CONTROLS</div>
+            <div className="wm-keys" style={{ marginBottom: "28px" }}>
+              <div className="wm-key-row">
+                <div className="wm-keys-group">
+                  <span className="wm-key">HOVER</span>
+                </div>
+                <span className="wm-key-desc"><strong>Move mouse</strong> to select or switch items instantly</span>
+              </div>
+              <div className="wm-key-row">
+                <div className="wm-keys-group">
+                  <span className="wm-key">CLICK</span>
+                </div>
+                <span className="wm-key-desc"><strong>Left-Click</strong> to reveal details or open links</span>
+              </div>
+              <div className="wm-key-row">
+                <div className="wm-keys-group">
+                  <span className="wm-key">SCROLL</span>
+                </div>
+                <span className="wm-key-desc"><strong>Wheel/Trackpad</strong> to browse certificates & lists</span>
+              </div>
+            </div>
+
             <div className="wm-section-title">// KEYBOARD CONTROLS</div>
 
             <div className="wm-keys">
