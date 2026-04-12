@@ -24,7 +24,9 @@ const REVEAL_CONTENT = [
       "Bridging the gap between Red Team attacks & Blue Team defense.",
       "I break systems using ethical hacking and threat intelligence,",
       "then fortify them with audits and secure architecture.",
-      "I know how to break systems — and how to secure them."
+      "I know how to break systems — and how to secure them.",
+      "AWS Cloud Club Core Team Member:",
+      "I manage social media, creating reels & content for my college club."
     ],
     lower: "About Me",
   },
