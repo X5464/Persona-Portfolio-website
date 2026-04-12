@@ -92,7 +92,7 @@ export default function App() {
       
       <div className="global-controls-bar">
         <button className="global-welcome-btn" onClick={handleOpenWelcome}>
-          ? CONTROLS
+          CONTROLS
         </button>
       </div>
 
