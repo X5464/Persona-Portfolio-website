@@ -20,12 +20,13 @@ const ROLES = [
 
 const ITEMS = [
   {
-    id: "linkedin", label: "LINKEDIN", handle: "@rajarshi-cybersecurity", href: "https://www.linkedin.com/in/rajarshi-cybersecurity/", icon: "", barIcon: icon1, bars: 4, newBars: [0],
+    id: "linkedin", label: "LINKEDIN", handle: "@rajarshi-cybersecurity", href: "https://www.linkedin.com/in/rajarshi-cybersecurity/", icon: "", barIcon: icon1, bars: 5, newBars: [0, 3],
     links: [
       { text: "LINKEDIN ACCOUNT", pillLabel: "STAT", pillValue: "ACTIVE", href: "https://www.linkedin.com/in/rajarshi-cybersecurity/" },
-      { text: "PROFESSIONAL NETWORK & ENDORSEMENTS", pillLabel: "CON", pillValue: "840", href: null },
-      { text: "EXPERIENCE & CERTIFICATION LOGS", pillLabel: "NET", pillValue: "LIVE", href: null },
-      { text: "DIRECT MESSAGING AND INQUIRIES", pillLabel: "MAIL", pillValue: "OPEN", href: "mailto:rajarshi7474@gmail.com" },
+      { text: "GITHUB REPOSITORIES: X5464", pillLabel: "CODE", pillValue: "OPEN", href: "https://github.com/X5464" },
+      { text: "PROFESSIONAL NETWORK & ENDORSEMENTS", pillLabel: "CON", pillValue: "840+", href: "https://www.linkedin.com/in/rajarshi-cybersecurity/" },
+      { text: "EMAIL: RAJARSHI7474@GMAIL.COM", pillLabel: "MAIL", pillValue: "OPEN", href: "mailto:rajarshi7474@gmail.com" },
+      { text: "PHONE: +91 94339 39953", pillLabel: "CALL", pillValue: "DIRECT", href: "tel:+919433939953" },
     ],
     stats: [
       { tag: "CON", value: "840", color: "#0077b5" },
@@ -48,9 +49,9 @@ const ITEMS = [
     id: "tryhackme", label: "TRYHACKME", handle: "@OmegaR [PATHFINDER]", href: "https://tryhackme.com/p/OmegaR", icon: "🔴", barIcon: icon3, bars: 4, newBars: [0],
     links: [
       { text: "TRYHACKME ACCOUNT : OMEGAR ", pillLabel: "STAT", pillValue: "ACTIVE", href: "https://tryhackme.com/p/OmegaR" },
-      { text: "GLOBAL RANK — TOP 35% WORLDWIDE", pillLabel: "RANK", pillValue: "TOP 35%", href: null },
-      { text: "COMPLETED ROOMS: 14 — BADGES EARNED: 3", pillLabel: "PROG", pillValue: "14 RMS", href: null },
-      { text: "HCK4G CTF ENDURANCE EVENT — SECURED", pillLabel: "COMP", pillValue: "SECURED", href: null },
+      { text: "GLOBAL RANK — TOP 35% WORLDWIDE", pillLabel: "RANK", pillValue: "TOP 35%", href: "https://tryhackme.com/p/OmegaR" },
+      { text: "COMPLETED ROOMS: 14 — BADGES EARNED: 3", pillLabel: "PROG", pillValue: "14 RMS", href: "https://tryhackme.com/p/OmegaR" },
+      { text: "60-HR HCK4G CTF CON 2025 (MELBOURNE) — FINISHER", pillLabel: "COMP", pillValue: "SECURED", href: null },
     ],
     stats: [
       { tag: "LVL", value: "0x3", color: "#ff0000" },
@@ -107,21 +108,21 @@ export default function Socials() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [active, navigate, focus]);
+  }, [active, navigate, focus, activeInfoBar]);
 
   return (
     <div id="menu-screen">
       <video 
-        src={bgVideo} 
+        src={bgVideo}
+        poster={bgPoster}
         autoPlay 
         loop 
         muted 
         playsInline 
         preload="auto"
+        onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
       />
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,700;1,700&display=swap');
-
         .sc-root {
           position: absolute;
           inset: 0;
@@ -141,12 +142,13 @@ export default function Socials() {
         /* ── Each bar ── */
         .sc-bar {
           position: relative;
-          width: 45vw;
+          width: 45cqw;
           height: 64px;
           transition: height 0.3s cubic-bezier(0.22,1,0.36,1);
           background: #111;
           cursor: pointer;
           pointer-events: all;
+          touch-action: manipulation;
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
           box-shadow: 0 6px 24px rgba(0,0,0,0.65);
           z-index: 1;
@@ -170,7 +172,7 @@ export default function Socials() {
         .sc-bar-red {
           position: absolute;
           top: 0; left: 0;
-          width: 45vw;
+          width: 45cqw;
           height: 64px;
           background: #c4001a;
           clip-path: polygon(50% 0, 100% 0, 100% 100%, calc(50% - 10px) 100%);
@@ -464,7 +466,9 @@ export default function Socials() {
           position: relative;
           width: 100%;
           height: 100%;
-          background: transparent;
+          background: rgba(255, 255, 255, 0.86);
+          border-radius: 7px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.22);
           display: flex;
           align-items: center;
           overflow: hidden;
@@ -472,6 +476,7 @@ export default function Socials() {
         .sc-info-bar-wrap.selected .sc-info-bar {
           background: #fff;
           border-radius: 7px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.45);
         }
         .sc-info-bar-new {
           position: absolute;
@@ -576,33 +581,43 @@ export default function Socials() {
         }
 
         @media (max-width: 768px) {
-          .sc-root { padding-left: 0; gap: 4px; }
-          .sc-bar { width: 92vw; height: 52px; }
-          .sc-bar-outer.active .sc-bar { height: 68px; }
-          .sc-bar-outer.active .sc-bar-red { height: 68px; }
-          .sc-bar-red { width: 92vw; }
-          .sc-label { font-size: 18px; letter-spacing: 2px; }
-          .sc-stat-num { font-size: 18px; }
-          .sc-stat-tag { font-size: 8px; }
-          .sc-char { max-width: 90px; left: 70px; }
-          .sc-main { padding-left: 40%; }
-          .sc-role { font-size: 26px; }
-
-          .sc-info-bar-wrap {
-            left: 0;
-            right: 0;
-            height: 44px;
+          body:not(.pc-stage-mode) .sc-root {
+            justify-content: flex-start;
+            padding-top: 50px;
+            padding-left: 0;
+            gap: 4px;
           }
-          .sc-info-bar-text { font-size: 13px; letter-spacing: 0.8px; }
-          .sc-info-bar-box { font-size: 11px; padding: 0 6px; }
-          .sc-info-bar-count { font-size: 13px; margin-right: 6px; }
-          .sc-acc-badge { font-size: 10px; padding: 1px 5px; }
+          body:not(.pc-stage-mode) .sc-root.dimmed {
+            opacity: 0.9;
+          }
+          body:not(.pc-stage-mode) .sc-bar { width: 94cqw; height: 46px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 56px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 56px; }
+          body:not(.pc-stage-mode) .sc-bar-red { width: 94cqw; height: 46px; }
+          body:not(.pc-stage-mode) .sc-label { font-size: 18px; letter-spacing: 2px; }
+          body:not(.pc-stage-mode) .sc-stat-num { font-size: 16px; }
+          body:not(.pc-stage-mode) .sc-stat-tag { font-size: 8px; }
+          body:not(.pc-stage-mode) .sc-char { max-width: 80px; left: 62px; }
+          body:not(.pc-stage-mode) .sc-main { padding-left: 38%; }
+          body:not(.pc-stage-mode) .sc-role { font-size: 24px; }
 
-          .sc-right-nav { top: 16px; right: 10px; font-size: 18px; }
-          .sc-nav-label { font-size: 14px; }
-          .sc-footer { bottom: 8px; right: 8px; }
-          .sc-footer-row { font-size: 10px; }
-          .sc-back-btn { bottom: 20px; left: 20px; font-size: 18px; }
+          body:not(.pc-stage-mode) .sc-info-bar-wrap {
+            left: 2%;
+            right: 2%;
+            height: 44px;
+            transform: translateY(105px);
+          }
+          body:not(.pc-stage-mode) .sc-info-bar-text { font-size: 13px; letter-spacing: 0.8px; }
+          body:not(.pc-stage-mode) .sc-info-bar-box { font-size: 11px; padding: 0 6px; }
+          body:not(.pc-stage-mode) .sc-info-bar-count { font-size: 13px; margin-right: 6px; }
+          body:not(.pc-stage-mode) .sc-acc-badge { font-size: 10px; padding: 1px 5px; }
+
+          body:not(.pc-stage-mode) .sc-right-nav { top: 222px; right: 12px; font-size: 18px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 24px; }
+          body:not(.pc-stage-mode) .sc-nav-label { font-size: 14px; }
+          body:not(.pc-stage-mode) .sc-footer { bottom: 8px; right: 8px; }
+          body:not(.pc-stage-mode) .sc-footer-row { font-size: 10px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 14px; left: 16px; font-size: 18px; }
         }
 
         .sc-back-btn {
@@ -624,7 +639,7 @@ export default function Socials() {
           z-index: 9999;
           pointer-events: all;
           border: 1px solid rgba(255,255,255,0.1);
-
+          touch-action: manipulation;
         }
         .sc-back-btn:hover {
           background: #c4001a;
@@ -648,13 +663,13 @@ export default function Socials() {
               onClick={() => {
                 if (active !== i) {
                   setActive(i);
-                  setFocus("left");
-                } else if (focus === "left") {
+                  setActiveInfoBar(0);
+                } else {
                   setFocus("right");
                 }
               }}
             >
-              <img className="sc-char" src={CHARS[i]} alt="" />
+              <img className="sc-char" src={CHARS[i]} width="350" height="135" decoding="async" alt="" />
               <div className="sc-bar-fill" />
               <div className="sc-bar-shade" />
               <div className="sc-bar-content">
@@ -688,11 +703,31 @@ export default function Socials() {
       {mounted && (
         <div className={`sc-info-panel-container${focus === "left" ? " dimmed" : ""}`}>
           <div className="sc-right-nav" key={active}>
-            <span className="sc-nav-arrow left">◄</span>
-            <span className="sc-nav-btn">LB</span>
+            <button
+              type="button"
+              style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActive((i) => (i - 1 + ITEMS.length) % ITEMS.length);
+                setActiveInfoBar(0);
+              }}
+            >
+              <span className="sc-nav-arrow left">◄</span>
+              <span className="sc-nav-btn">LB</span>
+            </button>
             <span className="sc-nav-label">{ITEMS[active].label}</span>
-            <span className="sc-nav-btn">RB</span>
-            <span className="sc-nav-arrow right">►</span>
+            <button
+              type="button"
+              style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActive((i) => (i + 1) % ITEMS.length);
+                setActiveInfoBar(0);
+              }}
+            >
+              <span className="sc-nav-btn">RB</span>
+              <span className="sc-nav-arrow right">►</span>
+            </button>
           </div>
         </div>
       )}
@@ -704,6 +739,7 @@ export default function Socials() {
           key={`bar-${active}-${i}`}
           style={{ top: `${155 + i * 52}px`, animationDelay: `${i * 50}ms` }}
           onClick={() => {
+            setFocus("right");
             setActiveInfoBar(i);
             const link = ITEMS[active].links[i]?.href;
             if (link) window.open(link, "_blank");
@@ -711,12 +747,12 @@ export default function Socials() {
           onMouseEnter={() => { if (focus === "right") setActiveInfoBar(i); }}
         >
           {ITEMS[active].newBars.includes(i) && (
-            <img className="sc-info-bar-new" src={newsign} alt="" />
+            <img className="sc-info-bar-new" src={newsign} width="100" height="100" decoding="async" alt="" />
           )}
           <div className="sc-info-bar">
-            <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} alt="" />
+            <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} width="48" height="28" decoding="async" alt="" />
             <span className="sc-info-bar-text">{ITEMS[active].links[i].text}</span>
-            {i === 0 && <span className="sc-acc-badge">▶ LINK</span>}
+            {ITEMS[active].links[i]?.href && <span className="sc-acc-badge">▶ LINK</span>}
             <span className="sc-info-bar-box">{ITEMS[active].links[i].pillLabel}</span>
             <span className="sc-info-bar-count">{ITEMS[active].links[i].pillValue}</span>
           </div>
@@ -733,8 +769,7 @@ export default function Socials() {
         className="sc-back-btn" 
         onClick={(e) => {
           e.stopPropagation();
-          if (focus === "right") setFocus("left");
-          else navigate('/');
+          navigate('/');
         }}
       >
         <span>◄</span> BACK

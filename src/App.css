@@ -2,18 +2,29 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background: #000;
   overflow: hidden;
+  overscroll-behavior: none;
+}
+
+main {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 #menu-screen {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  container-type: size;
 }
 
 #menu-screen video {
@@ -22,13 +33,20 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
+}
+
+/* On portrait mobile (when not in rotated PC stage mode), position the video slightly toward the right where the Persona 3 character stands */
+@media (max-width: 768px) and (orientation: portrait) {
+  body:not(.pc-stage-mode) #menu-screen video {
+    object-position: 68% center;
+  }
 }
 
 #main {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
-/* Sync refresh */
 
 .global-controls-bar {
   position: fixed;
@@ -38,10 +56,13 @@ body {
   z-index: 10000;
   pointer-events: none;
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 8px;
 }
 
-.global-welcome-btn {
+.global-welcome-btn,
+.global-rotate-btn {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 18px;
   letter-spacing: 2px;
@@ -49,32 +70,87 @@ body {
   background: #08102e;
   border: none;
   border-bottom: 4px solid #c4001a;
-  padding: 8px 40px;
+  padding: 8px 34px;
   cursor: pointer;
   pointer-events: all;
-  clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+  clip-path: polygon(12% 0, 100% 0, 88% 100%, 0 100%);
   transition: all 0.2s ease;
   backdrop-filter: blur(5px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   text-transform: uppercase;
+  white-space: nowrap;
+  touch-action: manipulation;
 }
 
-.global-welcome-btn:hover {
+.global-rotate-btn {
+  background: #c4001a;
+  border-bottom: 4px solid #8ef5ff;
+  color: #fff;
+}
+
+.global-rotate-btn.active {
   background: #0c1a4d;
+  border-bottom: 4px solid #8ef5ff;
+  color: #8ef5ff;
+}
+
+.global-welcome-btn:hover,
+.global-rotate-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(196, 0, 26, 0.4);
 }
 
 #menu-screen video,
 .resume-entry-video,
+.resume-bg-video,
 #menu-screen div video {
   pointer-events: none;
   user-select: none;
 }
 
-@media (max-width: 768px) {
-  .global-welcome-btn {
+.p3-sideways-toast {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%) skewX(-10deg);
+  z-index: 9999;
+  background: rgba(8, 16, 46, 0.92);
+  border: 1.5px solid #8ef5ff;
+  border-left: 6px solid #c4001a;
+  color: #fff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding: 8px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(46, 232, 255, 0.35);
+  cursor: pointer;
+  white-space: nowrap;
+  animation: p3ToastPulse 2.2s ease-in-out infinite;
+}
+
+.p3-sideways-icon {
+  color: #8ef5ff;
+  font-size: 20px;
+  display: inline-block;
+}
+
+@keyframes p3ToastPulse {
+  0%, 100% {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 0 14px rgba(46, 232, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 0 26px rgba(196, 0, 26, 0.65);
+  }
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  body:not(.pc-stage-mode) .global-welcome-btn,
+  body:not(.pc-stage-mode) .global-rotate-btn {
     font-size: 14px;
-    padding: 6px 20px;
+    padding: 6px 18px;
+    letter-spacing: 1.5px;
   }
 }

@@ -27,7 +27,7 @@ export default function P3Menu({ onNavigate }) {
   };
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 1000);
+    const t = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(t);
   }, []);
 
@@ -39,7 +39,7 @@ export default function P3Menu({ onNavigate }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [active]);
+  }, [active, onNavigate]);
 
   return (
     <>
@@ -195,6 +195,8 @@ export default function P3Menu({ onNavigate }) {
           top: 18px;
           left: 22px;
           z-index: 20;
+          margin: 0;
+          font-weight: normal;
           font-family: 'Anton', sans-serif;
           font-style: italic;
           font-size: 108px;
@@ -214,34 +216,34 @@ export default function P3Menu({ onNavigate }) {
         }
 
         @media (max-width: 768px) {
-          .p3-menu {
+          body:not(.pc-stage-mode) .p3-menu {
             padding: 20px 12px;
-            transform: scale(0.55);
+            transform: scale(0.62);
             transform-origin: center center;
           }
-          .p3-name-tag {
+          body:not(.pc-stage-mode) .p3-name-tag {
             font-size: 52px;
-            top: 10px;
-            left: 8px;
+            top: 46px;
+            left: 12px;
           }
-          .p3-hint {
-            bottom: 10px;
-            right: 10px;
+          body:not(.pc-stage-mode) .p3-hint {
+            bottom: 14px;
+            right: 14px;
             font-size: 10px;
           }
-          .p3-hint-row { font-size: 10px; }
+          body:not(.pc-stage-mode) .p3-hint-row { font-size: 10px; }
         }
       `}</style>
 
       <div className="p3-overlay">
-        <div className="p3-name-tag">
+        <h1 className="p3-name-tag">
           <span>Raj's</span>
           <span>_persona</span>
-        </div>
+        </h1>
         <div className="p3-stripe" />
         <div className="p3-stripe2" />
 
-        <nav className="p3-menu">
+        <nav className="p3-menu" aria-label="Main navigation">
           {ITEMS.map((item, i) => {
             const isActive = active === i;
             const dist = Math.abs(i - active);
@@ -253,14 +255,22 @@ export default function P3Menu({ onNavigate }) {
             return (
               <a
                 key={item.id}
-                href="#"
+                href={item.page === 'github' ? 'https://github.com/X5464' : `/${item.page}`}
                 className={`p3-row ${isActive ? "active" : ""} ${mounted ? "mounted" : ""}`}
                 style={{
                   marginRight: item.offsetX,
                   marginTop: item.offsetY,
-                  transitionDelay: mounted ? `${i * 80}ms` : "0ms",
+                  transitionDelay: mounted ? `${i * 55}ms` : "0ms",
                 }}
-                onClick={(e) => { e.preventDefault(); if (item.page === 'github') { window.open('https://github.com/X5464', '_blank'); } else { onNavigate?.(item.page); } }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  activate(i);
+                  if (item.page === 'github') {
+                    window.open('https://github.com/X5464', '_blank', 'noopener,noreferrer');
+                  } else {
+                    onNavigate?.(item.page);
+                  }
+                }}
                 onMouseEnter={() => activate(i)}
                 aria-current={isActive ? "page" : undefined}
               >

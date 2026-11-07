@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import char1 from "./assets/char1.png";
 import char2 from "./assets/char2.png";
@@ -20,13 +20,14 @@ const ROLES = [
 
 const ITEMS = [
   {
-    id: "cyber", label: "CYBER & CLOUD", subtitle: "CRT 12 · STS VALID", barIcon: icon1, bars: 12, newBars: [0],
+    id: "cyber", label: "CYBER & CLOUD", subtitle: "CRT 13 · STS VALID", barIcon: icon1, bars: 13, newBars: [0, 1],
     stats: [
-      { tag: "CRT", value: "12", color: "#0077b5" },
+      { tag: "CRT", value: "13", color: "#0077b5" },
       { tag: "STS", value: "VALID", color: "#00c853" },
     ],
     links: [
       { text: "GOOGLE: FOUNDATIONS OF CYBERSECURITY", pillLabel: "ISSUER", pillValue: "GOOGLE", href: "/certs/google.pdf" },
+      { text: "COMPTIA: SECURITY+ (TRAINING COURSE)", pillLabel: "ISSUER", pillValue: "COMPTIA", href: "/resume.pdf" },
       { text: "CISCO: INTRODUCTION TO CYBERSECURITY", pillLabel: "ISSUER", pillValue: "CISCO", href: "/certs/cisco.pdf" },
       { text: "AWS FORAGE: APAC SOLUTIONS ARCHITECTURE SIM", pillLabel: "ISSUER", pillValue: "AWS", href: "/certs/aws.pdf" },
       { text: "AIG FORAGE: SHIELDS UP CYBERSECURITY SIM", pillLabel: "ISSUER", pillValue: "AIG", href: "/certs/aig.pdf" },
@@ -41,12 +42,14 @@ const ITEMS = [
     ],
   },
   {
-    id: "dev", label: "DEV & ENGINEERING", subtitle: "CRT 06 · STS VALID", barIcon: icon2, bars: 6, newBars: [0],
+    id: "dev", label: "DEV & ENGINEERING", subtitle: "CRT 08 · STS VALID", barIcon: icon2, bars: 8, newBars: [0, 1],
     stats: [
-      { tag: "CRT", value: "06", color: "#4a8fff" },
+      { tag: "CRT", value: "08", color: "#4a8fff" },
       { tag: "STS", value: "VALID", color: "#00c853" },
     ],
     links: [
+      { text: "FREECODECAMP: INFOSEC PORT SCANNER PROJECT", pillLabel: "ISSUER", pillValue: "FCC", href: "https://github.com/X5464/InfoSec-Port-Scanner" },
+      { text: "IIT MADRAS: PYTHON FOR BEGINNERS", pillLabel: "ISSUER", pillValue: "IIT MADRAS", href: "/certs/iit.pdf" },
       { text: "IIT MANDI / PRAVARTAK: PYTHON COURSE", pillLabel: "ISSUER", pillValue: "IIT", href: "/certs/iit.pdf" },
       { text: "HCL GUVI: PYTHON", pillLabel: "ISSUER", pillValue: "HCL GUVI", href: "/certs/hcl-python.pdf" },
       { text: "MYCAPTAIN: C PROGRAMMING COURSE", pillLabel: "ISSUER", pillValue: "MYCAPTAIN", href: "/certs/mycaptain-c.pdf" },
@@ -78,23 +81,42 @@ export default function Certs() {
   const [activeInfoBar, setActiveInfoBar] = useState(0);
   const [scrollOffset, setScrollOffset] = useState(0);
   const [focus, setFocus] = useState("left");
+  const [selectedCert, setSelectedCert] = useState(null);
   const navigate = useNavigate();
+  const touchStartPos = useRef({ x: 0, y: 0 });
+
+  const openCert = (link, categoryLabel) => {
+    if (link.href && link.href.startsWith("http")) {
+      window.open(link.href, "_blank");
+      return;
+    }
+    setSelectedCert({ ...link, category: categoryLabel });
+  };
+
+  const selectCategory = (nextIdxOrUpdater) => {
+    setActive(nextIdxOrUpdater);
+    setScrollOffset(0);
+    setActiveInfoBar(0);
+  };
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(t);
   }, []);
 
-  // Reset scroll when switching category
-  useEffect(() => { setScrollOffset(0); setActiveInfoBar(0); }, [active]);
-
   useEffect(() => {
     const onKey = (e) => {
+      if (selectedCert) {
+        if (e.key === "Escape" || e.key === "Backspace" || e.key === "Enter") {
+          setSelectedCert(null);
+        }
+        return;
+      }
       if (focus === "left") {
-        if (e.key === "ArrowUp") setActive(i => Math.max(0, i - 1));
-        if (e.key === "ArrowDown") setActive(i => Math.min(ITEMS.length - 1, i + 1));
+        if (e.key === "ArrowUp") selectCategory(i => Math.max(0, i - 1));
+        if (e.key === "ArrowDown") selectCategory(i => Math.min(ITEMS.length - 1, i + 1));
         if (e.key === "ArrowRight") { setFocus("right"); setActiveInfoBar(0); setScrollOffset(0); }
-        if (e.key === "Enter") window.open(ITEMS[active].links[0].href, "_blank");
+        if (e.key === "Enter") openCert(ITEMS[active].links[0], ITEMS[active].label);
       } else {
         const barCount = ITEMS[active].bars;
         if (e.key === "ArrowUp") {
@@ -112,7 +134,7 @@ export default function Certs() {
           });
         }
         if (e.key === "ArrowLeft") setFocus("left");
-        if (e.key === "Enter") window.open(ITEMS[active].links[activeInfoBar].href, "_blank");
+        if (e.key === "Enter") openCert(ITEMS[active].links[activeInfoBar], ITEMS[active].label);
       }
       if (e.key === "ArrowLeft" && focus === "right") {
         setFocus("left");
@@ -149,8 +171,8 @@ export default function Certs() {
           });
         }
       } else {
-        if (e.deltaY > 0) setActive(i => Math.min(ITEMS.length - 1, i + 1));
-        else if (e.deltaY < 0) setActive(i => Math.max(0, i - 1));
+        if (e.deltaY > 0) selectCategory(i => Math.min(ITEMS.length - 1, i + 1));
+        else if (e.deltaY < 0) selectCategory(i => Math.max(0, i - 1));
       }
     };
     window.addEventListener("wheel", onWheel, { passive: true });
@@ -159,7 +181,7 @@ export default function Certs() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("wheel", onWheel);
     };
-  }, [active, navigate, focus, activeInfoBar]);
+  }, [active, navigate, focus, activeInfoBar, selectedCert]);
 
   return (
     <div id="menu-screen">
@@ -175,8 +197,6 @@ export default function Certs() {
         onCanPlay={(e) => e.currentTarget.play()}
       />
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&display=swap');
-
         .ct-root {
           position: absolute;
           inset: 0;
@@ -208,19 +228,20 @@ export default function Certs() {
 
         .ct-bar {
           position: relative;
-          width: 52vw;
+          width: 52cqw;
           height: 64px;
           transition: height 0.3s cubic-bezier(0.22,1,0.36,1);
           background: #111;
           cursor: pointer;
           pointer-events: all;
+          touch-action: manipulation;
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
           box-shadow: 0 6px 24px rgba(0,0,0,0.65);
         }
         .ct-bar-red {
           position: absolute;
           top: 0; left: 0;
-          width: 52vw;
+          width: 52cqw;
           height: 64px;
           background: #c4001a;
           clip-path: polygon(50% 0, 100% 0, 100% 100%, calc(50% - 10px) 100%);
@@ -361,7 +382,9 @@ export default function Certs() {
         .ct-info-bar {
           position: relative;
           width: 100%; height: 100%;
-          background: transparent;
+          background: rgba(255, 255, 255, 0.86);
+          border-radius: 7px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.22);
           display: flex;
           align-items: center;
           overflow: hidden;
@@ -369,6 +392,7 @@ export default function Certs() {
         .ct-info-bar-wrap.selected .ct-info-bar {
           background: #fff;
           border-radius: 7px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.45);
         }
         .ct-info-bar-wrap.selected .ct-info-bar::before {
           content: '';
@@ -559,37 +583,52 @@ export default function Certs() {
         }
 
         @media (max-width: 768px) {
-          .ct-bar { width: 92vw; height: 52px; }
-          .ct-bar-red { width: 92vw; }
-          .ct-bar-outer.active .ct-bar { height: 68px; }
-          .ct-bar-outer.active .ct-bar-red { height: 68px; }
-          .ct-label { font-size: 15px; letter-spacing: 1.5px; }
-          .ct-subtitle { font-size: 10px; }
-          .ct-char { max-width: 90px; left: 70px; }
-          .ct-main { padding-left: 40%; }
-          .ct-role { font-size: 26px; }
-          .ct-stat-num { font-size: 16px; }
-
-          .ct-info-bar-wrap {
-            left: 0;
-            right: 0;
-            height: 44px;
+          body:not(.pc-stage-mode) .ct-root {
+            justify-content: flex-start;
+            padding-top: 50px;
+            gap: 4px;
           }
-          .ct-scroll-hint-below, .ct-scroll-hint-above {
-            left: 0;
-            right: 0;
+          body:not(.pc-stage-mode) .ct-root.dimmed {
+            opacity: 0.9;
           }
-          .ct-info-bar-text { font-size: 13px; letter-spacing: 0.8px; }
-          .ct-info-bar-box { font-size: 11px; padding: 0 6px; }
-          .ct-info-bar-count { font-size: 13px; margin-right: 6px; }
-          .ct-acc-badge { font-size: 10px; padding: 1px 5px; }
+          body:not(.pc-stage-mode) .ct-bar { width: 94cqw; height: 46px; }
+          body:not(.pc-stage-mode) .ct-bar-red { width: 94cqw; height: 46px; }
+          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar { height: 56px; }
+          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar-red { height: 56px; }
+          body:not(.pc-stage-mode) .ct-label { font-size: 15px; letter-spacing: 1.5px; }
+          body:not(.pc-stage-mode) .ct-subtitle { font-size: 10px; }
+          body:not(.pc-stage-mode) .ct-char { max-width: 80px; left: 62px; }
+          body:not(.pc-stage-mode) .ct-main { padding-left: 38%; }
+          body:not(.pc-stage-mode) .ct-role { font-size: 24px; }
+          body:not(.pc-stage-mode) .ct-stat-num { font-size: 16px; }
 
-          .ct-right-nav { top: 16px; right: 10px; font-size: 18px; }
-          .ct-nav-label { font-size: 14px; }
-          .ct-footer { bottom: 8px; right: 8px; }
-          .ct-footer-row { font-size: 10px; }
-          .ct-scroll-track { right: 4px; }
-          .sc-back-btn { bottom: 20px; left: 20px; font-size: 18px; }
+          body:not(.pc-stage-mode) .ct-info-panel-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            transform: translateY(95px);
+          }
+          body:not(.pc-stage-mode) .ct-info-bar-wrap {
+            left: 2%;
+            right: 4%;
+            height: 42px;
+          }
+          body:not(.pc-stage-mode) .ct-scroll-hint-below,
+          body:not(.pc-stage-mode) .ct-scroll-hint-above {
+            left: 2%;
+            right: 4%;
+          }
+          body:not(.pc-stage-mode) .ct-info-bar-text { font-size: 12.5px; letter-spacing: 0.8px; }
+          body:not(.pc-stage-mode) .ct-info-bar-box { font-size: 10.5px; padding: 0 6px; }
+          body:not(.pc-stage-mode) .ct-info-bar-count { font-size: 12.5px; margin-right: 6px; }
+          body:not(.pc-stage-mode) .ct-acc-badge { font-size: 10px; padding: 1px 5px; }
+
+          body:not(.pc-stage-mode) .ct-right-nav { top: 222px; right: 12px; font-size: 16px; }
+          body:not(.pc-stage-mode) .ct-nav-label { font-size: 13px; }
+          body:not(.pc-stage-mode) .ct-footer { bottom: 8px; right: 8px; }
+          body:not(.pc-stage-mode) .ct-footer-row { font-size: 10px; }
+          body:not(.pc-stage-mode) .ct-scroll-track { right: 4px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 14px; left: 16px; font-size: 18px; }
         }
 
         .sc-back-btn {
@@ -611,7 +650,7 @@ export default function Certs() {
           z-index: 9999;
           pointer-events: all;
           border: 1px solid rgba(255,255,255,0.1);
-
+          touch-action: manipulation;
         }
         .sc-back-btn:hover {
           background: #c4001a;
@@ -626,25 +665,24 @@ export default function Certs() {
           <div
             key={item.id}
             className={`ct-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onMouseEnter={() => { setActive(i); setFocus("left"); }}
+            onMouseEnter={() => { if (active !== i) selectCategory(i); setFocus("left"); }}
           >
             <div className="ct-bar-red" />
             <div 
               className="ct-bar"
-              onMouseEnter={() => { setActive(i); setFocus("left"); }}
+              onMouseEnter={() => { if (active !== i) selectCategory(i); setFocus("left"); }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (active !== i) {
-                  setActive(i);
-                  setFocus("left");
-                } else if (focus === "left") {
+                  selectCategory(i);
+                } else {
                   setFocus("right");
                   setActiveInfoBar(0);
                   setScrollOffset(0);
                 }
               }}
             >
-              <img className="ct-char" src={CHARS[i]} alt="" />
+              <img className="ct-char" src={CHARS[i]} width="350" height="135" decoding="async" alt="" />
               <div className="ct-bar-fill" />
               <div className="ct-bar-content">
                 <div className="ct-role">{ROLES[i].text}</div>
@@ -670,11 +708,29 @@ export default function Certs() {
 
       {mounted && (
         <div className="ct-right-nav" key={active}>
-          <span className="ct-arrow">◄</span>
-          <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>LB</span>
+          <button
+            type="button"
+            style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              selectCategory((i) => (i - 1 + ITEMS.length) % ITEMS.length);
+            }}
+          >
+            <span className="ct-arrow">◄</span>
+            <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>LB</span>
+          </button>
           <span className="ct-nav-label">{ITEMS[active].label}</span>
-          <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>RB</span>
-          <span className="ct-arrow">►</span>
+          <button
+            type="button"
+            style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              selectCategory((i) => (i + 1) % ITEMS.length);
+            }}
+          >
+            <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>RB</span>
+            <span className="ct-arrow">►</span>
+          </button>
         </div>
       )}
 
@@ -686,8 +742,37 @@ export default function Certs() {
         const thumbH = Math.round((VISIBLE / totalBars) * (VISIBLE * 55));
         const thumbTop = Math.round((scrollOffset / totalBars) * (VISIBLE * 55));
         const hasMore = totalBars > VISIBLE;
+
+        const scrollByStep = (dir) => {
+          setFocus("right");
+          if (dir > 0) {
+            setScrollOffset((off) => Math.min(Math.max(0, totalBars - VISIBLE), off + 1));
+            setActiveInfoBar((prev) => Math.min(totalBars - 1, prev + 1));
+          } else {
+            setScrollOffset((off) => Math.max(0, off - 1));
+            setActiveInfoBar((prev) => Math.max(0, prev - 1));
+          }
+        };
+
         return mounted ? (
-          <div className={`ct-info-panel-container${focus === "left" ? " dimmed" : ""}`}>
+          <div
+            className={`ct-info-panel-container${focus === "left" ? " dimmed" : ""}`}
+            onTouchStart={(e) => {
+              if (!e.touches || !e.touches[0]) return;
+              touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }}
+            onTouchMove={(e) => {
+              if (!e.touches || !e.touches[0]) return;
+              const rawDx = e.touches[0].clientX - touchStartPos.current.x;
+              const rawDy = e.touches[0].clientY - touchStartPos.current.y;
+              const isRotated = document.body.classList.contains("pc-stage-mode") && window.innerWidth < window.innerHeight;
+              const dy = isRotated ? -rawDx : rawDy;
+              if (Math.abs(dy) > 28) {
+                scrollByStep(dy < 0 ? 1 : -1);
+                touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+              }
+            }}
+          >
             {hasMore && (
 
               <>
@@ -696,7 +781,14 @@ export default function Certs() {
                 </div>
                 {/* More below indicator */}
                 {scrollOffset + VISIBLE < totalBars && (
-                  <div className="ct-scroll-hint-below" style={{ top: `${155 + VISIBLE * 55 - 38}px` }}>
+                  <div
+                    className="ct-scroll-hint-below"
+                    style={{ top: `${155 + VISIBLE * 55 - 38}px`, cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      scrollByStep(1);
+                    }}
+                  >
                     <div className="ct-scroll-fade" />
                     <div className="ct-scroll-arrow">
                       <span>▼</span>
@@ -706,7 +798,14 @@ export default function Certs() {
                 )}
                 {/* More above indicator */}
                 {scrollOffset > 0 && (
-                  <div className="ct-scroll-hint-above" style={{ top: `${155}px` }}>
+                  <div
+                    className="ct-scroll-hint-above"
+                    style={{ top: `${155}px`, cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      scrollByStep(-1);
+                    }}
+                  >
                     <div className="ct-scroll-arrow-top">
                       <span>▲</span>
                       {scrollOffset} MORE ABOVE
@@ -724,18 +823,19 @@ export default function Certs() {
                   key={`bar-${active}-${realIdx}`}
                   style={{ top: `${155 + vi * 55}px`, animationDelay: `${vi * 40}ms` }}
                   onClick={() => {
+                    setFocus("right");
                     setActiveInfoBar(realIdx);
-                    window.open(link.href, "_blank");
+                    openCert(link, currentItem.label);
                   }}
                   onMouseEnter={() => setActiveInfoBar(realIdx)}
                 >
                   {currentItem.newBars.includes(realIdx) && (
-                    <img className="ct-info-bar-new" src={newsign} alt="" />
+                    <img className="ct-info-bar-new" src={newsign} width="100" height="100" decoding="async" alt="" />
                   )}
                   <div className="ct-info-bar">
-                    <img className="ct-info-bar-icon" src={currentItem.barIcon} alt="" />
+                    <img className="ct-info-bar-icon" src={currentItem.barIcon} width="48" height="28" decoding="async" alt="" />
                     <span className="ct-info-bar-text">{link.text}</span>
-                    <span className="ct-acc-badge">▶ PDF</span>
+                    <span className="ct-acc-badge">▶ VIEW</span>
                     <span className="ct-info-bar-box">{link.pillLabel}</span>
                     <span className="ct-info-bar-count">{link.pillValue}</span>
                   </div>
@@ -746,16 +846,119 @@ export default function Certs() {
         ) : null;
       })()}
 
+      {selectedCert && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9998,
+            background: "rgba(0, 4, 24, 0.82)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "16px",
+            pointerEvents: "all",
+          }}
+          onClick={() => setSelectedCert(null)}
+        >
+          <div
+            style={{
+              width: "min(520px, 92%)",
+              background: "linear-gradient(180deg, #0d1958 0%, #060d38 100%)",
+              border: "1px solid rgba(142, 245, 255, 0.35)",
+              boxShadow: "0 0 0 3px #c4001a, 14px 14px 0 rgba(0,0,0,0.65)",
+              transform: "skewX(-3deg)",
+              padding: "22px 24px",
+              color: "#fff",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "16px", letterSpacing: "2.5px", color: "#8ef5ff", background: "rgba(142,245,255,0.12)", padding: "3px 10px" }}>
+                {selectedCert.category} · CREDENTIAL RECORD
+              </span>
+              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "15px", letterSpacing: "2px", background: "#00c853", color: "#041238", padding: "2px 10px", fontWeight: 700 }}>
+                STATUS: VERIFIED
+              </span>
+            </div>
+            <div style={{ fontFamily: "'Anton', sans-serif", fontSize: "28px", lineHeight: 1.1, letterSpacing: "1px", color: "#fff", marginBottom: "10px" }}>
+              {selectedCert.text}
+            </div>
+            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "20px", letterSpacing: "1.5px", color: "#9cf7ff", marginBottom: "18px" }}>
+              ISSUING AUTHORITY: <span style={{ color: "#fff" }}>{selectedCert.pillValue}</span> · HOLDER: <span style={{ color: "#fff" }}>RAJARSHI CHAKRABORTY</span>
+            </div>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <a
+                href="https://www.linkedin.com/in/rajarshi-cybersecurity/details/certifications/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  flex: 1,
+                  minWidth: "170px",
+                  textAlign: "center",
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "20px",
+                  letterSpacing: "2px",
+                  color: "#fff",
+                  background: "#c4001a",
+                  padding: "9px 14px",
+                  textDecoration: "none",
+                  clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
+                }}
+              >
+                ▶ VERIFY ON LINKEDIN
+              </a>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  flex: 1,
+                  minWidth: "150px",
+                  textAlign: "center",
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "20px",
+                  letterSpacing: "2px",
+                  color: "#06133b",
+                  background: "#8ef5ff",
+                  padding: "9px 14px",
+                  textDecoration: "none",
+                  clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
+                }}
+              >
+                ▶ VIEW RESUME PDF
+              </a>
+              <button
+                type="button"
+                onClick={() => setSelectedCert(null)}
+                style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "20px",
+                  letterSpacing: "2px",
+                  color: "#fff",
+                  background: "rgba(255,255,255,0.12)",
+                  border: "1px solid rgba(255,255,255,0.3)",
+                  padding: "9px 18px",
+                  cursor: "pointer",
+                }}
+              >
+                ✕ CLOSE
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={`ct-footer${mounted ? " mounted" : ""}`}>
         <div className="ct-footer-row"><span className="ct-footer-key">↑↓</span><span>SELECT</span></div>
-        <div className="ct-footer-row"><span className="ct-footer-key">↵</span><span>OPEN PDF</span></div>
+        <div className="ct-footer-row"><span className="ct-footer-key">↵</span><span>VIEW</span></div>
         <div className="ct-footer-row"><span className="ct-footer-key">ESC</span><span>BACK</span></div>
       </div>
       <div 
         className="sc-back-btn" 
         onClick={(e) => {
           e.stopPropagation();
-          if (focus === "right") setFocus("left");
+          if (selectedCert) setSelectedCert(null);
           else navigate('/');
         }}
       >

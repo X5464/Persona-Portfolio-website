@@ -18,37 +18,36 @@ const MAIN_IMAGES = [mainm, mainm2, mainf];
 const REVEAL_CONTENT = [
   {
     name: "Name : Rajarshi Chakraborty",
-    major: "Major :  Cybersecurity · Computer Science",
+    major: "Major : BCA Cybersecurity (9.08 SGPA) · CS Minor (IIT Mandi)",
     upper: [
-      "Class: Offensive Security & Blue Team Defense",
-      "Bridging the gap between Red Team attacks & Blue Team defense.",
-      "I break systems using ethical hacking and threat intelligence,",
-      "then fortify them with audits and secure architecture.",
-      "I know how to break systems — and how to secure them.",
-      "AWS Cloud Club Core Team Member:",
-      "I manage social media, creating reels & content for my college club."
+      "Class: Cybersecurity Analyst · PenTester · Digital Forensics",
+      "Performing live digital forensics & network log analysis on active",
+      "cybercrime cases with Uttar Pradesh Police (APCSIP 2026).",
+      "Building Python security tools: CTI dashboards (VirusTotal/AbuseIPDB),",
+      "hash crackers, and Tor-routed OSINT suites.",
+      "AWS Cloud Club Core Team Member (Social Media & Content)."
     ],
     lower: "About Me",
   },
   {
     upper: [
-      "Surviving The Grind",
-      "I successfully survived a grueling 60-hour non-stop",
-      "Capture The Flag endurance hacking competition.",
-      "When I step away from the terminal, I completely unplug",
-      "by playing the guitar and painting with watercolors.",
-      "I am highly fascinated by Cybersecurity",
+      "Surviving The Grind & Winning On The Field",
+      "Survived a grueling 60-hour non-stop CTF endurance event",
+      "at Hck4G CTF Con 2025 International (Melbourne, Australia).",
+      "Won 1st Place at Research Horizons 2025 & 3rd Place overall",
+      "among 1,000+ teams at JAIN Launchpad 2025 Glitch Pitch.",
+      "Off-terminal: I unplug with guitar and watercolor painting.",
     ],
     lower: "Fun Fact About Me",
   },
   {
     upper: [
-      "Some project Insides",
-      "(Blue Team Defense): I built Sentinel AI, a live Threat",
-      "Intelligence dashboard used to centralize real-time enterprise threats.",
-      "(Offensive Recon): I built a Python web crawlers to automate reconnaissance",
-      "(Hardware Security): I engineered a decentralized agricultural IoT",
-      "device to process health data offline ensuring absolute data privacy."
+      "Signature Security Architecture",
+      "(Threat Intel): Built Sentinel AI, a real-time CTI platform",
+      "integrating VirusTotal & AbuseIPDB for IP reputation scoring.",
+      "(OSINT & Forensics): Built ARGUS OSINT with 18 tools, automated",
+      "Tor routing, encrypted key vault & chain-of-custody logging.",
+      "(IoT & Offensive): Built VARS Agri Nova (Sarvam API) & Spiderweb."
     ],
     lower: "Wired Fact About Me",
   },
@@ -127,14 +126,22 @@ export default function AboutMe() {
   return (
     <div id="menu-screen">
       <video 
-        src={bgVideo} 
+        src={bgVideo}
+        poster={bgPoster}
         autoPlay 
         loop 
         muted 
         playsInline 
         preload="auto"
+        onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
       />
-      {revealed && <div key={`dim-${active}`} className="sc-dim" />}
+      {revealed && (
+        <div
+          key={`dim-${active}`}
+          className="sc-dim"
+          onClick={() => setRevealed(false)}
+        />
+      )}
       {revealed && (
         <div key={`panel-${active}`} className={`sc-reveal-panel${mounted ? " mounted" : ""}`}>
           {REVEAL_CONTENT[active].name && (
@@ -148,16 +155,79 @@ export default function AboutMe() {
               <div className="sc-reveal-upper-line" key={line}>{line}</div>
             ))}
           </div>
-          <div className="sc-reveal-lower-bar">{REVEAL_CONTENT[active].lower}</div>
+          <div className="sc-reveal-lower-bar">
+            <span>{REVEAL_CONTENT[active].lower}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginLeft: "auto", marginRight: "32px" }}>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActive((i) => (i + 1) % ITEMS.length);
+                }}
+                style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "16px",
+                  letterSpacing: "1.5px",
+                  color: "#fff",
+                  background: "#c4001a",
+                  border: "none",
+                  padding: "4px 12px",
+                  cursor: "pointer",
+                  clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
+                }}
+              >
+                NEXT ►
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setRevealed(false);
+                }}
+                style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "16px",
+                  letterSpacing: "1.5px",
+                  color: "#8ef5ff",
+                  background: "rgba(255,255,255,0.12)",
+                  border: "1px solid rgba(142,245,255,0.35)",
+                  padding: "3px 10px",
+                  cursor: "pointer",
+                }}
+              >
+                ✕ CLOSE
+              </button>
+            </div>
+          </div>
         </div>
       )}
       {revealed && (
         <div key={`nav-${active}`} className="sc-right-nav">
-          <span className="sc-nav-arrow left">◄</span>
-          <span className="sc-nav-btn">LB</span>
+          <button
+            type="button"
+            className="sc-nav-click"
+            aria-label="Previous section"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActive((i) => (i - 1 + ITEMS.length) % ITEMS.length);
+            }}
+          >
+            <span className="sc-nav-arrow left">◄</span>
+            <span className="sc-nav-btn">LB</span>
+          </button>
           <span className="sc-nav-dot" />
-          <span className="sc-nav-btn">RB</span>
-          <span className="sc-nav-arrow right">►</span>
+          <button
+            type="button"
+            className="sc-nav-click"
+            aria-label="Next section"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActive((i) => (i + 1) % ITEMS.length);
+            }}
+          >
+            <span className="sc-nav-btn">RB</span>
+            <span className="sc-nav-arrow right">►</span>
+          </button>
         </div>
       )}
       {revealed && (
@@ -165,18 +235,19 @@ export default function AboutMe() {
           <img
             className="sc-main-portrait"
             src={MAIN_IMAGES[active]}
+            width="500"
+            height="830"
+            decoding="async"
             alt=""
           />
         </div>
       )}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,700;1,700&family=Montserrat:wght@300&display=swap');
-
         .sc-root {
           position: absolute;
           inset: 0;
           z-index: 1000;
-          pointer-events: all;
+          pointer-events: none;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -186,7 +257,7 @@ export default function AboutMe() {
           transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .sc-root.revealed {
-          transform: translateX(-15vw);
+          transform: translateX(-15%);
         }
 
         .sc-dim {
@@ -194,7 +265,8 @@ export default function AboutMe() {
           inset: 0;
           z-index: 12;
           background: rgba(40, 45, 54, 0.68);
-          pointer-events: none;
+          pointer-events: all;
+          cursor: pointer;
           animation: sc-dim-in 0.32s ease-out;
         }
 
@@ -253,11 +325,11 @@ export default function AboutMe() {
         .sc-main-portrait-shell {
           position: absolute;
           top: 0;
-          right: -8vw;
+          right: -8%;
           z-index: 10;
           pointer-events: none;
-          width: 43vw;
-          height: 100vh;
+          width: 43%;
+          height: 100%;
           overflow: hidden;
           opacity: 0;
           transform: translateX(24px) skewX(-8deg) scale(0.98);
@@ -271,10 +343,10 @@ export default function AboutMe() {
 
         .sc-reveal-panel {
           position: absolute;
-          top: 25vh;
-          left: 22vw;
-          width: 68vw;
-          height: 62vh;
+          top: 25%;
+          left: 22%;
+          width: 68%;
+          height: 62%;
           z-index: 20;
           pointer-events: all;
           background:
@@ -419,8 +491,10 @@ export default function AboutMe() {
           65%  { opacity: 1; transform: scale(1.1) translateY(2px); }
           100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-          top: 1.5vh;
-          left: 4vw;
+        .sc-right-nav {
+          position: absolute;
+          top: 4%;
+          left: 4%;
           display: flex;
           align-items: center;
           gap: 6px;
@@ -430,9 +504,19 @@ export default function AboutMe() {
           transform-origin: left bottom;
           animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
         }
+        .sc-nav-click {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          pointer-events: all;
+          touch-action: manipulation;
+        }
         .sc-right-nav .sc-nav-btn {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(32px, 6vw, 64px);
+          font-size: 48px;
           letter-spacing: 3px;
           line-height: 1;
           user-select: none;
@@ -473,12 +557,13 @@ export default function AboutMe() {
         /* ── Each bar ── */
         .sc-bar {
           position: relative;
-          width: 45vw;
+          width: 45cqw;
           height: 64px;
           transition: height 0.3s cubic-bezier(0.22,1,0.36,1);
           background: #111;
           cursor: pointer;
           pointer-events: all;
+          touch-action: manipulation;
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
           box-shadow: 0 6px 24px rgba(0,0,0,0.65);
           z-index: 1;
@@ -488,6 +573,7 @@ export default function AboutMe() {
         .sc-bar-outer {
           position: relative;
           flex-shrink: 0;
+          pointer-events: all;
           transform: translateX(-100%);
           transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
         }
@@ -502,7 +588,7 @@ export default function AboutMe() {
         .sc-bar-red {
           position: absolute;
           top: 0; left: 0;
-          width: 45vw;
+          width: 45cqw;
           height: 64px;
           background: #c4001a;
           clip-path: polygon(50% 0, 100% 0, 100% 100%, calc(50% - 10px) 100%);
@@ -718,31 +804,48 @@ export default function AboutMe() {
         }
 
         @media (max-width: 768px) {
-          /* Left menu bars */
-          .sc-bar { width: 88vw; height: 52px; }
-          .sc-bar-red { width: 88vw; }
-          .sc-bar-outer.active .sc-bar { height: 68px; }
-          .sc-bar-outer.active .sc-bar-red { height: 68px; }
-          .sc-char { max-width: 90px; left: 62px; }
-          .sc-main { padding-left: 38%; }
+          /* Left menu bars in portrait mode */
+          body:not(.pc-stage-mode) .sc-bar { width: 92cqw; height: 58px; }
+          body:not(.pc-stage-mode) .sc-bar-red { width: 92cqw; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 74px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 74px; }
+          body:not(.pc-stage-mode) .sc-char { max-width: 90px; left: 62px; }
+          body:not(.pc-stage-mode) .sc-main { padding-left: 38%; }
+          body:not(.pc-stage-mode) .sc-root.revealed { transform: translateX(-110%); }
 
-          /* Reveal info panel */
-          .sc-reveal-panel {
-            top: 28vh;
-            left: 0;
-            width: 96vw;
-            height: 62vh;
-            clip-path: polygon(0 0, 100% 0, calc(100% - 32px) 100%, 0 100%);
+          /* Reveal info panel in portrait mode */
+          body:not(.pc-stage-mode) .sc-reveal-panel {
+            top: 24%;
+            left: 2%;
+            width: 96%;
+            height: 60%;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 28px) 100%, 0 100%);
+            transform: skewX(-4deg);
           }
-          .sc-reveal-upper-bar { padding-left: 12px; padding-right: 6%; }
-          .sc-reveal-lower-bar { font-size: 20px; padding-left: 14px; }
-          .sc-reveal-name-box { padding-left: 12px; }
+          body:not(.pc-stage-mode) .sc-reveal-upper-bar {
+            padding-left: 16px;
+            padding-right: 6%;
+            height: 46%;
+          }
+          body:not(.pc-stage-mode) .sc-reveal-upper-line {
+            font-size: 12.5px;
+            line-height: 1.25;
+          }
+          body:not(.pc-stage-mode) .sc-reveal-upper-line:nth-child(1) {
+            font-size: 14px;
+          }
+          body:not(.pc-stage-mode) .sc-reveal-lower-bar { font-size: 20px; padding-left: 14px; top: 75%; height: 15%; }
+          body:not(.pc-stage-mode) .sc-reveal-name-box { padding-left: 16px; top: 8%; height: 18%; }
+          body:not(.pc-stage-mode) .sc-reveal-name { font-size: 22px; }
+          body:not(.pc-stage-mode) .sc-reveal-major { font-size: 10.5px; }
+          body:not(.pc-stage-mode) .sc-main-portrait-shell { width: 65%; right: -10%; opacity: 0.45; }
 
           /* Nav & footer */
-          .sc-right-nav { top: 12px; left: 50%; transform: translateX(-50%); font-size: 14px; }
-          .sc-footer { bottom: 8px; right: 8px; }
-          .sc-footer-row { font-size: 10px; }
-          .sc-back-btn { bottom: 20px; left: 20px; font-size: 18px; }
+          body:not(.pc-stage-mode) .sc-right-nav { top: 52px; left: 50%; transform: translateX(-50%); font-size: 14px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 32px; }
+          body:not(.pc-stage-mode) .sc-footer { bottom: 8px; right: 8px; }
+          body:not(.pc-stage-mode) .sc-footer-row { font-size: 10px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 16px; left: 16px; font-size: 18px; }
         }
 
         .sc-back-btn {
@@ -763,6 +866,7 @@ export default function AboutMe() {
           transition: all 0.2s;
           pointer-events: all;
           border: 1px solid rgba(255,255,255,0.1);
+          touch-action: manipulation;
         }
         .sc-back-btn:hover {
           background: #c4001a;
@@ -787,13 +891,13 @@ export default function AboutMe() {
                 e.stopPropagation();
                 if (active !== i) {
                   setActive(i);
-                  setRevealed(false);
+                  setRevealed(true);
                 } else {
                   setRevealed(!revealed);
                 }
               }}
             >
-              <img className="sc-char" src={CHARS[i]} alt="" />
+              <img className="sc-char" src={CHARS[i]} width="350" height="135" decoding="async" alt="" />
               <div className="sc-bar-fill" />
               <div className="sc-bar-shade" />
               <div className="sc-bar-content">

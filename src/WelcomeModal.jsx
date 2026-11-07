@@ -1,24 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-export default function WelcomeModal({ isOpen, onClose }) {
+export default function WelcomeModal({
+  isOpen,
+  onClose,
+  onSetForceLandscape,
+  isPortraitMobile,
+}) {
   const [animOut, setAnimOut] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) setAnimOut(false);
-  }, [isOpen]);
-
-  const dismiss = () => {
+  const dismiss = useCallback(() => {
     setAnimOut(true);
     setTimeout(() => {
       onClose();
       setAnimOut(false);
-    }, 400);
-  };
+    }, 350);
+  }, [onClose]);
 
-  const reopen = () => {
-    sessionStorage.removeItem("welcome-dismissed");
-    setAnimOut(false);
-    setVisible(true);
+  const selectModeAndDismiss = (landscapeVal) => {
+    setAnimOut(true);
+    setTimeout(() => {
+      if (onSetForceLandscape) onSetForceLandscape(landscapeVal);
+      else onClose();
+      setAnimOut(false);
+    }, 280);
   };
 
   useEffect(() => {
@@ -32,27 +36,26 @@ export default function WelcomeModal({ isOpen, onClose }) {
     };
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
-  }, [isOpen]);
+  }, [isOpen, dismiss]);
 
   if (!isOpen && !animOut) return null;
 
   return (
     <>
       <style>{`
-        /* Fonts are now in index.html */
-
         .wm-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 12, 0.82);
+          background: rgba(0, 0, 12, 0.84);
           z-index: 9999;
           display: flex;
           align-items: center;
           justify-content: center;
-          animation: wm-fadein 0.5s ease both;
+          padding: 16px;
+          animation: wm-fadein 0.4s ease both;
         }
         .wm-overlay.out {
-          animation: wm-fadeout 0.4s ease both;
+          animation: wm-fadeout 0.35s ease both;
         }
 
         @keyframes wm-fadein {
@@ -64,7 +67,7 @@ export default function WelcomeModal({ isOpen, onClose }) {
           to   { opacity: 0; }
         }
         @keyframes wm-slidein {
-          from { opacity: 0; transform: translateY(30px) skewX(-2deg); }
+          from { opacity: 0; transform: translateY(24px) skewX(-2deg); }
           to   { opacity: 1; transform: translateY(0) skewX(-2deg); }
         }
 
@@ -76,18 +79,25 @@ export default function WelcomeModal({ isOpen, onClose }) {
             0 0 0 3px #c4001a,
             0 0 60px rgba(0,0,0,0.9),
             0 0 40px rgba(196, 0, 26, 0.2);
-          width: min(560px, 90vw);
-          overflow: hidden;
-          animation: wm-slidein 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+          width: min(560px, 94%);
+          max-height: 90%;
+          overflow-y: auto;
+          scrollbar-width: none;
+          animation: wm-slidein 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+        }
+        .wm-box::-webkit-scrollbar {
+          display: none;
         }
 
         .wm-header {
           background: #c4001a;
-          padding: 10px 24px;
+          padding: 10px 22px;
           display: flex;
           align-items: center;
           gap: 12px;
-          position: relative;
+          position: sticky;
+          top: 0;
+          z-index: 2;
         }
         .wm-close {
           position: absolute;
@@ -120,21 +130,21 @@ export default function WelcomeModal({ isOpen, onClose }) {
         }
         .wm-header-title {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 22px;
-          letter-spacing: 4px;
+          font-size: 21px;
+          letter-spacing: 3.5px;
           color: #fff;
           line-height: 1;
         }
 
         .wm-body {
-          padding: 28px 28px 20px;
+          padding: 20px 24px 18px;
         }
 
         .wm-warning {
-          background: rgba(196, 0, 26, 0.12);
-          border-left: 3px solid #c4001a;
+          background: rgba(142, 245, 255, 0.08);
+          border-left: 3px solid #8ef5ff;
           padding: 10px 14px;
-          margin-bottom: 22px;
+          margin-bottom: 18px;
           display: flex;
           align-items: flex-start;
           gap: 10px;
@@ -146,11 +156,11 @@ export default function WelcomeModal({ isOpen, onClose }) {
         }
         .wm-warning-text {
           font-family: 'Montserrat', sans-serif;
-          font-size: 12.5px;
+          font-size: 12px;
           font-weight: 600;
-          letter-spacing: 0.5px;
-          color: #ffb8c1;
-          line-height: 1.5;
+          letter-spacing: 0.4px;
+          color: #d6fbff;
+          line-height: 1.45;
         }
 
         .wm-section-title {
@@ -158,14 +168,14 @@ export default function WelcomeModal({ isOpen, onClose }) {
           font-size: 16px;
           letter-spacing: 3px;
           color: #8ef5ff;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
 
         .wm-keys {
           display: flex;
           flex-direction: column;
-          gap: 10px;
-          margin-bottom: 24px;
+          gap: 8px;
+          margin-bottom: 18px;
         }
         .wm-key-row {
           display: flex;
@@ -193,9 +203,9 @@ export default function WelcomeModal({ isOpen, onClose }) {
         }
         .wm-key-desc {
           font-family: 'Montserrat', sans-serif;
-          font-size: 13px;
+          font-size: 12.5px;
           font-weight: 400;
-          color: rgba(255,255,255,0.75);
+          color: rgba(255,255,255,0.78);
           letter-spacing: 0.3px;
         }
         .wm-key-desc strong {
@@ -205,37 +215,49 @@ export default function WelcomeModal({ isOpen, onClose }) {
 
         .wm-divider {
           height: 1px;
-          background: rgba(145, 245, 255, 0.1);
-          margin: 18px 0;
+          background: rgba(145, 245, 255, 0.12);
+          margin: 14px 0;
+        }
+
+        .wm-btn-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
         }
 
         .wm-btn {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 22px;
-          letter-spacing: 3px;
+          font-size: 21px;
+          letter-spacing: 2.5px;
           color: #fff;
           background: #c4001a;
           border: none;
           cursor: pointer;
           width: 100%;
-          padding: 12px 0;
+          padding: 11px 12px;
           clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
           transition: background 0.2s ease, transform 0.1s ease;
+          touch-action: manipulation;
         }
         .wm-btn:hover {
           background: #e03d31;
           transform: translateY(-1px);
         }
-        .wm-btn:active {
-          transform: translateY(1px);
+        .wm-btn.secondary {
+          background: #101e5a;
+          border: 1px solid rgba(142, 245, 255, 0.4);
+          color: #8ef5ff;
+        }
+        .wm-btn.secondary:hover {
+          background: #172b7a;
         }
         .wm-btn-hint {
           font-family: 'Montserrat', sans-serif;
           font-size: 11px;
-          color: rgba(255,255,255,0.7);
+          color: rgba(255,255,255,0.65);
           letter-spacing: 1px;
           text-align: center;
-          margin-top: 8px;
+          margin-top: 6px;
         }
       `}</style>
 
@@ -252,73 +274,70 @@ export default function WelcomeModal({ isOpen, onClose }) {
           <div className="wm-body">
 
             <div className="wm-warning">
-              <span className="wm-warning-icon">🖥️</span>
+              <span className="wm-warning-icon">📱</span>
               <span className="wm-warning-text">
-                BEST EXPERIENCED ON DESKTOP OR LAPTOP.<br />
-                Mobile devices are not fully supported — keyboard navigation required.
+                ON MOBILE / NFC? Even with <strong>Rotation Lock ON</strong>, tap <strong>⟳ ROTATE 90° (PC VIEW)</strong> anytime at the top to flip the website sideways for the full 16:9 widescreen video &amp; Persona 3 UI—or stay in Portrait mode!
               </span>
             </div>
 
-            <div className="wm-section-title">// MOUSE CONTROLS</div>
-            <div className="wm-keys" style={{ marginBottom: "28px" }}>
+            <div className="wm-section-title">// TOUCH &amp; MOUSE CONTROLS</div>
+            <div className="wm-keys">
               <div className="wm-key-row">
                 <div className="wm-keys-group">
-                  <span className="wm-key">HOVER</span>
+                  <span className="wm-key">TAP / CLICK</span>
                 </div>
-                <span className="wm-key-desc"><strong>Move mouse</strong> to select or switch items instantly</span>
+                <span className="wm-key-desc"><strong>Tap any item</strong> to select, reveal details, or open links</span>
               </div>
               <div className="wm-key-row">
                 <div className="wm-keys-group">
-                  <span className="wm-key">CLICK</span>
+                  <span className="wm-key">SWIPE / SCROLL</span>
                 </div>
-                <span className="wm-key-desc"><strong>Left-Click</strong> to reveal details or open links</span>
+                <span className="wm-key-desc"><strong>Swipe or drag</strong> to navigate menus &amp; scroll certificates</span>
               </div>
               <div className="wm-key-row">
                 <div className="wm-keys-group">
-                  <span className="wm-key">SCROLL</span>
+                  <span className="wm-key">⟳ ROTATE 90°</span>
                 </div>
-                <span className="wm-key-desc"><strong>Wheel/Trackpad</strong> to browse certificates & lists</span>
+                <span className="wm-key-desc"><strong>Toggle sideways PC view</strong> on phones with rotation lock on</span>
               </div>
             </div>
 
             <div className="wm-section-title">// KEYBOARD CONTROLS</div>
-
             <div className="wm-keys">
               <div className="wm-key-row">
                 <div className="wm-keys-group">
                   <span className="wm-key">↑</span>
                   <span className="wm-key">↓</span>
+                  <span className="wm-key">←</span>
+                  <span className="wm-key">→</span>
                 </div>
-                <span className="wm-key-desc"><strong>Navigate</strong> between menu items</span>
+                <span className="wm-key-desc"><strong>Arrow Keys</strong> to navigate items &amp; switch panels</span>
               </div>
               <div className="wm-key-row">
                 <div className="wm-keys-group">
                   <span className="wm-key">↵</span>
-                </div>
-                <span className="wm-key-desc"><strong>Confirm</strong> / Open selected item</span>
-              </div>
-              <div className="wm-key-row">
-                <div className="wm-keys-group">
-                  <span className="wm-key">←</span>
-                  <span className="wm-key">→</span>
-                </div>
-                <span className="wm-key-desc"><strong>Switch focus</strong> between panels (Socials / Certs)</span>
-              </div>
-              <div className="wm-key-row">
-                <div className="wm-keys-group">
                   <span className="wm-key">ESC</span>
                 </div>
-                <span className="wm-key-desc"><strong>Go back</strong> to previous screen</span>
+                <span className="wm-key-desc"><strong>Enter</strong> to confirm / open · <strong>Esc</strong> to go back</span>
               </div>
             </div>
 
-
-
             <div className="wm-divider" />
-            <div style={{ textAlign: "center" }}>
-              <button className="wm-btn" onClick={dismiss}>ENTER THE SYSTEM</button>
-              <div className="wm-btn-hint">PRESS ENTER OR CLICK TO CONTINUE</div>
-            </div>
+            {isPortraitMobile ? (
+              <div className="wm-btn-stack">
+                <button className="wm-btn" onClick={() => selectModeAndDismiss(true)}>
+                  ⟳ ROTATE 90° — FULL 16:9 PC EXPERIENCE
+                </button>
+                <button className="wm-btn secondary" onClick={() => selectModeAndDismiss(false)}>
+                  📱 CONTINUE IN PORTRAIT MOBILE VIEW
+                </button>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>
+                <button className="wm-btn" onClick={dismiss}>ENTER THE SYSTEM</button>
+                <div className="wm-btn-hint">PRESS ENTER OR TAP TO CONTINUE</div>
+              </div>
+            )}
 
           </div>
         </div>
