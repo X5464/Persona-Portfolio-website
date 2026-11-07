@@ -346,11 +346,12 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
           max-height: 87%;
           z-index: 12;
           padding: 18px 22px 20px 22px;
-          background: linear-gradient(180deg, rgba(15, 28, 105, 0.96) 0%, rgba(8, 16, 68, 0.97) 100%);
+          background: linear-gradient(180deg, rgba(12, 24, 92, 0.68) 0%, rgba(6, 12, 54, 0.74) 100%);
+          backdrop-filter: blur(3px);
           clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
           box-shadow:
-            inset 0 0 0 1px rgba(133, 244, 255, 0.16),
-            16px 16px 0 rgba(0, 6, 30, 0.55);
+            inset 0 0 0 1px rgba(133, 244, 255, 0.22),
+            16px 16px 0 rgba(0, 6, 30, 0.45);
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
           touch-action: pan-y;
@@ -416,9 +417,9 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
           gap: 12px;
           min-height: 46px;
           padding: 6px 14px;
-          background: rgba(8, 18, 72, 0.96);
+          background: rgba(6, 14, 58, 0.72);
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
-          box-shadow: inset 0 0 0 1px rgba(140, 239, 255, 0.12);
+          box-shadow: inset 0 0 0 1px rgba(140, 239, 255, 0.16);
           transition: transform 0.16s ease, background 0.16s ease;
           animation: resume-row-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
@@ -462,9 +463,9 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
           position: relative;
           margin-top: 16px;
           padding: 14px 16px;
-          background: rgba(5, 13, 57, 0.97);
+          background: rgba(5, 13, 57, 0.76);
           clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
-          box-shadow: inset 0 0 0 1px rgba(145, 239, 255, 0.12);
+          box-shadow: inset 0 0 0 1px rgba(145, 239, 255, 0.16);
         }
         .resume-detail-bottom-title {
           font-family: 'Bebas Neue', sans-serif;
