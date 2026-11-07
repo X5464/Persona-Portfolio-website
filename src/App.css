@@ -34,6 +34,9 @@ main {
   height: 100%;
   object-fit: cover;
   object-position: center center;
+  filter: contrast(1.04) saturate(1.05);
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* On portrait mobile (when not in rotated PC stage mode), position the video slightly toward the right where the Persona 3 character stands */

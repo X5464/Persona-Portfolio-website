@@ -14,6 +14,7 @@ function DefaultTransition() {
         background: color,
         zIndex: 999 - i,
         originX: 0,
+        pointerEvents: "none",
       }}
       initial={{ scaleX: 0 }}
       animate={{ scaleX: [0, 1, 1, 0] }}
@@ -48,6 +49,7 @@ function AboutTransition() {
         clipPath: "polygon(0 0, 100% 0, calc(100% - 120px) 100%, 0 100%)",
         transform: "rotate(-18deg)",
         transformOrigin: "left center",
+        pointerEvents: "none",
       }}
       initial={{ x: -500, opacity: 0 }}
       animate={{ x: [-500, 20, 0], opacity: [1, 1, 0] }}
@@ -82,9 +84,10 @@ function SocialsTransition() {
         zIndex: 999 - i,
         transform: "skewX(-16deg)",
         transformOrigin: "top",
+        pointerEvents: "none",
       }}
       initial={{ y: -1200, opacity: 1 }}
-      animate={{ y: [-1200, 0, 0, 1200] }}
+      animate={{ y: [-1200, 0, 0, 1400], opacity: [1, 1, 1, 0] }}
       transition={{
         duration: 0.56,
         delay: stripe.delay,
@@ -123,9 +126,10 @@ function ResumeTransition() {
         zIndex: 999 - i,
         clipPath: "polygon(0 0, 97% 0, 100% 100%, 3% 100%)",
         boxShadow: card.color === "#ffffff" ? "10px 0 0 #d63232" : "none",
+        pointerEvents: "none",
       }}
       initial={{ x: -900, opacity: 1 }}
-      animate={{ x: [-900, 30, 0, 900] }}
+      animate={{ x: [-900, 30, 0, 2200], opacity: [1, 1, 1, 0] }}
       transition={{
         duration: 0.6,
         delay: card.delay,
