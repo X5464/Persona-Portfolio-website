@@ -11,9 +11,12 @@ import icon3 from "./assets/icon3.png";
 import mainm from "./assets/mainm.jpeg";
 import mainm2 from "./assets/mainm2.jpeg";
 import mainf from "./assets/mainf.jpeg";
+import newsign from "./assets/newsign.png";
+import arcanaCard from "./assets/card.png";
 
 const CHARS = [char1, char2, char3];
 const MAIN_IMAGES = [mainm, mainm2, mainf];
+const CHAR_NAMES = ["MAKOTO YUKI // LEADER", "JUNPEI IORI // SEES", "YUKARI TAKEBA // SEES"];
 
 const REVEAL_CONTENT = [
   {
@@ -30,6 +33,8 @@ const REVEAL_CONTENT = [
     lower: "About Me",
   },
   {
+    name: "Field Endurance & Creative Balance",
+    major: "60-Hour International CTF Finisher · National Hackathon Winner",
     upper: [
       "Surviving The Grind & Winning On The Field",
       "Survived a grueling 60-hour non-stop CTF endurance event",
@@ -41,6 +46,8 @@ const REVEAL_CONTENT = [
     lower: "Fun Fact About Me",
   },
   {
+    name: "Offensive & Defensive Security Arsenal",
+    major: "Sentinel AI · ARGUS OSINT (18 Tools) · VARS Agri Nova · Spiderweb",
     upper: [
       "Signature Security Architecture",
       "(Threat Intel): Built Sentinel AI, a real-time CTI platform",
@@ -61,27 +68,36 @@ const ROLES = [
 
 const ITEMS = [
   {
-    id: "twitch", label: "ABOUT ME", handle: "@yourname", href: "https://twitch.tv/yourname", icon: "🎮", barIcon: icon1, bars: 1, newBars: [0], counts: ["56"],
-    links: ["twitch.tv/videos/2041837265"],
+    id: "profile",
+    label: "ABOUT ME",
+    subtitle: "CYBER ANALYST",
+    barIcon: icon1,
+    isNew: true,
     stats: [
-      { tag: "FOL", value: "1.2K", color: "#9147ff" },
-      { tag: "VWR", value: "042", color: "#bf94ff" },
+      { tag: "SGPA", value: "9.08", color: "#00d9ff" },
+      { tag: "ARC", value: "01", color: "#e8c100" },
     ],
   },
   {
-    id: "instagram", label: "FUN FACT ABOUT ME", handle: "@yourhandle", href: "https://instagram.com/yourhandle", icon: "📷", barIcon: icon2, bars: 5, newBars: [1, 2], counts: ["3.4M", "2.5M", "676K", "412K", "198K"],
-    links: ["instagram.com/p/C4xQmRrNk2a", "instagram.com/p/C3wLpBsOj7f", "instagram.com/reel/C2vKoArMi6e", "instagram.com/p/C1uJnZqLh5d", "instagram.com/reel/C0tImYpKg4c"],
+    id: "funfact",
+    label: "FUN FACT ABOUT ME",
+    subtitle: "60H CTF & ART",
+    barIcon: icon2,
+    isNew: false,
     stats: [
-      { tag: "FOL", value: "3.4K", color: "#e1306c" },
-      { tag: "PST", value: "128", color: "#f77737" },
+      { tag: "CTF", value: "60H", color: "#4a8fff" },
+      { tag: "WIN", value: "1ST", color: "#00c853" },
     ],
   },
   {
-    id: "tiktok", label: "WIRED FACT ABOUT ME", handle: "@yourhandle", href: "https://tiktok.com/@yourhandle", icon: "🎵", barIcon: icon3, bars: 7, newBars: [0, 3, 5, 6], counts: ["5.1M", "3.7M", "2.2M", "1.4M", "831K", "490K", "217K"],
-    links: ["tiktok.com/@yourhandle/video/7318492016374859054", "tiktok.com/@yourhandle/video/7305837261940183342", "tiktok.com/@yourhandle/video/7291046385720348974", "tiktok.com/@yourhandle/video/7278392047163820334", "tiktok.com/@yourhandle/video/7264819203847165742", "tiktok.com/@yourhandle/video/7251047382916430126", "tiktok.com/@yourhandle/video/7237294018463851822"],
+    id: "wiredfact",
+    label: "WIRED FACT ABOUT ME",
+    subtitle: "SECURITY TOOLS",
+    barIcon: icon3,
+    isNew: true,
     stats: [
-      { tag: "FOL", value: "8.9K", color: "#00f2ea" },
-      { tag: "LKS", value: "52K", color: "#ff0050" },
+      { tag: "TLS", value: "18+", color: "#ff2a6d" },
+      { tag: "PRJ", value: "06", color: "#bf94ff" },
     ],
   },
 ];
@@ -89,7 +105,6 @@ const ITEMS = [
 export default function AboutMe() {
   const [active, setActive] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [revealed, setRevealed] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -101,27 +116,22 @@ export default function AboutMe() {
     const onKey = (e) => {
       if (e.key === "ArrowUp") setActive(i => Math.max(0, i - 1));
       if (e.key === "ArrowDown") setActive(i => Math.min(ITEMS.length - 1, i + 1));
-      if (e.key === "Enter") setRevealed(true);
-      if (e.key === "ArrowRight") setRevealed(true);
-      if (e.key === "ArrowLeft" && revealed) {
-        setRevealed(false);
-        return;
-      }
-      if (e.key === "Escape" || e.key === "Backspace") {
-        if (revealed) {
-          setRevealed(false);
-          return;
-        }
-        navigate('/');
-        return;
-      }
-      if (e.key === "ArrowLeft" && !revealed) {
+      if (e.key === "ArrowRight") setActive(i => (i + 1) % ITEMS.length);
+      if (e.key === "Escape" || e.key === "Backspace" || e.key === "ArrowLeft") {
         navigate('/');
       }
     };
+    const onWheel = (e) => {
+      if (e.deltaY > 0) setActive(i => Math.min(ITEMS.length - 1, i + 1));
+      else if (e.deltaY < 0) setActive(i => Math.max(0, i - 1));
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [active, navigate, revealed]);
+    window.addEventListener("wheel", onWheel, { passive: true });
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("wheel", onWheel);
+    };
+  }, [active, navigate]);
 
   return (
     <div id="menu-screen">
@@ -136,180 +146,117 @@ export default function AboutMe() {
         preload="auto"
         onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
       />
-      {revealed && (
-        <div
-          key={`dim-${active}`}
-          className="sc-dim"
-          onClick={() => setRevealed(false)}
-        />
-      )}
-      {revealed && (
-        <div key={`panel-${active}`} className={`sc-reveal-panel${mounted ? " mounted" : ""}`}>
-          {REVEAL_CONTENT[active].name && (
-            <div className="sc-reveal-name-box">
-              <div className="sc-reveal-name">{REVEAL_CONTENT[active].name}</div>
-              <div className="sc-reveal-major">{REVEAL_CONTENT[active].major}</div>
-            </div>
-          )}
-          <div className="sc-reveal-upper-bar">
-            {REVEAL_CONTENT[active].upper.map((line) => (
-              <div className="sc-reveal-upper-line" key={line}>{line}</div>
-            ))}
+
+      {/* Top-right LB / RB Category Switcher */}
+      <div key={`nav-${active}`} className="ab-right-nav">
+        <button
+          type="button"
+          className="ab-nav-click"
+          aria-label="Previous section"
+          onClick={(e) => {
+            e.stopPropagation();
+            setActive((i) => (i - 1 + ITEMS.length) % ITEMS.length);
+          }}
+        >
+          <span className="ab-nav-arrow left">◄</span>
+          <span className="ab-nav-btn">LB</span>
+        </button>
+        <span className="ab-nav-label">{ITEMS[active].label}</span>
+        <button
+          type="button"
+          className="ab-nav-click"
+          aria-label="Next section"
+          onClick={(e) => {
+            e.stopPropagation();
+            setActive((i) => (i + 1) % ITEMS.length);
+          }}
+        >
+          <span className="ab-nav-btn">RB</span>
+          <span className="ab-nav-arrow right">►</span>
+        </button>
+      </div>
+
+      {/* Center-Right Persona 3 Slanted Bio Panel */}
+      <div key={`panel-${active}`} className={`ab-reveal-panel${mounted ? " mounted" : ""}`}>
+        <div className="ab-reveal-name-box">
+          <img className="ab-arcana-card" src={arcanaCard} width="42" height="58" decoding="async" alt="" />
+          <div className="ab-reveal-name-text">
+            <div className="ab-reveal-name">{REVEAL_CONTENT[active].name}</div>
+            <div className="ab-reveal-major">{REVEAL_CONTENT[active].major}</div>
           </div>
-          <div className="sc-reveal-lower-bar">
-            <span>{REVEAL_CONTENT[active].lower}</span>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginLeft: "auto", marginRight: "32px" }}>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActive((i) => (i + 1) % ITEMS.length);
-                }}
-                style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "16px",
-                  letterSpacing: "1.5px",
-                  color: "#fff",
-                  background: "#c4001a",
-                  border: "none",
-                  padding: "4px 12px",
-                  cursor: "pointer",
-                  clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
-                }}
-              >
-                NEXT ►
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setRevealed(false);
-                }}
-                style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "16px",
-                  letterSpacing: "1.5px",
-                  color: "#8ef5ff",
-                  background: "rgba(255,255,255,0.12)",
-                  border: "1px solid rgba(142,245,255,0.35)",
-                  padding: "3px 10px",
-                  cursor: "pointer",
-                }}
-              >
-                ✕ CLOSE
-              </button>
-            </div>
-          </div>
+          <img className="ab-stats-thumb" src={bgPoster} width="84" height="48" decoding="async" alt="" title="P3 STATS ARCHIVE" />
         </div>
-      )}
-      {revealed && (
-        <div key={`nav-${active}`} className="sc-right-nav">
+
+        <div className="ab-reveal-upper-bar">
+          {REVEAL_CONTENT[active].upper.map((line) => (
+            <div className="ab-reveal-upper-line" key={line}>{line}</div>
+          ))}
+        </div>
+
+        <div className="ab-reveal-lower-bar">
+          <img className="ab-lower-icon" src={ITEMS[active].barIcon} width="28" height="28" decoding="async" alt="" />
+          <span className="ab-lower-title">{REVEAL_CONTENT[active].lower}</span>
           <button
             type="button"
-            className="sc-nav-click"
-            aria-label="Previous section"
-            onClick={(e) => {
-              e.stopPropagation();
-              setActive((i) => (i - 1 + ITEMS.length) % ITEMS.length);
-            }}
-          >
-            <span className="sc-nav-arrow left">◄</span>
-            <span className="sc-nav-btn">LB</span>
-          </button>
-          <span className="sc-nav-dot" />
-          <button
-            type="button"
-            className="sc-nav-click"
-            aria-label="Next section"
+            className="ab-next-btn"
             onClick={(e) => {
               e.stopPropagation();
               setActive((i) => (i + 1) % ITEMS.length);
             }}
           >
-            <span className="sc-nav-btn">RB</span>
-            <span className="sc-nav-arrow right">►</span>
+            NEXT ►
           </button>
         </div>
-      )}
-      {revealed && (
-        <div key={`portrait-${active}`} className={`sc-main-portrait-shell${mounted ? " mounted" : ""}`}>
+      </div>
+
+      {/* Far-Right Character Cut-In Portrait (mainm.jpeg, mainm2.jpeg, mainf.jpeg) */}
+      <div key={`portrait-${active}`} className={`ab-main-portrait-shell${mounted ? " mounted" : ""}`}>
+        <div className="ab-portrait-frame">
           <img
-            className="sc-main-portrait"
+            className="ab-main-portrait"
             src={MAIN_IMAGES[active]}
             width="500"
             height="830"
             decoding="async"
-            alt=""
+            alt={CHAR_NAMES[active]}
           />
+          <div className="ab-portrait-tag">{CHAR_NAMES[active]}</div>
         </div>
-      )}
+      </div>
+
       <style>{`
         .sc-root {
           position: absolute;
           inset: 0;
-          z-index: 1000;
+          z-index: 20;
           pointer-events: none;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
           justify-content: center;
-          gap: 6px;
+          gap: 8px;
           padding-left: 0;
-          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .sc-root.revealed {
-          transform: translateX(-15%);
         }
 
-        .sc-dim {
-          position: absolute;
-          inset: 0;
-          z-index: 12;
-          background: rgba(40, 45, 54, 0.68);
-          pointer-events: all;
-          cursor: pointer;
-          animation: sc-dim-in 0.32s ease-out;
-        }
-
-        @keyframes sc-dim-in {
-          from {
+        @keyframes ab-reveal-bar-in {
+          0% {
             opacity: 0;
+            transform: translateX(32px) skewX(-6deg) scale(0.96);
           }
-          to {
+          100% {
             opacity: 1;
+            transform: translateX(0) skewX(-6deg) scale(1);
           }
         }
 
-        @keyframes sc-reveal-bar-in {
+        @keyframes ab-portrait-in {
           0% {
             opacity: 0;
-            transform: translateX(-120px) rotate(-20deg) scaleX(0.72);
-          }
-          60% {
-            opacity: 0.96;
-            transform: translateX(18px) rotate(-20deg) scaleX(1.03);
+            transform: translateX(48px) skewX(-6deg) scale(0.94);
           }
           100% {
-            opacity: 0.92;
-            transform: translateX(0) skewX(-12deg) scaleX(1);
-          }
-        }
-
-        @keyframes sc-portrait-in {
-          0% {
-            opacity: 0;
-            transform: translateX(78px) skewX(-8deg) scale(0.94);
-            filter: blur(8px);
-          }
-          55% {
-            opacity: 0.9;
-            transform: translateX(-8px) skewX(-8deg) scale(1.015);
-            filter: blur(0);
-          }
-          100% {
-            opacity: 0.96;
-            transform: translateX(0) skewX(-8deg) scale(1);
-            filter: blur(0);
+            opacity: 1;
+            transform: translateX(0) skewX(-6deg) scale(1);
           }
         }
 
@@ -323,141 +270,191 @@ export default function AboutMe() {
           50% { transform: translateX(5px); opacity: 0.4; }
         }
 
-        .sc-main-portrait-shell {
+        /* Far-Right Character Cut-In Portrait */
+        .ab-main-portrait-shell {
           position: absolute;
-          top: 0;
-          right: -8%;
-          z-index: 10;
+          top: 13%;
+          right: 1.8%;
+          width: 19.5%;
+          height: 74%;
+          z-index: 24;
           pointer-events: none;
-          width: 43%;
+          opacity: 0;
+          transform: translateX(24px) skewX(-6deg);
+        }
+        .ab-main-portrait-shell.mounted {
+          opacity: 1;
+          transform: translateX(0) skewX(-6deg);
+          animation: ab-portrait-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        .ab-portrait-frame {
+          position: relative;
+          width: 100%;
           height: 100%;
           overflow: hidden;
-          opacity: 0;
-          transform: translateX(24px) skewX(-8deg) scale(0.98);
-          transition: opacity 0.35s ease, transform 0.35s ease;
+          background: rgba(8, 16, 46, 0.85);
+          border: 2px solid #8ef5ff;
+          box-shadow:
+            8px 8px 0 #c4001a,
+            0 12px 32px rgba(0, 0, 0, 0.7);
+          clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
         }
-        .sc-main-portrait-shell.mounted {
-          opacity: 0.96;
-          transform: translateX(0) skewX(-8deg) scale(1);
-          animation: sc-portrait-in 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        .ab-main-portrait {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 18%;
+          transform: skewX(6deg) scale(1.08);
+          transform-origin: center center;
+        }
+        .ab-portrait-tag {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(90deg, rgba(196, 0, 26, 0.95) 0%, rgba(8, 16, 46, 0.95) 100%);
+          color: #fff;
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 14px;
+          letter-spacing: 2px;
+          padding: 4px 10px;
+          text-align: center;
+          border-top: 1px solid rgba(142, 245, 255, 0.5);
         }
 
-        .sc-reveal-panel {
+        /* Center-Right Bio Panel */
+        .ab-reveal-panel {
           position: absolute;
-          top: 25%;
-          left: 22%;
-          width: 68%;
-          height: 62%;
-          z-index: 20;
+          top: 15%;
+          left: 44.5%;
+          width: 32.5%;
+          min-height: 68%;
+          z-index: 25;
           pointer-events: all;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(243,246,252,0.98) 100%);
-          clip-path: polygon(0 0, 100% 0, calc(100% - 88px) 100%, 0 100%);
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 10px;
+          padding: 16px;
+          background: linear-gradient(180deg, rgba(10, 22, 82, 0.76) 0%, rgba(5, 11, 46, 0.84) 100%);
+          backdrop-filter: blur(4px);
+          border: 1px solid rgba(142, 245, 255, 0.35);
+          clip-path: polygon(0 0, 100% 0, calc(100% - 24px) 100%, 0 100%);
           box-shadow:
-            0 0 0 2px rgba(255,255,255,0.18),
-            18px 0 0 rgba(215, 13, 44, 0.82),
-            28px 0 0 rgba(255,255,255,0.26);
+            10px 10px 0 rgba(196, 0, 26, 0.88),
+            0 12px 30px rgba(0, 0, 0, 0.65);
           opacity: 0;
-          transform: translateX(40px) skewX(-12deg);
-          transform-origin: left center;
-          transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+          transform: translateX(32px) skewX(-6deg);
         }
-        .sc-reveal-panel.mounted {
-          opacity: 0.95;
-          transform: translateX(0) skewX(-12deg);
-          animation: sc-reveal-bar-in 0.46s cubic-bezier(0.22, 1, 0.36, 1);
+        .ab-reveal-panel.mounted {
+          opacity: 1;
+          transform: translateX(0) skewX(-6deg);
+          animation: ab-reveal-bar-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
-        .sc-reveal-panel::before {
+        .ab-reveal-panel::before {
           content: "";
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
-          height: 8px;
-          background: linear-gradient(180deg, #e03d31 0%, #eb3333 100%);
-          clip-path: inherit;
-        }
-        .sc-reveal-upper-bar {
-          position: absolute;
-          top: 27%;
-          left: 0%;
-          width: 100%;
-          height: 40%;
-          background: rgba(0, 0, 0, 0.92);
-          clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
-          box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          justify-content: center;
-          gap: 4px;
-          color: rgba(255, 255, 255, 0.95);
-          text-align: left;
-          padding-left: 25%;
-          padding-right: 8%;
+          height: 5px;
+          background: linear-gradient(90deg, #c4001a 0%, #8ef5ff 100%);
         }
 
-        .sc-reveal-name-box {
-          position: absolute;
-          top: 11%;
-          left: 0%;
+        .ab-reveal-name-box {
+          position: relative;
           width: 100%;
-          height: 18%;
-          background: rgba(0, 0, 0, 0.96);
-          clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
-          box-shadow: inset 3px 0 0 #c4001a, 0 0 0 1px rgba(255,255,255,0.06);
+          background: rgba(0, 0, 0, 0.88);
+          clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+          box-shadow: inset 4px 0 0 #c4001a;
+          display: flex;
+          align-items: center;
+          padding: 10px 14px;
+          gap: 12px;
+        }
+        .ab-arcana-card {
+          width: 34px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 3px;
+          border: 1px solid #8ef5ff;
+          box-shadow: 0 0 10px rgba(142, 245, 255, 0.4);
+          flex-shrink: 0;
+        }
+        .ab-reveal-name-text {
+          flex: 1;
+          min-width: 0;
           display: flex;
           flex-direction: column;
-          align-items: flex-start;
-          justify-content: center;
-          padding-left: 25%;
-          padding-right: 8%;
-          gap: 4px;
-          animation: sc-line-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+          gap: 3px;
         }
-        .sc-reveal-name {
+        .ab-reveal-name {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 28px;
-          letter-spacing: 3px;
+          font-size: 24px;
+          letter-spacing: 2px;
           color: #fff;
-          line-height: 1;
+          line-height: 1.05;
         }
-        .sc-reveal-major {
+        .ab-reveal-major {
           font-family: 'Montserrat', sans-serif;
-          font-size: 13px;
-          font-weight: 400;
-          letter-spacing: 1.5px;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.8px;
           color: #8ef5ff;
           text-transform: uppercase;
+          line-height: 1.25;
+        }
+        .ab-stats-thumb {
+          width: 68px;
+          height: 40px;
+          object-fit: cover;
+          border: 1px solid rgba(142, 245, 255, 0.5);
+          border-radius: 3px;
+          flex-shrink: 0;
         }
 
-        .sc-reveal-upper-line {
+        .ab-reveal-upper-bar {
+          flex: 1;
+          width: 100%;
+          background: rgba(0, 4, 20, 0.82);
+          clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
+          border-left: 3px solid #8ef5ff;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 6px;
+          color: rgba(255, 255, 255, 0.95);
+          text-align: left;
+          padding: 14px 18px;
+        }
+
+        .ab-reveal-upper-line {
           font-family: 'Montserrat', sans-serif;
-          font-weight: 400;
-          font-size: 15px;
-          letter-spacing: 0.3px;
-          line-height: 1.3;
-          text-shadow: 1px 1px 0px #000, 2px 2px 4px rgba(0,0,0,0.8);
+          font-weight: 500;
+          font-size: 13.5px;
+          letter-spacing: 0.2px;
+          line-height: 1.35;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
           opacity: 0;
-          transform: translateX(-15px);
-          animation: sc-line-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          transform: translateX(-12px);
+          animation: sc-line-enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        .sc-reveal-upper-line:nth-child(1) { 
-          animation-delay: 0.3s; 
+        .ab-reveal-upper-line:nth-child(1) { 
+          animation-delay: 0.1s; 
           font-weight: 700; 
-          color: #4a8fff; 
-          font-size: 17px; 
+          color: #8ef5ff; 
+          font-size: 15px; 
           text-transform: uppercase; 
-          letter-spacing: 1.2px;
+          letter-spacing: 1px;
           margin-bottom: 2px;
         }
-        .sc-reveal-upper-line:nth-child(2) { animation-delay: 0.38s; }
-        .sc-reveal-upper-line:nth-child(3) { animation-delay: 0.46s; }
-        .sc-reveal-upper-line:nth-child(4) { animation-delay: 0.54s; }
-        .sc-reveal-upper-line:nth-child(5) { animation-delay: 0.62s; }
-        .sc-reveal-upper-line:nth-child(6) { animation-delay: 0.70s; }
-        .sc-reveal-upper-line:nth-child(7) { animation-delay: 0.78s; }
+        .ab-reveal-upper-line:nth-child(2) { animation-delay: 0.16s; }
+        .ab-reveal-upper-line:nth-child(3) { animation-delay: 0.22s; }
+        .ab-reveal-upper-line:nth-child(4) { animation-delay: 0.28s; }
+        .ab-reveal-upper-line:nth-child(5) { animation-delay: 0.34s; }
+        .ab-reveal-upper-line:nth-child(6) { animation-delay: 0.40s; }
 
         @keyframes sc-line-enter {
           to {
@@ -466,46 +463,66 @@ export default function AboutMe() {
           }
         }
 
-        .sc-reveal-lower-bar {
-          position: absolute;
-          top: 70%;
-          right: 0;
-          width: 55%;
-          height: 18%;
-          background: rgba(0, 0, 0, 0.95);
-          clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
-          box-shadow: -4px 4px 0px rgba(0,0,0,0.3), inset 2px 0 0 #c4001a;
+        .ab-reveal-lower-bar {
+          width: 100%;
+          min-height: 46px;
+          background: rgba(0, 0, 0, 0.92);
+          clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+          box-shadow: inset 3px 0 0 #c4001a;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: space-between;
           color: #fff;
           font-family: 'Bebas Neue', sans-serif;
-          font-weight: 400;
-          font-size: 32px;
+          padding: 6px 20px 6px 14px;
+          gap: 10px;
+        }
+        .ab-lower-icon {
+          height: 24px;
+          width: auto;
+          object-fit: contain;
+          flex-shrink: 0;
+        }
+        .ab-lower-title {
+          font-size: 24px;
           letter-spacing: 2px;
           text-transform: uppercase;
-          padding-left: 28px;
+          color: #fff;
+        }
+        .ab-next-btn {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 16px;
+          letter-spacing: 1.5px;
+          color: #fff;
+          background: #c4001a;
+          border: none;
+          padding: 4px 14px;
+          cursor: pointer;
+          margin-left: auto;
+          clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+          transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .ab-next-btn:hover {
+          background: #e03d31;
+          transform: scale(1.05);
         }
 
-        @keyframes sc-right-nav-pop {
-          0%   { opacity: 0; transform: scale(0.55) translateY(-10px); }
-          65%  { opacity: 1; transform: scale(1.1) translateY(2px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .sc-right-nav {
+        /* Top-Right LB / RB Nav */
+        .ab-right-nav {
           position: absolute;
-          top: 4%;
-          left: 4%;
+          top: 5%;
+          right: 2%;
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           pointer-events: all;
-          z-index: 1010;
-          transform: translateX(0) rotate(-10deg);
-          transform-origin: left bottom;
-          animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
+          z-index: 30;
+          background: rgba(8, 16, 46, 0.84);
+          border: 1px solid rgba(142, 245, 255, 0.35);
+          padding: 4px 14px;
+          clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
         }
-        .sc-nav-click {
+        .ab-nav-click {
           display: flex;
           align-items: center;
           gap: 4px;
@@ -515,51 +532,39 @@ export default function AboutMe() {
           pointer-events: all;
           touch-action: manipulation;
         }
-        .sc-right-nav .sc-nav-btn {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 48px;
-          letter-spacing: 3px;
-          line-height: 1;
-          user-select: none;
-          color: #fff;
-          -webkit-text-stroke: 2px #000;
-          paint-order: stroke fill;
-          background: none;
-          border: none;
-          padding: 0 6px;
-        }
-        .sc-right-nav .sc-nav-dot {
-          width: 16px;
-          height: 16px;
-          border-radius: 999px;
-          background: #111;
-          margin: 0 10px;
-          flex-shrink: 0;
-        }
-        .sc-right-nav .sc-nav-arrow {
+        .ab-right-nav .ab-nav-btn {
           font-family: 'Bebas Neue', sans-serif;
           font-size: 22px;
+          letter-spacing: 2px;
+          line-height: 1;
+          user-select: none;
+          color: #111;
+          background: #fff;
+          padding: 2px 8px;
+        }
+        .ab-right-nav .ab-nav-label {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 22px;
+          letter-spacing: 2.5px;
+          color: #8ef5ff;
+          padding: 0 6px;
+          white-space: nowrap;
+        }
+        .ab-right-nav .ab-nav-arrow {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 18px;
           color: #c4001a;
           display: inline-block;
           user-select: none;
         }
-        .sc-right-nav .sc-nav-arrow.left  { animation: sc-arrow-left  0.8s ease-in-out infinite; }
-        .sc-right-nav .sc-nav-arrow.right { animation: sc-arrow-right 0.8s ease-in-out infinite; }
+        .ab-right-nav .ab-nav-arrow.left  { animation: sc-arrow-left  0.8s ease-in-out infinite; }
+        .ab-right-nav .ab-nav-arrow.right { animation: sc-arrow-right 0.8s ease-in-out infinite; }
 
-        .sc-main-portrait {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: top right;
-          transform: skewX(8deg) scale(1.08);
-          transform-origin: top right;
-        }
-
-        /* ── Each bar ── */
+        /* ── Left Party Bars ── */
         .sc-bar {
           position: relative;
-          width: 45cqw;
-          height: 64px;
+          width: 42cqw;
+          height: 68px;
           transition: height 0.3s cubic-bezier(0.22,1,0.36,1);
           background: #111;
           cursor: pointer;
@@ -570,7 +575,6 @@ export default function AboutMe() {
           z-index: 1;
         }
 
-        /* wrapper holds both the red underlay and the bar */
         .sc-bar-outer {
           position: relative;
           flex-shrink: 0;
@@ -578,19 +582,18 @@ export default function AboutMe() {
           transform: translateX(-100%);
           transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .sc-bar-outer.active .sc-bar     { height: 90px; }
-        .sc-bar-outer.active .sc-bar-red { height: 90px; }
+        .sc-bar-outer.active .sc-bar     { height: 92px; }
+        .sc-bar-outer.active .sc-bar-red { height: 92px; }
         .sc-bar-outer.mounted { transform: translateX(0); }
         .sc-bar-outer:nth-child(1) { transition-delay: 0ms; }
         .sc-bar-outer:nth-child(2) { transition-delay: 80ms; }
         .sc-bar-outer:nth-child(3) { transition-delay: 160ms; }
 
-        /* red underlay — peeks out below the bar when active */
         .sc-bar-red {
           position: absolute;
           top: 0; left: 0;
-          width: 45cqw;
-          height: 64px;
+          width: 42cqw;
+          height: 68px;
           background: #c4001a;
           clip-path: polygon(50% 0, 100% 0, 100% 100%, calc(50% - 10px) 100%);
           transform: translateY(-7px);
@@ -601,7 +604,6 @@ export default function AboutMe() {
         }
         .sc-bar-outer.active .sc-bar-red { opacity: 1; }
 
-        /* white fill — skewed parallelogram on the right 25% */
         .sc-bar-fill {
           position: absolute;
           inset: 0;
@@ -615,7 +617,6 @@ export default function AboutMe() {
           clip-path: polygon(22% 0, 100% 0, calc(100% - 14px) 100%, calc(22% + 138px) 100%);
         }
 
-        /* shade on the left edge of the white fill */
         .sc-bar-shade {
           position: absolute;
           top: 0; bottom: 0;
@@ -629,7 +630,6 @@ export default function AboutMe() {
         }
         .sc-bar-outer.active .sc-bar-shade { opacity: 1; }
 
-        /* bottom shadow line under each bar */
         .sc-bar::after {
           content: '';
           position: absolute;
@@ -640,7 +640,6 @@ export default function AboutMe() {
           pointer-events: all;
         }
 
-        /* content layout inside each bar */
         .sc-bar-content {
           position: relative;
           z-index: 4;
@@ -648,98 +647,104 @@ export default function AboutMe() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 20px 0 20px;
+          padding: 0 16px 0 14px;
         }
 
-        /* left: role label */
         .sc-role {
           display: flex;
           align-items: center;
           flex-shrink: 0;
           font-family: 'Anton', sans-serif;
-          font-size: 46px;
+          font-size: 40px;
           letter-spacing: -2px;
           color: #ffffff;
           transform: rotate(-30deg);
           user-select: none;
           line-height: 1;
-          padding: 0 12px 0 6px;
+          padding: 0 8px 0 4px;
         }
 
-        /* left: icon + name centered in remaining space */
         .sc-main {
           flex: 1;
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
-          gap: 3px;
-          padding-left: 110px;
+          gap: 2px;
+          padding-left: 108px;
         }
         .sc-main-top {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 8px;
         }
-
-        .sc-icon {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 22px;
-          width: 32px;
-          text-align: center;
+        .sc-bar-icon-img {
+          height: 18px;
+          width: auto;
+          object-fit: contain;
           flex-shrink: 0;
-          color: rgba(255,255,255,0.15);
-          transition: color 0.2s ease;
-          user-select: none;
         }
-        .sc-bar-outer.active .sc-icon { color: rgba(255,255,255,0.25); }
+        .sc-new-badge {
+          position: absolute;
+          top: -8px;
+          right: 14px;
+          height: 22px;
+          width: auto;
+          z-index: 8;
+          pointer-events: none;
+        }
 
         .sc-label {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 28px;
-          letter-spacing: 4px;
+          font-size: 22px;
+          letter-spacing: 2px;
           line-height: 1;
-          color: rgba(255,255,255,0.85);
+          color: rgba(255,255,255,0.92);
           transition: color 0.2s ease;
           user-select: none;
+          white-space: nowrap;
         }
         .sc-bar-outer.active .sc-label { color: #111111; }
 
-        /* right: stats group */
+        .sc-subtitle {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 12px;
+          letter-spacing: 2px;
+          color: rgba(255,255,255,0.5);
+          transition: color 0.2s ease;
+        }
+        .sc-bar-outer.active .sc-subtitle { color: rgba(0,0,0,0.55); }
+
         .sc-stats {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding-right: 24px;
+          gap: 8px;
+          padding-right: 12px;
           flex-shrink: 0;
         }
-
         .sc-stat {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
         }
-
         .sc-stat-top {
           display: flex;
           align-items: baseline;
-          gap: 4px;
+          gap: 3px;
         }
-
         .sc-stat-tag {
           font-family: 'Bebas Neue', sans-serif;
           font-size: 9px;
-          letter-spacing: 1.5px;
+          letter-spacing: 1.2px;
           padding: 1px 4px;
           border-width: 1px;
           border-style: solid;
-          line-height: 1.4;
+          line-height: 1.3;
           user-select: none;
         }
-
         .sc-stat-num {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 26px;
+          font-size: 22px;
           font-style: italic;
           line-height: 1;
           color: #ffffff;
@@ -749,36 +754,19 @@ export default function AboutMe() {
         }
         .sc-bar-outer.active .sc-stat-num { color: #111111; }
 
-        .sc-stat-bars {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          gap: 1px;
-          margin-top: 2px;
-        }
-        .sc-stat-bar-color {
-          height: 3px;
-          width: 100%;
-        }
-        .sc-stat-bar-black {
-          height: 2px;
-          width: 100%;
-          background: #000;
-        }
-
-        /* character portrait */
+        /* character portrait inside bar */
         .sc-char {
           position: absolute;
           top: 0;
-          left: 105px;
+          left: 88px;
           height: 100%;
-          width: 138px;
-          max-width: 138px;
+          width: 112px;
+          max-width: 112px;
           object-fit: cover;
           object-position: 18% center;
           pointer-events: none;
           z-index: 2;
-          clip-path: polygon(18px 0%, 100% 0%, calc(100% - 18px) 100%, 0% 100%);
+          clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
         }
 
         /* footer hints */
@@ -788,7 +776,7 @@ export default function AboutMe() {
           display: flex; flex-direction: column;
           align-items: flex-end; gap: 5px;
           font-family: 'Bebas Neue', sans-serif;
-          z-index: 14;
+          z-index: 30;
           opacity: 0;
           transition: opacity 0.4s ease 0.6s;
         }
@@ -805,66 +793,102 @@ export default function AboutMe() {
         }
 
         @media (max-width: 768px) {
-          /* Left menu bars in portrait mode */
-          body:not(.pc-stage-mode) .sc-bar { width: 94cqw; height: 64px; }
-          body:not(.pc-stage-mode) .sc-bar-red { width: 94cqw; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 78px; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 78px; }
-          body:not(.pc-stage-mode) .sc-bar-content { padding: 0 14px 0 10px; }
-          body:not(.pc-stage-mode) .sc-role { font-size: 30px; padding: 0 4px 0 2px; }
-          body:not(.pc-stage-mode) .sc-char { width: 96px; max-width: 96px; left: 58px; object-position: 18% center; }
-          body:not(.pc-stage-mode) .sc-main { padding-left: 84px; align-items: flex-end; padding-right: 12px; }
-          body:not(.pc-stage-mode) .sc-label { font-size: 22px; letter-spacing: 2px; white-space: nowrap; }
-          body:not(.pc-stage-mode) .sc-root.revealed { transform: translateX(-110%); }
+          body:not(.pc-stage-mode) .sc-root {
+            justify-content: flex-start;
+            padding-top: 46px;
+            gap: 5px;
+          }
+          body:not(.pc-stage-mode) .sc-bar { width: 95cqw; height: 48px; }
+          body:not(.pc-stage-mode) .sc-bar-red { width: 95cqw; height: 48px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 56px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 56px; }
+          body:not(.pc-stage-mode) .sc-bar-content { padding: 0 10px 0 8px; }
+          body:not(.pc-stage-mode) .sc-role { font-size: 24px; padding: 0 4px 0 2px; }
+          body:not(.pc-stage-mode) .sc-char { width: 78px; max-width: 78px; left: 50px; object-position: 18% center; }
+          body:not(.pc-stage-mode) .sc-main { padding-left: 68px; align-items: flex-start; }
+          body:not(.pc-stage-mode) .sc-label { font-size: 16px; letter-spacing: 1.2px; white-space: nowrap; }
+          body:not(.pc-stage-mode) .sc-subtitle { font-size: 9.5px; }
+          body:not(.pc-stage-mode) .sc-stats { padding-right: 4px; gap: 5px; }
+          body:not(.pc-stage-mode) .sc-stat-num { font-size: 15px; }
+          body:not(.pc-stage-mode) .sc-stat-tag { font-size: 7.5px; }
 
-          /* Reveal info panel in portrait mode */
-          body:not(.pc-stage-mode) .sc-reveal-panel {
-            top: 15%;
+          body:not(.pc-stage-mode) .ab-right-nav {
+            top: 214px;
             left: 3%;
-            width: 94%;
-            height: 68%;
-            clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
-            transform: skewX(-2deg);
+            right: 3%;
+            justify-content: center;
+            padding: 2px 10px;
           }
-          body:not(.pc-stage-mode) .sc-reveal-name-box {
-            padding-left: 16px;
-            padding-right: 12px;
-            top: 4%;
-            height: 15%;
+          body:not(.pc-stage-mode) .ab-right-nav .ab-nav-btn { font-size: 18px; }
+          body:not(.pc-stage-mode) .ab-right-nav .ab-nav-label { font-size: 16px; }
+
+          body:not(.pc-stage-mode) .ab-reveal-panel,
+          body:not(.pc-stage-mode) .ab-reveal-panel.mounted {
+            top: 252px;
+            left: 3%;
+            width: 63%;
+            min-height: 0;
+            bottom: 54px;
+            padding: 10px;
+            gap: 6px;
+            transform: none;
+            animation: none;
+            opacity: 1;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
           }
-          body:not(.pc-stage-mode) .sc-reveal-name { font-size: 22px; }
-          body:not(.pc-stage-mode) .sc-reveal-major { font-size: 10.5px; }
-          body:not(.pc-stage-mode) .sc-reveal-upper-bar {
-            top: 21%;
-            height: 56%;
-            padding: 10px 16px;
+          body:not(.pc-stage-mode) .ab-reveal-name-box {
+            padding: 6px 8px;
+            gap: 6px;
+          }
+          body:not(.pc-stage-mode) .ab-arcana-card { width: 24px; height: 34px; }
+          body:not(.pc-stage-mode) .ab-stats-thumb { display: none; }
+          body:not(.pc-stage-mode) .ab-reveal-name { font-size: 15px; letter-spacing: 1px; }
+          body:not(.pc-stage-mode) .ab-reveal-major { font-size: 8.5px; letter-spacing: 0.4px; }
+          body:not(.pc-stage-mode) .ab-reveal-upper-bar {
+            padding: 8px 10px;
+            gap: 4px;
             overflow-y: auto;
             justify-content: flex-start;
           }
-          body:not(.pc-stage-mode) .sc-reveal-upper-line {
-            font-size: 12.5px;
-            line-height: 1.3;
+          body:not(.pc-stage-mode) .ab-reveal-upper-line {
+            font-size: 10.5px;
+            line-height: 1.25;
           }
-          body:not(.pc-stage-mode) .sc-reveal-upper-line:nth-child(1) {
-            font-size: 14px;
+          body:not(.pc-stage-mode) .ab-reveal-upper-line:nth-child(1) {
+            font-size: 11.5px;
           }
-          body:not(.pc-stage-mode) .sc-reveal-lower-bar {
-            font-size: 18px;
-            padding-left: 14px;
-            top: 80%;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 15%;
+          body:not(.pc-stage-mode) .ab-reveal-lower-bar {
+            min-height: 34px;
+            padding: 4px 10px;
           }
-          body:not(.pc-stage-mode) .sc-main-portrait-shell { width: 78%; right: -6%; opacity: 0.55; }
+          body:not(.pc-stage-mode) .ab-lower-icon { height: 18px; }
+          body:not(.pc-stage-mode) .ab-lower-title { font-size: 14px; letter-spacing: 1px; }
+          body:not(.pc-stage-mode) .ab-next-btn { font-size: 12px; padding: 2px 8px; }
 
-          /* Nav & footer */
-          body:not(.pc-stage-mode) .sc-right-nav { top: 48px; left: 50%; transform: translateX(-50%); font-size: 14px; }
-          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 30px; }
+          body:not(.pc-stage-mode) .ab-main-portrait-shell,
+          body:not(.pc-stage-mode) .ab-main-portrait-shell.mounted {
+            top: 252px;
+            right: 3%;
+            width: 29%;
+            height: auto;
+            bottom: 54px;
+            transform: none;
+            animation: none;
+            opacity: 1;
+          }
+          body:not(.pc-stage-mode) .ab-main-portrait {
+            transform: scale(1.04);
+            object-position: center 15%;
+          }
+          body:not(.pc-stage-mode) .ab-portrait-tag {
+            font-size: 10px;
+            letter-spacing: 1px;
+            padding: 3px 4px;
+          }
+
           body:not(.pc-stage-mode) .sc-footer { bottom: 8px; right: 8px; }
           body:not(.pc-stage-mode) .sc-footer-row { font-size: 10px; }
-          body:not(.pc-stage-mode) .sc-back-btn { bottom: 16px; left: 16px; font-size: 18px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 12px; left: 14px; font-size: 18px; }
         }
 
         .sc-back-btn {
@@ -891,31 +915,25 @@ export default function AboutMe() {
           background: #c4001a;
           transform: scale(1.1) skewX(-5deg);
         }
-
       `}</style>
 
-
-      <div className={`sc-root${revealed ? " revealed" : ""}`} role="navigation">
+      <div className="sc-root" role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
             data-p3-hover="true"
             ref={(el) => { if (el) el.__p3Hover = () => setActive(i); }}
-            onMouseEnter={() => { setActive(i); }}
+            onMouseEnter={() => setActive(i)}
           >
+            {item.isNew && <img className="sc-new-badge" src={newsign} width="54" height="24" decoding="async" alt="NEW" />}
             <div className="sc-bar-red" />
             <div 
               className="sc-bar"
-              onMouseEnter={() => { setActive(i); }}
+              onMouseEnter={() => setActive(i)}
               onClick={(e) => {
                 e.stopPropagation();
-                if (active !== i) {
-                  setActive(i);
-                  setRevealed(true);
-                } else {
-                  setRevealed(!revealed);
-                }
+                setActive(i);
               }}
             >
               <img className="sc-char" src={CHARS[i]} width="220" height="135" decoding="async" alt="" />
@@ -925,8 +943,20 @@ export default function AboutMe() {
                 <div className="sc-role">{ROLES[i].text}</div>
                 <div className="sc-main">
                   <div className="sc-main-top">
+                    <img className="sc-bar-icon-img" src={item.barIcon} width="24" height="24" decoding="async" alt="" />
                     <div className="sc-label">{item.label}</div>
                   </div>
+                  <div className="sc-subtitle">{item.subtitle}</div>
+                </div>
+                <div className="sc-stats">
+                  {item.stats.map(s => (
+                    <div className="sc-stat" key={s.tag}>
+                      <div className="sc-stat-top">
+                        <span className="sc-stat-tag" style={{ color: s.color, borderColor: s.color }}>{s.tag}</span>
+                        <span className="sc-stat-num">{s.value}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -936,15 +966,14 @@ export default function AboutMe() {
 
       <div className={`sc-footer${mounted ? " mounted" : ""}`}>
         <div className="sc-footer-row"><span className="sc-footer-key">↑↓</span><span>SELECT</span></div>
-        <div className="sc-footer-row"><span className="sc-footer-key">↵</span><span>REVEAL</span></div>
+        <div className="sc-footer-row"><span className="sc-footer-key">LB/RB</span><span>SWITCH</span></div>
         <div className="sc-footer-row"><span className="sc-footer-key">ESC</span><span>BACK</span></div>
       </div>
       <div 
         className="sc-back-btn" 
         onClick={(e) => {
           e.stopPropagation();
-          if (revealed) setRevealed(false);
-          else navigate('/');
+          navigate('/');
         }}
       >
         <span>◄</span> BACK

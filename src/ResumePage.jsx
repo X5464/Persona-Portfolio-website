@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import main2 from "./assets/main2.mp4";
 import main2Poster from "./assets/main2_poster.jpg";
+import arcanaCard from "./assets/card.png";
+import heroIcon from "./assets/hero.png";
 
 const ITEMS = [
   { id: "i", badge: "I", title: "EDUCATION", subtitle: "ACADEMIC / THEORETICAL BASE", rank: 1 },
@@ -372,15 +374,23 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
         .resume-detail-top {
           position: relative;
           display: grid;
-          grid-template-columns: 64px 1fr auto;
+          grid-template-columns: auto 56px 1fr auto;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
           min-height: 76px;
           padding: 0 16px;
           background: linear-gradient(90deg, #8ef5ff 0%, #d3fdff 100%);
           clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
           color: #08153f;
           box-shadow: 10px 0 0 rgba(255, 94, 136, 0.88);
+        }
+        .resume-arcana-card {
+          width: 34px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 3px;
+          border: 1.5px solid #08153f;
+          box-shadow: 2px 2px 0 rgba(8, 21, 63, 0.5);
         }
         .resume-detail-top-index {
           font-family: 'Anton', sans-serif;
@@ -566,10 +576,14 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
             clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
           }
           body:not(.pc-stage-mode) .resume-detail-top {
-            grid-template-columns: 38px 1fr auto;
+            grid-template-columns: auto 34px 1fr auto;
             min-height: 48px;
             padding: 0 12px;
             gap: 8px;
+          }
+          body:not(.pc-stage-mode) .resume-arcana-card {
+            width: 24px;
+            height: 34px;
           }
           body:not(.pc-stage-mode) .resume-detail-top-index { font-size: 26px; }
           body:not(.pc-stage-mode) .resume-detail-top-title { font-size: 22px; }
@@ -674,6 +688,7 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
         {active !== null && PANEL_CONTENT[active] && (
           <div className="resume-detail-panel" key={active}>
             <div className="resume-detail-top">
+              <img className="resume-arcana-card" src={arcanaCard} width="34" height="48" decoding="async" alt="" />
               <div className="resume-detail-top-index">{PANEL_CONTENT[active].index}</div>
               <div className="resume-detail-top-title">{PANEL_CONTENT[active].title}</div>
               <div className="resume-detail-top-progress">{PANEL_CONTENT[active].progress}</div>
@@ -698,7 +713,10 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
 
             {PANEL_CONTENT[active].details && PANEL_CONTENT[active].details.length > 0 && (
               <div className="resume-detail-bottom">
-                <div className="resume-detail-bottom-title">DETAILS</div>
+                <div className="resume-detail-bottom-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <img src={heroIcon} width="22" height="22" decoding="async" alt="" style={{ objectFit: "contain" }} />
+                  <span>DETAILS</span>
+                </div>
                 <div className="resume-detail-bullets">
                   {PANEL_CONTENT[active].details.map((bullet, i) => (
                     <div className="resume-detail-bullet" key={i}>{bullet}</div>

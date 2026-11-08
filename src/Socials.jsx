@@ -9,8 +9,13 @@ import newsign from "./assets/newsign.png";
 import icon1 from "./assets/icon1.png";
 import icon2 from "./assets/icon2.png";
 import icon3 from "./assets/icon3.png";
+import mainm from "./assets/mainm.jpeg";
+import mainm2 from "./assets/mainm2.jpeg";
+import mainf from "./assets/mainf.jpeg";
+import arcanaCard from "./assets/card.png";
 
 const CHARS = [char1, char2, char3];
+const MAIN_IMAGES = [mainm, mainm2, mainf];
 
 const ROLES = [
   { text: "LEADER", color: "#e8c100", bg: "rgba(232,193,0,0.12)", border: "rgba(232,193,0,0.5)" },
@@ -429,32 +434,72 @@ export default function Socials() {
           right: 40px;
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 10px;
           pointer-events: all;
           z-index: 50;
+          background: rgba(8, 16, 46, 0.84);
+          border: 1px solid rgba(142, 245, 255, 0.38);
+          padding: 6px 14px;
+          clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+          box-shadow: 6px 6px 0 #c4001a;
           animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        .sc-social-portrait-wrap {
+          width: 48px;
+          height: 48px;
+          border-radius: 4px;
+          overflow: hidden;
+          border: 1.5px solid #8ef5ff;
+          flex-shrink: 0;
+          background: #08102e;
+        }
+        .sc-social-portrait {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 15%;
+        }
+        .sc-social-arcana {
+          width: 24px;
+          height: 34px;
+          object-fit: cover;
+          border-radius: 2px;
+          border: 1px solid rgba(142, 245, 255, 0.6);
+          flex-shrink: 0;
+        }
+        .sc-nav-meta {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 0 6px;
+        }
+        .sc-nav-handle {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.8px;
+          color: #8ef5ff;
+          line-height: 1.1;
+          white-space: nowrap;
         }
         .sc-right-nav .sc-nav-btn {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(32px, 6vw, 64px);
+          font-size: 26px;
+          letter-spacing: 2px;
+          line-height: 1;
+          user-select: none;
+          color: #111;
+          background: #fff;
+          border: 1px solid #000;
+          padding: 2px 8px;
+        }
+        .sc-right-nav .sc-nav-label {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 26px;
           letter-spacing: 3px;
           line-height: 1;
           user-select: none;
           color: #fff;
-          -webkit-text-stroke: 2px #000;
-          paint-order: stroke fill;
-          background: none;
-          border: none;
-          padding: 0 6px;
-        }
-        .sc-right-nav .sc-nav-label {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 28px;
-          letter-spacing: 3px;
-          line-height: 1;
-          user-select: none;
-          color: #111;
-          padding: 0 8px;
         }
         .sc-right-nav .sc-nav-arrow {
           font-family: 'Bebas Neue', sans-serif;
@@ -641,20 +686,24 @@ export default function Socials() {
           body:not(.pc-stage-mode) .sc-stat-tag { font-size: 7.5px; }
 
           body:not(.pc-stage-mode) .sc-right-nav {
-            top: 215px;
-            left: 16px;
-            right: 16px;
+            top: 210px;
+            left: 3%;
+            right: 3%;
             justify-content: center;
-            background: rgba(8, 16, 46, 0.82);
+            background: rgba(8, 16, 46, 0.88);
             border: 1px solid rgba(142, 245, 255, 0.35);
             border-radius: 6px;
-            padding: 2px 12px;
+            padding: 3px 10px;
+            box-shadow: 4px 4px 0 #c4001a;
           }
-          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 22px; }
-          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-label { font-size: 17px; color: #fff; }
+          body:not(.pc-stage-mode) .sc-social-portrait-wrap { width: 30px; height: 30px; }
+          body:not(.pc-stage-mode) .sc-social-arcana { width: 18px; height: 26px; }
+          body:not(.pc-stage-mode) .sc-nav-handle { font-size: 8.5px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 16px; padding: 1px 6px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-label { font-size: 16px; color: #fff; }
 
           body:not(.pc-stage-mode) .sc-info-list-panel {
-            top: 254px;
+            top: 256px;
             left: 3%;
             right: 3%;
             bottom: 58px;
@@ -783,7 +832,14 @@ export default function Socials() {
               <span className="sc-nav-arrow left">◄</span>
               <span className="sc-nav-btn">LB</span>
             </button>
-            <span className="sc-nav-label">{ITEMS[active].label}</span>
+            <div className="sc-social-portrait-wrap">
+              <img className="sc-social-portrait" src={MAIN_IMAGES[active]} width="60" height="60" decoding="async" alt="" />
+            </div>
+            <div className="sc-nav-meta">
+              <span className="sc-nav-label">{ITEMS[active].label}</span>
+              <span className="sc-nav-handle">{ITEMS[active].handle}</span>
+            </div>
+            <img className="sc-social-arcana" src={arcanaCard} width="28" height="40" decoding="async" alt="" />
             <button
               type="button"
               aria-label="Next social category"

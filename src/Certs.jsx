@@ -9,6 +9,8 @@ import newsign from "./assets/newsign.png";
 import icon1 from "./assets/icon1.png";
 import icon2 from "./assets/icon2.png";
 import icon3 from "./assets/icon3.png";
+import arcanaCard from "./assets/card.png";
+import circleRadar from "./assets/circletransition.mp4";
 
 const CHARS = [char1, char2, char3];
 
@@ -479,14 +481,35 @@ export default function Certs() {
         .ct-right-nav {
           position: fixed;
           top: 40px; right: 40px;
-          display: flex; align-items: center; gap: 6px;
+          display: flex; align-items: center; gap: 8px;
           pointer-events: all; z-index: 50;
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 28px;
+          font-size: 26px;
           letter-spacing: 3px;
           color: #fff;
+          background: rgba(8, 16, 46, 0.84);
+          border: 1px solid rgba(142, 245, 255, 0.38);
+          padding: 6px 14px;
+          clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+          box-shadow: 6px 6px 0 #c4001a;
         }
-        .ct-nav-label { color: #111; padding: 0 8px; font-size: 24px; }
+        .ct-nav-arcana {
+          width: 24px;
+          height: 34px;
+          object-fit: cover;
+          border-radius: 2px;
+          border: 1px solid #8ef5ff;
+          flex-shrink: 0;
+        }
+        .ct-nav-radar {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 1.5px solid #8ef5ff;
+          flex-shrink: 0;
+        }
+        .ct-nav-label { color: #fff; padding: 0 6px; font-size: 24px; }
         .ct-arrow { color: #c4001a; display: inline-block; }
 
         .ct-scroll-track {
@@ -618,16 +641,19 @@ export default function Certs() {
           body:not(.pc-stage-mode) .ct-stat-num { font-size: 15px; }
 
           body:not(.pc-stage-mode) .ct-right-nav {
-            top: 215px;
-            left: 16px;
-            right: 16px;
+            top: 212px;
+            left: 3%;
+            right: 3%;
             justify-content: center;
-            background: rgba(8, 16, 46, 0.82);
+            background: rgba(8, 16, 46, 0.88);
             border: 1px solid rgba(142, 245, 255, 0.35);
             border-radius: 6px;
-            padding: 2px 12px;
+            padding: 3px 10px;
             font-size: 16px;
+            box-shadow: 4px 4px 0 #c4001a;
           }
+          body:not(.pc-stage-mode) .ct-nav-arcana { width: 18px; height: 26px; }
+          body:not(.pc-stage-mode) .ct-nav-radar { width: 24px; height: 24px; }
           body:not(.pc-stage-mode) .ct-nav-label { font-size: 16px; color: #fff; }
 
           body:not(.pc-stage-mode) .ct-info-panel-container {
@@ -755,7 +781,16 @@ export default function Certs() {
             <span className="ct-arrow">◄</span>
             <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>LB</span>
           </button>
+          <video
+            className="ct-nav-radar"
+            src={circleRadar}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
           <span className="ct-nav-label">{ITEMS[active].label}</span>
+          <img className="ct-nav-arcana" src={arcanaCard} width="24" height="34" decoding="async" alt="" />
           <button
             type="button"
             style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
@@ -908,6 +943,8 @@ export default function Certs() {
         >
           <div
             style={{
+              position: "relative",
+              overflow: "hidden",
               width: "min(520px, 92%)",
               background: "linear-gradient(180deg, #0d1958 0%, #060d38 100%)",
               border: "1px solid rgba(142, 245, 255, 0.35)",
@@ -918,21 +955,38 @@ export default function Certs() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "16px", letterSpacing: "2.5px", color: "#8ef5ff", background: "rgba(142,245,255,0.12)", padding: "3px 10px" }}>
+            <video
+              src={circleRadar}
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: 0.28,
+                pointerEvents: "none",
+              }}
+            />
+            <div style={{ position: "relative", zIndex: 2, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "'Bebas Neue', sans-serif", fontSize: "16px", letterSpacing: "2.5px", color: "#8ef5ff", background: "rgba(142,245,255,0.12)", padding: "3px 10px" }}>
+                <img src={arcanaCard} width="18" height="25" decoding="async" alt="" style={{ borderRadius: "2px" }} />
                 {selectedCert.category} · CREDENTIAL RECORD
               </span>
               <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "15px", letterSpacing: "2px", background: "#00c853", color: "#041238", padding: "2px 10px", fontWeight: 700 }}>
                 STATUS: VERIFIED
               </span>
             </div>
-            <div style={{ fontFamily: "'Anton', sans-serif", fontSize: "28px", lineHeight: 1.1, letterSpacing: "1px", color: "#fff", marginBottom: "10px" }}>
+            <div style={{ position: "relative", zIndex: 2, fontFamily: "'Anton', sans-serif", fontSize: "28px", lineHeight: 1.1, letterSpacing: "1px", color: "#fff", marginBottom: "10px" }}>
               {selectedCert.text}
             </div>
-            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "20px", letterSpacing: "1.5px", color: "#9cf7ff", marginBottom: "18px" }}>
+            <div style={{ position: "relative", zIndex: 2, fontFamily: "'Bebas Neue', sans-serif", fontSize: "20px", letterSpacing: "1.5px", color: "#9cf7ff", marginBottom: "18px" }}>
               ISSUING AUTHORITY: <span style={{ color: "#fff" }}>{selectedCert.pillValue}</span> · HOLDER: <span style={{ color: "#fff" }}>RAJARSHI CHAKRABORTY</span>
             </div>
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            <div style={{ position: "relative", zIndex: 2, display: "flex", gap: "10px", flexWrap: "wrap" }}>
               <a
                 href="https://www.linkedin.com/in/rajarshi-cybersecurity/details/certifications/"
                 target="_blank"
