@@ -257,6 +257,8 @@ export default function P3Menu({ onNavigate }) {
                 key={item.id}
                 href={item.page === 'github' ? 'https://github.com/X5464' : `/${item.page}`}
                 className={`p3-row ${isActive ? "active" : ""} ${mounted ? "mounted" : ""}`}
+                data-p3-hover="true"
+                ref={(el) => { if (el) el.__p3Hover = () => { if (active !== i) activate(i); }; }}
                 style={{
                   marginRight: item.offsetX,
                   marginTop: item.offsetY,

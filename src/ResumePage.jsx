@@ -641,6 +641,8 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
               <div
                 key={item.id}
                 className={`resume-card-wrap${active === index ? " active" : ""}${mounted ? " mounted" : ""}`}
+                data-p3-hover="true"
+                ref={(el) => { if (el) el.__p3Hover = () => setActive(index); }}
                 style={{ transitionDelay: `${index * 55}ms` }}
                 onMouseEnter={() => {
                   setActive(index);

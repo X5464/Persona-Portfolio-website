@@ -155,7 +155,9 @@ export default function Certs() {
     window.addEventListener("keydown", onKey);
 
     const onWheel = (e) => {
-      if (focus === "right") {
+      const isRightSide = e.clientX > window.innerWidth * 0.54;
+      if (isRightSide || focus === "right") {
+        setFocus("right");
         const barCount = ITEMS[active].bars;
         if (e.deltaY > 0) {
           setActiveInfoBar(prev => {
@@ -171,6 +173,7 @@ export default function Certs() {
           });
         }
       } else {
+        setFocus("left");
         if (e.deltaY > 0) selectCategory(i => Math.min(ITEMS.length - 1, i + 1));
         else if (e.deltaY < 0) selectCategory(i => Math.max(0, i - 1));
       }
@@ -186,6 +189,7 @@ export default function Certs() {
   return (
     <div id="menu-screen">
       <video 
+        className="subpage-video-bottom-right"
         src={bgVideo} 
         poster={bgPoster} 
         autoPlay 
@@ -210,7 +214,7 @@ export default function Certs() {
           padding-left: 0;
           transition: opacity 0.3s ease;
         }
-        .ct-root.dimmed { opacity: 0.35; pointer-events: none; }
+        .ct-root.dimmed { opacity: 0.94; }
 
 
         .ct-bar-outer {
@@ -273,12 +277,12 @@ export default function Certs() {
         }
         .ct-bar-content {
           position: relative;
-          z-index: 2;
+          z-index: 4;
           height: 100%;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 20px 0 20px;
+          padding: 0 18px 0 14px;
         }
         .ct-role {
           display: flex;
@@ -291,7 +295,7 @@ export default function Certs() {
           transform: rotate(-30deg);
           user-select: none;
           line-height: 1;
-          padding: 0 12px 0 6px;
+          padding: 0 10px 0 4px;
         }
         .ct-main {
           flex: 1;
@@ -300,20 +304,20 @@ export default function Certs() {
           align-items: center;
           justify-content: center;
           gap: 2px;
-          padding-left: 26%;
+          padding-left: 112px;
         }
         .ct-char {
           position: absolute;
           top: 0;
-          left: 110px;
+          left: 92px;
           height: 100%;
-          width: auto;
-          max-width: 160px;
+          width: 118px;
+          max-width: 118px;
           object-fit: cover;
-          object-position: top;
-          pointer-events: all;
-          z-index: 3;
-          clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
+          object-position: 18% center;
+          pointer-events: none;
+          z-index: 2;
+          clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
         }
         .ct-label {
           font-family: 'Bebas Neue', sans-serif;
@@ -363,11 +367,20 @@ export default function Certs() {
           60%  { opacity: 1; transform: translateX(-4px); }
           100% { opacity: 1; transform: translateX(0); }
         }
-        .ct-info-bar-wrap {
+        .ct-info-panel-container {
           position: fixed;
-          right: 0;
+          top: 155px;
           left: 62%;
-          height: 48px;
+          right: 0;
+          bottom: 50px;
+          z-index: 50;
+          pointer-events: all;
+        }
+        .ct-info-bar-wrap {
+          position: absolute;
+          right: 0;
+          left: 0;
+          height: 46px;
           background: transparent;
           pointer-events: all;
           cursor: pointer;
@@ -477,11 +490,11 @@ export default function Certs() {
         .ct-arrow { color: #c4001a; display: inline-block; }
 
         .ct-scroll-track {
-          position: fixed;
-          right: 12px;
-          top: 155px;
+          position: absolute;
+          right: 10px;
+          top: 0;
           width: 3px;
-          height: ${VISIBLE * 55}px;
+          height: ${VISIBLE * 52}px;
           background: rgba(255,255,255,0.12);
           z-index: 60;
           border-radius: 2px;
@@ -495,9 +508,9 @@ export default function Certs() {
           transition: top 0.25s ease, height 0.25s ease;
         }
         .ct-scroll-hint-below {
-          position: fixed;
-          left: 62%;
-          right: 20px;
+          position: absolute;
+          left: 0;
+          right: 16px;
           pointer-events: all;
           z-index: 61;
           display: flex;
@@ -530,9 +543,9 @@ export default function Certs() {
           50%       { transform: translateY(4px); }
         }
         .ct-scroll-hint-above {
-          position: fixed;
-          left: 62%;
-          right: 20px;
+          position: absolute;
+          left: 0;
+          right: 16px;
           pointer-events: all;
           z-index: 61;
           display: flex;
@@ -585,50 +598,64 @@ export default function Certs() {
         @media (max-width: 768px) {
           body:not(.pc-stage-mode) .ct-root {
             justify-content: flex-start;
-            padding-top: 50px;
-            gap: 4px;
+            padding-top: 46px;
+            gap: 5px;
           }
           body:not(.pc-stage-mode) .ct-root.dimmed {
-            opacity: 0.9;
+            opacity: 1;
           }
-          body:not(.pc-stage-mode) .ct-bar { width: 94cqw; height: 46px; }
-          body:not(.pc-stage-mode) .ct-bar-red { width: 94cqw; height: 46px; }
-          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar { height: 56px; }
-          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar-red { height: 56px; }
-          body:not(.pc-stage-mode) .ct-label { font-size: 15px; letter-spacing: 1.5px; }
+          body:not(.pc-stage-mode) .ct-bar { width: 95cqw; height: 48px; }
+          body:not(.pc-stage-mode) .ct-bar-red { width: 95cqw; height: 48px; }
+          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar { height: 58px; }
+          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar-red { height: 58px; }
+          body:not(.pc-stage-mode) .ct-bar-content { padding: 0 12px 0 8px; }
+          body:not(.pc-stage-mode) .ct-role { font-size: 26px; padding: 0 4px 0 2px; }
+          body:not(.pc-stage-mode) .ct-char { width: 82px; max-width: 82px; left: 54px; object-position: 18% center; }
+          body:not(.pc-stage-mode) .ct-main { padding-left: 72px; align-items: flex-start; }
+          body:not(.pc-stage-mode) .ct-label { font-size: 16px; letter-spacing: 1.5px; }
           body:not(.pc-stage-mode) .ct-subtitle { font-size: 10px; }
-          body:not(.pc-stage-mode) .ct-char { max-width: 80px; left: 62px; }
-          body:not(.pc-stage-mode) .ct-main { padding-left: 38%; }
-          body:not(.pc-stage-mode) .ct-role { font-size: 24px; }
-          body:not(.pc-stage-mode) .ct-stat-num { font-size: 16px; }
+          body:not(.pc-stage-mode) .ct-stats { padding-right: 6px; gap: 6px; }
+          body:not(.pc-stage-mode) .ct-stat-num { font-size: 15px; }
+
+          body:not(.pc-stage-mode) .ct-right-nav {
+            top: 215px;
+            left: 16px;
+            right: 16px;
+            justify-content: center;
+            background: rgba(8, 16, 46, 0.82);
+            border: 1px solid rgba(142, 245, 255, 0.35);
+            border-radius: 6px;
+            padding: 2px 12px;
+            font-size: 16px;
+          }
+          body:not(.pc-stage-mode) .ct-nav-label { font-size: 16px; color: #fff; }
 
           body:not(.pc-stage-mode) .ct-info-panel-container {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            transform: translateY(95px);
+            top: 254px;
+            left: 3%;
+            right: 3%;
+            bottom: 58px;
           }
           body:not(.pc-stage-mode) .ct-info-bar-wrap {
-            left: 2%;
-            right: 4%;
-            height: 42px;
+            left: 0;
+            right: 12px;
+            height: 44px;
           }
+          body:not(.pc-stage-mode) .ct-info-bar-new { left: -12px; height: 50%; }
           body:not(.pc-stage-mode) .ct-scroll-hint-below,
           body:not(.pc-stage-mode) .ct-scroll-hint-above {
-            left: 2%;
-            right: 4%;
+            left: 0;
+            right: 12px;
           }
           body:not(.pc-stage-mode) .ct-info-bar-text { font-size: 12.5px; letter-spacing: 0.8px; }
           body:not(.pc-stage-mode) .ct-info-bar-box { font-size: 10.5px; padding: 0 6px; }
           body:not(.pc-stage-mode) .ct-info-bar-count { font-size: 12.5px; margin-right: 6px; }
           body:not(.pc-stage-mode) .ct-acc-badge { font-size: 10px; padding: 1px 5px; }
 
-          body:not(.pc-stage-mode) .ct-right-nav { top: 222px; right: 12px; font-size: 16px; }
-          body:not(.pc-stage-mode) .ct-nav-label { font-size: 13px; }
           body:not(.pc-stage-mode) .ct-footer { bottom: 8px; right: 8px; }
           body:not(.pc-stage-mode) .ct-footer-row { font-size: 10px; }
-          body:not(.pc-stage-mode) .ct-scroll-track { right: 4px; }
-          body:not(.pc-stage-mode) .sc-back-btn { bottom: 14px; left: 16px; font-size: 18px; }
+          body:not(.pc-stage-mode) .ct-scroll-track { right: 2px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 12px; left: 14px; font-size: 18px; }
         }
 
         .sc-back-btn {
@@ -660,11 +687,20 @@ export default function Certs() {
       `}</style>
 
 
-      <div className={`ct-root${focus === "right" ? " dimmed" : ""}`} role="navigation">
+      <div className="ct-root" role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
             className={`ct-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
+            data-p3-hover="true"
+            ref={(el) => {
+              if (el) {
+                el.__p3Hover = () => {
+                  if (active !== i) selectCategory(i);
+                  setFocus("left");
+                };
+              }
+            }}
             onMouseEnter={() => { if (active !== i) selectCategory(i); setFocus("left"); }}
           >
             <div className="ct-bar-red" />
@@ -682,7 +718,7 @@ export default function Certs() {
                 }
               }}
             >
-              <img className="ct-char" src={CHARS[i]} width="350" height="135" decoding="async" alt="" />
+              <img className="ct-char" src={CHARS[i]} width="220" height="135" decoding="async" alt="" />
               <div className="ct-bar-fill" />
               <div className="ct-bar-content">
                 <div className="ct-role">{ROLES[i].text}</div>
@@ -739,8 +775,8 @@ export default function Certs() {
         const currentItem = ITEMS[active];
         const totalBars = currentItem.bars;
         const visibleLinks = currentItem.links.slice(scrollOffset, scrollOffset + VISIBLE);
-        const thumbH = Math.round((VISIBLE / totalBars) * (VISIBLE * 55));
-        const thumbTop = Math.round((scrollOffset / totalBars) * (VISIBLE * 55));
+        const thumbH = Math.round((VISIBLE / totalBars) * (VISIBLE * 52));
+        const thumbTop = Math.round((scrollOffset / totalBars) * (VISIBLE * 52));
         const hasMore = totalBars > VISIBLE;
 
         const scrollByStep = (dir) => {
@@ -756,7 +792,7 @@ export default function Certs() {
 
         return mounted ? (
           <div
-            className={`ct-info-panel-container${focus === "left" ? " dimmed" : ""}`}
+            className="ct-info-panel-container"
             onTouchStart={(e) => {
               if (!e.touches || !e.touches[0]) return;
               touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -783,7 +819,7 @@ export default function Certs() {
                 {scrollOffset + VISIBLE < totalBars && (
                   <div
                     className="ct-scroll-hint-below"
-                    style={{ top: `${155 + VISIBLE * 55 - 38}px`, cursor: "pointer" }}
+                    style={{ top: `${VISIBLE * 52 - 34}px`, cursor: "pointer" }}
                     onClick={(e) => {
                       e.stopPropagation();
                       scrollByStep(1);
@@ -800,7 +836,7 @@ export default function Certs() {
                 {scrollOffset > 0 && (
                   <div
                     className="ct-scroll-hint-above"
-                    style={{ top: `${155}px`, cursor: "pointer" }}
+                    style={{ top: `0px`, cursor: "pointer" }}
                     onClick={(e) => {
                       e.stopPropagation();
                       scrollByStep(-1);
@@ -821,13 +857,22 @@ export default function Certs() {
                 <div
                   className={`ct-info-bar-wrap${activeInfoBar === realIdx ? " selected" : ""}`}
                   key={`bar-${active}-${realIdx}`}
-                  style={{ top: `${155 + vi * 55}px`, animationDelay: `${vi * 40}ms` }}
+                  data-p3-hover="true"
+                  ref={(el) => {
+                    if (el) {
+                      el.__p3Hover = () => {
+                        setFocus("right");
+                        setActiveInfoBar(realIdx);
+                      };
+                    }
+                  }}
+                  style={{ top: `${vi * 52}px`, animationDelay: `${vi * 40}ms` }}
                   onClick={() => {
                     setFocus("right");
                     setActiveInfoBar(realIdx);
                     openCert(link, currentItem.label);
                   }}
-                  onMouseEnter={() => setActiveInfoBar(realIdx)}
+                  onMouseEnter={() => { setFocus("right"); setActiveInfoBar(realIdx); }}
                 >
                   {currentItem.newBars.includes(realIdx) && (
                     <img className="ct-info-bar-new" src={newsign} width="100" height="100" decoding="async" alt="" />

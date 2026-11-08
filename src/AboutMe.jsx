@@ -126,6 +126,7 @@ export default function AboutMe() {
   return (
     <div id="menu-screen">
       <video 
+        className="subpage-video-right"
         src={bgVideo}
         poster={bgPoster}
         autoPlay 
@@ -642,7 +643,7 @@ export default function AboutMe() {
         /* content layout inside each bar */
         .sc-bar-content {
           position: relative;
-          z-index: 2;
+          z-index: 4;
           height: 100%;
           display: flex;
           align-items: center;
@@ -656,13 +657,13 @@ export default function AboutMe() {
           align-items: center;
           flex-shrink: 0;
           font-family: 'Anton', sans-serif;
-          font-size: 50px;
+          font-size: 46px;
           letter-spacing: -2px;
           color: #ffffff;
           transform: rotate(-30deg);
           user-select: none;
           line-height: 1;
-          padding: 0 16px 0 8px;
+          padding: 0 12px 0 6px;
         }
 
         /* left: icon + name centered in remaining space */
@@ -673,7 +674,7 @@ export default function AboutMe() {
           align-items: center;
           justify-content: center;
           gap: 3px;
-          padding-left: 78px;
+          padding-left: 110px;
         }
         .sc-main-top {
           display: flex;
@@ -769,15 +770,15 @@ export default function AboutMe() {
         .sc-char {
           position: absolute;
           top: 0;
-          left: 110px;
+          left: 105px;
           height: 100%;
-          width: auto;
-          max-width: 160px;
+          width: 138px;
+          max-width: 138px;
           object-fit: cover;
-          object-position: top;
-          pointer-events: all;
-          z-index: 3;
-          clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
+          object-position: 18% center;
+          pointer-events: none;
+          z-index: 2;
+          clip-path: polygon(18px 0%, 100% 0%, calc(100% - 18px) 100%, 0% 100%);
         }
 
         /* footer hints */
@@ -805,44 +806,62 @@ export default function AboutMe() {
 
         @media (max-width: 768px) {
           /* Left menu bars in portrait mode */
-          body:not(.pc-stage-mode) .sc-bar { width: 92cqw; height: 58px; }
-          body:not(.pc-stage-mode) .sc-bar-red { width: 92cqw; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 74px; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 74px; }
-          body:not(.pc-stage-mode) .sc-char { max-width: 90px; left: 62px; }
-          body:not(.pc-stage-mode) .sc-main { padding-left: 38%; }
+          body:not(.pc-stage-mode) .sc-bar { width: 94cqw; height: 64px; }
+          body:not(.pc-stage-mode) .sc-bar-red { width: 94cqw; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 78px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 78px; }
+          body:not(.pc-stage-mode) .sc-bar-content { padding: 0 14px 0 10px; }
+          body:not(.pc-stage-mode) .sc-role { font-size: 30px; padding: 0 4px 0 2px; }
+          body:not(.pc-stage-mode) .sc-char { width: 96px; max-width: 96px; left: 58px; object-position: 18% center; }
+          body:not(.pc-stage-mode) .sc-main { padding-left: 84px; align-items: flex-end; padding-right: 12px; }
+          body:not(.pc-stage-mode) .sc-label { font-size: 22px; letter-spacing: 2px; white-space: nowrap; }
           body:not(.pc-stage-mode) .sc-root.revealed { transform: translateX(-110%); }
 
           /* Reveal info panel in portrait mode */
           body:not(.pc-stage-mode) .sc-reveal-panel {
-            top: 24%;
-            left: 2%;
-            width: 96%;
-            height: 60%;
-            clip-path: polygon(0 0, 100% 0, calc(100% - 28px) 100%, 0 100%);
-            transform: skewX(-4deg);
+            top: 15%;
+            left: 3%;
+            width: 94%;
+            height: 68%;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
+            transform: skewX(-2deg);
           }
-          body:not(.pc-stage-mode) .sc-reveal-upper-bar {
+          body:not(.pc-stage-mode) .sc-reveal-name-box {
             padding-left: 16px;
-            padding-right: 6%;
-            height: 46%;
+            padding-right: 12px;
+            top: 4%;
+            height: 15%;
+          }
+          body:not(.pc-stage-mode) .sc-reveal-name { font-size: 22px; }
+          body:not(.pc-stage-mode) .sc-reveal-major { font-size: 10.5px; }
+          body:not(.pc-stage-mode) .sc-reveal-upper-bar {
+            top: 21%;
+            height: 56%;
+            padding: 10px 16px;
+            overflow-y: auto;
+            justify-content: flex-start;
           }
           body:not(.pc-stage-mode) .sc-reveal-upper-line {
             font-size: 12.5px;
-            line-height: 1.25;
+            line-height: 1.3;
           }
           body:not(.pc-stage-mode) .sc-reveal-upper-line:nth-child(1) {
             font-size: 14px;
           }
-          body:not(.pc-stage-mode) .sc-reveal-lower-bar { font-size: 20px; padding-left: 14px; top: 75%; height: 15%; }
-          body:not(.pc-stage-mode) .sc-reveal-name-box { padding-left: 16px; top: 8%; height: 18%; }
-          body:not(.pc-stage-mode) .sc-reveal-name { font-size: 22px; }
-          body:not(.pc-stage-mode) .sc-reveal-major { font-size: 10.5px; }
-          body:not(.pc-stage-mode) .sc-main-portrait-shell { width: 65%; right: -10%; opacity: 0.45; }
+          body:not(.pc-stage-mode) .sc-reveal-lower-bar {
+            font-size: 18px;
+            padding-left: 14px;
+            top: 80%;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 15%;
+          }
+          body:not(.pc-stage-mode) .sc-main-portrait-shell { width: 78%; right: -6%; opacity: 0.55; }
 
           /* Nav & footer */
-          body:not(.pc-stage-mode) .sc-right-nav { top: 52px; left: 50%; transform: translateX(-50%); font-size: 14px; }
-          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 32px; }
+          body:not(.pc-stage-mode) .sc-right-nav { top: 48px; left: 50%; transform: translateX(-50%); font-size: 14px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 30px; }
           body:not(.pc-stage-mode) .sc-footer { bottom: 8px; right: 8px; }
           body:not(.pc-stage-mode) .sc-footer-row { font-size: 10px; }
           body:not(.pc-stage-mode) .sc-back-btn { bottom: 16px; left: 16px; font-size: 18px; }
@@ -881,6 +900,8 @@ export default function AboutMe() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
+            data-p3-hover="true"
+            ref={(el) => { if (el) el.__p3Hover = () => setActive(i); }}
             onMouseEnter={() => { setActive(i); }}
           >
             <div className="sc-bar-red" />
@@ -897,7 +918,7 @@ export default function AboutMe() {
                 }
               }}
             >
-              <img className="sc-char" src={CHARS[i]} width="350" height="135" decoding="async" alt="" />
+              <img className="sc-char" src={CHARS[i]} width="220" height="135" decoding="async" alt="" />
               <div className="sc-bar-fill" />
               <div className="sc-bar-shade" />
               <div className="sc-bar-content">

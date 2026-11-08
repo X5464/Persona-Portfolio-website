@@ -107,12 +107,37 @@ export default function Socials() {
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+
+    const onWheel = (e) => {
+      const isRightSide = e.clientX > window.innerWidth * 0.52;
+      if (isRightSide || focus === "right") {
+        setFocus("right");
+        const barCount = ITEMS[active].bars;
+        if (e.deltaY > 0) setActiveInfoBar((i) => Math.min(barCount - 1, i + 1));
+        else if (e.deltaY < 0) setActiveInfoBar((i) => Math.max(0, i - 1));
+      } else {
+        setFocus("left");
+        if (e.deltaY > 0) {
+          setActive((i) => Math.min(ITEMS.length - 1, i + 1));
+          setActiveInfoBar(0);
+        } else if (e.deltaY < 0) {
+          setActive((i) => Math.max(0, i - 1));
+          setActiveInfoBar(0);
+        }
+      }
+    };
+    window.addEventListener("wheel", onWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("wheel", onWheel);
+    };
   }, [active, navigate, focus, activeInfoBar]);
 
   return (
     <div id="menu-screen">
       <video 
+        className="subpage-video-bottom-right"
         src={bgVideo}
         poster={bgPoster}
         autoPlay 
@@ -136,7 +161,7 @@ export default function Socials() {
           padding-left: 0;
           transition: opacity 0.3s ease;
         }
-        .sc-root.dimmed { opacity: 0.35; pointer-events: none; }
+        .sc-root.dimmed { opacity: 0.94; }
 
 
         /* ── Each bar ── */
@@ -226,12 +251,12 @@ export default function Socials() {
         /* content layout inside each bar */
         .sc-bar-content {
           position: relative;
-          z-index: 2;
+          z-index: 4;
           height: 100%;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 20px 0 20px;
+          padding: 0 18px 0 14px;
         }
 
         /* left: role label */
@@ -240,13 +265,13 @@ export default function Socials() {
           align-items: center;
           flex-shrink: 0;
           font-family: 'Anton', sans-serif;
-          font-size: 50px;
+          font-size: 42px;
           letter-spacing: -2px;
           color: #ffffff;
           transform: rotate(-30deg);
           user-select: none;
           line-height: 1;
-          padding: 0 16px 0 8px;
+          padding: 0 8px 0 4px;
         }
 
         /* left: icon + name centered in remaining space */
@@ -257,33 +282,35 @@ export default function Socials() {
           align-items: center;
           justify-content: center;
           gap: 3px;
+          padding-left: 112px;
         }
         .sc-main-top {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 8px;
         }
 
         .sc-icon {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 22px;
-          width: 32px;
+          font-size: 20px;
+          width: 26px;
           text-align: center;
           flex-shrink: 0;
-          color: rgba(255,255,255,0.15);
+          color: rgba(255,255,255,0.2);
           transition: color 0.2s ease;
           user-select: none;
         }
-        .sc-bar-outer.active .sc-icon { color: rgba(255,255,255,0.25); }
+        .sc-bar-outer.active .sc-icon { color: rgba(0,0,0,0.55); }
 
         .sc-label {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 28px;
-          letter-spacing: 4px;
+          font-size: 26px;
+          letter-spacing: 3px;
           line-height: 1;
-          color: rgba(255,255,255,0.85);
+          color: rgba(255,255,255,0.92);
           transition: color 0.2s ease;
           user-select: none;
+          white-space: nowrap;
         }
         .sc-bar-outer.active .sc-label { color: #111111; }
 
@@ -379,15 +406,15 @@ export default function Socials() {
         .sc-char {
           position: absolute;
           top: 0;
-          left: 110px;
+          left: 92px;
           height: 100%;
-          width: auto;
-          max-width: 160px;
+          width: 118px;
+          max-width: 118px;
           object-fit: cover;
-          object-position: top;
-          pointer-events: all;
-          z-index: 3;
-          clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
+          object-position: 18% center;
+          pointer-events: none;
+          z-index: 2;
+          clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
         }
 
         /* right-side nav bar */
@@ -445,10 +472,19 @@ export default function Socials() {
           60%  { opacity: 1; transform: translateX(-4px); }
           100% { opacity: 1; transform: translateX(0); }
         }
-        .sc-info-bar-wrap {
+        .sc-info-list-panel {
           position: fixed;
+          top: 150px;
+          left: 63%;
           right: 0;
-          left: 65%;
+          bottom: 60px;
+          z-index: 50;
+          pointer-events: none;
+        }
+        .sc-info-bar-wrap {
+          position: absolute;
+          right: 0;
+          left: 0;
           height: 46px;
           background: transparent;
           pointer-events: all;
@@ -583,41 +619,60 @@ export default function Socials() {
         @media (max-width: 768px) {
           body:not(.pc-stage-mode) .sc-root {
             justify-content: flex-start;
-            padding-top: 50px;
+            padding-top: 46px;
             padding-left: 0;
-            gap: 4px;
+            gap: 5px;
           }
           body:not(.pc-stage-mode) .sc-root.dimmed {
-            opacity: 0.9;
+            opacity: 1;
           }
-          body:not(.pc-stage-mode) .sc-bar { width: 94cqw; height: 46px; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 56px; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 56px; }
-          body:not(.pc-stage-mode) .sc-bar-red { width: 94cqw; height: 46px; }
-          body:not(.pc-stage-mode) .sc-label { font-size: 18px; letter-spacing: 2px; }
-          body:not(.pc-stage-mode) .sc-stat-num { font-size: 16px; }
-          body:not(.pc-stage-mode) .sc-stat-tag { font-size: 8px; }
-          body:not(.pc-stage-mode) .sc-char { max-width: 80px; left: 62px; }
-          body:not(.pc-stage-mode) .sc-main { padding-left: 38%; }
-          body:not(.pc-stage-mode) .sc-role { font-size: 24px; }
+          body:not(.pc-stage-mode) .sc-bar { width: 95cqw; height: 48px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 58px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 58px; }
+          body:not(.pc-stage-mode) .sc-bar-red { width: 95cqw; height: 48px; }
+          body:not(.pc-stage-mode) .sc-bar-content { padding: 0 12px 0 8px; }
+          body:not(.pc-stage-mode) .sc-role { font-size: 26px; padding: 0 4px 0 2px; }
+          body:not(.pc-stage-mode) .sc-char { width: 82px; max-width: 82px; left: 54px; object-position: 18% center; }
+          body:not(.pc-stage-mode) .sc-main { padding-left: 72px; align-items: flex-start; }
+          body:not(.pc-stage-mode) .sc-icon { font-size: 16px; width: 20px; }
+          body:not(.pc-stage-mode) .sc-label { font-size: 19px; letter-spacing: 1.5px; }
+          body:not(.pc-stage-mode) .sc-stats { padding-right: 6px; gap: 6px; }
+          body:not(.pc-stage-mode) .sc-stat-num { font-size: 15px; }
+          body:not(.pc-stage-mode) .sc-stat-tag { font-size: 7.5px; }
 
-          body:not(.pc-stage-mode) .sc-info-bar-wrap {
-            left: 2%;
-            right: 2%;
-            height: 44px;
-            transform: translateY(105px);
+          body:not(.pc-stage-mode) .sc-right-nav {
+            top: 215px;
+            left: 16px;
+            right: 16px;
+            justify-content: center;
+            background: rgba(8, 16, 46, 0.82);
+            border: 1px solid rgba(142, 245, 255, 0.35);
+            border-radius: 6px;
+            padding: 2px 12px;
           }
-          body:not(.pc-stage-mode) .sc-info-bar-text { font-size: 13px; letter-spacing: 0.8px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 22px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-label { font-size: 17px; color: #fff; }
+
+          body:not(.pc-stage-mode) .sc-info-list-panel {
+            top: 254px;
+            left: 3%;
+            right: 3%;
+            bottom: 58px;
+          }
+          body:not(.pc-stage-mode) .sc-info-bar-wrap {
+            left: 0;
+            right: 0;
+            height: 44px;
+          }
+          body:not(.pc-stage-mode) .sc-info-bar-new { left: -12px; height: 50%; }
+          body:not(.pc-stage-mode) .sc-info-bar-text { font-size: 13.5px; letter-spacing: 0.8px; }
           body:not(.pc-stage-mode) .sc-info-bar-box { font-size: 11px; padding: 0 6px; }
-          body:not(.pc-stage-mode) .sc-info-bar-count { font-size: 13px; margin-right: 6px; }
+          body:not(.pc-stage-mode) .sc-info-bar-count { font-size: 13px; margin-right: 8px; }
           body:not(.pc-stage-mode) .sc-acc-badge { font-size: 10px; padding: 1px 5px; }
 
-          body:not(.pc-stage-mode) .sc-right-nav { top: 222px; right: 12px; font-size: 18px; }
-          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 24px; }
-          body:not(.pc-stage-mode) .sc-nav-label { font-size: 14px; }
           body:not(.pc-stage-mode) .sc-footer { bottom: 8px; right: 8px; }
           body:not(.pc-stage-mode) .sc-footer-row { font-size: 10px; }
-          body:not(.pc-stage-mode) .sc-back-btn { bottom: 14px; left: 16px; font-size: 18px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 12px; left: 14px; font-size: 18px; }
         }
 
         .sc-back-btn {
@@ -649,11 +704,23 @@ export default function Socials() {
       `}</style>
 
 
-      <div className={`sc-root${focus === "right" ? " dimmed" : ""}`} role="navigation">
+      <div className="sc-root" role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
+            data-p3-hover="true"
+            ref={(el) => {
+              if (el) {
+                el.__p3Hover = () => {
+                  if (active !== i) {
+                    setActive(i);
+                    setActiveInfoBar(0);
+                  }
+                  setFocus("left");
+                };
+              }
+            }}
             onMouseEnter={() => { setActive(i); setFocus("left"); }}
           >
             <div className="sc-bar-red" />
@@ -669,7 +736,7 @@ export default function Socials() {
                 }
               }}
             >
-              <img className="sc-char" src={CHARS[i]} width="350" height="135" decoding="async" alt="" />
+              <img className="sc-char" src={CHARS[i]} width="220" height="135" decoding="async" alt="" />
               <div className="sc-bar-fill" />
               <div className="sc-bar-shade" />
               <div className="sc-bar-content">
@@ -701,10 +768,11 @@ export default function Socials() {
       </div>
 
       {mounted && (
-        <div className={`sc-info-panel-container${focus === "left" ? " dimmed" : ""}`}>
+        <div className="sc-info-panel-container">
           <div className="sc-right-nav" key={active}>
             <button
               type="button"
+              aria-label="Previous social category"
               style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -718,6 +786,7 @@ export default function Socials() {
             <span className="sc-nav-label">{ITEMS[active].label}</span>
             <button
               type="button"
+              aria-label="Next social category"
               style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -732,32 +801,44 @@ export default function Socials() {
         </div>
       )}
 
-
-      {mounted && Array.from({ length: ITEMS[active].bars }).map((_, i) => (
-        <div
-          className={`sc-info-bar-wrap${activeInfoBar === i ? " selected" : ""}${focus === "left" ? " dimmed" : ""}`}
-          key={`bar-${active}-${i}`}
-          style={{ top: `${155 + i * 52}px`, animationDelay: `${i * 50}ms` }}
-          onClick={() => {
-            setFocus("right");
-            setActiveInfoBar(i);
-            const link = ITEMS[active].links[i]?.href;
-            if (link) window.open(link, "_blank");
-          }}
-          onMouseEnter={() => { if (focus === "right") setActiveInfoBar(i); }}
-        >
-          {ITEMS[active].newBars.includes(i) && (
-            <img className="sc-info-bar-new" src={newsign} width="100" height="100" decoding="async" alt="" />
-          )}
-          <div className="sc-info-bar">
-            <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} width="48" height="28" decoding="async" alt="" />
-            <span className="sc-info-bar-text">{ITEMS[active].links[i].text}</span>
-            {ITEMS[active].links[i]?.href && <span className="sc-acc-badge">▶ LINK</span>}
-            <span className="sc-info-bar-box">{ITEMS[active].links[i].pillLabel}</span>
-            <span className="sc-info-bar-count">{ITEMS[active].links[i].pillValue}</span>
-          </div>
+      {mounted && (
+        <div className="sc-info-list-panel">
+          {Array.from({ length: ITEMS[active].bars }).map((_, i) => (
+            <div
+              className={`sc-info-bar-wrap${activeInfoBar === i ? " selected" : ""}`}
+              key={`bar-${active}-${i}`}
+              data-p3-hover="true"
+              ref={(el) => {
+                if (el) {
+                  el.__p3Hover = () => {
+                    setFocus("right");
+                    setActiveInfoBar(i);
+                  };
+                }
+              }}
+              style={{ top: `${i * 50}px`, animationDelay: `${i * 50}ms` }}
+              onClick={() => {
+                setFocus("right");
+                setActiveInfoBar(i);
+                const link = ITEMS[active].links[i]?.href;
+                if (link) window.open(link, "_blank");
+              }}
+              onMouseEnter={() => { setFocus("right"); setActiveInfoBar(i); }}
+            >
+              {ITEMS[active].newBars.includes(i) && (
+                <img className="sc-info-bar-new" src={newsign} width="100" height="100" decoding="async" alt="" />
+              )}
+              <div className="sc-info-bar">
+                <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} width="48" height="28" decoding="async" alt="" />
+                <span className="sc-info-bar-text">{ITEMS[active].links[i].text}</span>
+                {ITEMS[active].links[i]?.href && <span className="sc-acc-badge">▶ LINK</span>}
+                <span className="sc-info-bar-box">{ITEMS[active].links[i].pillLabel}</span>
+                <span className="sc-info-bar-count">{ITEMS[active].links[i].pillValue}</span>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
 
 
       <div className={`sc-footer${mounted ? " mounted" : ""}`}>
