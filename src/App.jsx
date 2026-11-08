@@ -30,9 +30,22 @@ function MenuScreen() {
         fetchPriority="high"
       />
 
-      <P3Menu onNavigate={(page) => navigate(`/${page}`)} />
+      <P3Menu onNavigate={(page) => {
+        if (page === 'github') {
+          window.location.href = 'https://github.com/X5464';
+        } else {
+          navigate(`/${page}`);
+        }
+      }} />
     </div>
   )
+}
+
+function GithubRedirect() {
+  useEffect(() => {
+    window.location.replace("https://github.com/X5464");
+  }, []);
+  return null;
 }
 
 function AnimatedRoutes() {
@@ -56,6 +69,7 @@ function AnimatedRoutes() {
           <Route path="/certs" element={
             <PageTransition variant="socials"><Certs /></PageTransition>
           } />
+          <Route path="/github" element={<GithubRedirect />} />
           <Route path="*" element={
             <PageTransition><MenuScreen /></PageTransition>
           } />

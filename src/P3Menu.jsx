@@ -259,6 +259,8 @@ export default function P3Menu({ onNavigate }) {
               <a
                 key={item.id}
                 href={item.page === 'github' ? 'https://github.com/X5464' : `/${item.page}`}
+                target={item.page === 'github' ? '_blank' : undefined}
+                rel={item.page === 'github' ? 'noopener noreferrer' : undefined}
                 className={`p3-row ${isActive ? "active" : ""} ${mounted ? "mounted" : ""}`}
                 data-p3-hover="true"
                 ref={(el) => { if (el) el.__p3Hover = () => { if (active !== i) activate(i); }; }}
@@ -268,13 +270,13 @@ export default function P3Menu({ onNavigate }) {
                   transitionDelay: mounted ? `${i * 55}ms` : "0ms",
                 }}
                 onClick={(e) => {
-                  e.preventDefault();
                   activate(i);
                   if (item.page === 'github') {
-                    window.open('https://github.com/X5464', '_blank', 'noopener,noreferrer');
-                  } else {
-                    onNavigate?.(item.page);
+                    // Let native link click through to https://github.com/X5464 without popup-blocker issues
+                    return;
                   }
+                  e.preventDefault();
+                  onNavigate?.(item.page);
                 }}
                 onMouseEnter={() => activate(i)}
                 aria-current={isActive ? "page" : undefined}

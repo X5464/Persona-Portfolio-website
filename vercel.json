@@ -10,6 +10,13 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/github",
+      "destination": "https://github.com/X5464",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
