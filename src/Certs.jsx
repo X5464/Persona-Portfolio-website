@@ -108,12 +108,6 @@ export default function Certs() {
     setActiveInfoBar((prev) => {
       const next = Math.max(0, Math.min(barCount - 1, prev + delta));
       setScrollOffset((off) => {
-        if (delta > 0 && next >= off + VISIBLE - 1) {
-          return Math.min(maxOff, next - (VISIBLE - 2));
-        }
-        if (delta < 0 && next <= off) {
-          return Math.max(0, next - 1);
-        }
         if (next < off) return next;
         if (next >= off + VISIBLE) return Math.min(maxOff, next - VISIBLE + 1);
         return off;
@@ -274,13 +268,12 @@ export default function Certs() {
       }
 
       // Continuous vertical drag inside the Certificates panel:
-      // Dragging finger downwards (visualDy > 0) selects next certificates & scrolls down;
-      // Dragging finger upwards (visualDy < 0) selects previous certificates & scrolls up.
+      // 44px matches the exact height of 1 certificate bar so moving 1 bar moves selection by 1 bar (just like Socials)
       const rawDx = clientX - lastDragPosRef.current.x;
       const rawDy = clientY - lastDragPosRef.current.y;
       const visualDy = isRotated ? -rawDx : rawDy;
 
-      const STEP_PX = 18;
+      const STEP_PX = 44;
       if (Math.abs(visualDy) >= STEP_PX) {
         const steps = Math.trunc(visualDy / STEP_PX);
         lastStepDirRef.current = Math.sign(steps);
@@ -294,19 +287,19 @@ export default function Certs() {
         }
       }
 
-      // Edge auto-scroll ONLY in the direction the user is actively dragging when holding at the edge
+      // Gentle edge auto-scroll ONLY when holding finger at the very bottom/top edge of the list
       const rect = panelEl.getBoundingClientRect();
       const relY = isRotated
         ? (rect.right - clientX) / Math.max(1, rect.width)
         : (clientY - rect.top) / Math.max(1, rect.height);
 
-      if (lastStepDirRef.current > 0 && relY > 0.84 && relY <= 1.12) {
+      if (lastStepDirRef.current > 0 && relY > 0.90 && relY <= 1.12) {
         if (!edgeScrollTimerRef.current) {
-          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(1), 160);
+          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(1), 380);
         }
-      } else if (lastStepDirRef.current < 0 && relY >= -0.05 && relY < 0.14 && scrollOffsetRef.current > 0) {
+      } else if (lastStepDirRef.current < 0 && relY >= -0.05 && relY < 0.09 && scrollOffsetRef.current > 0) {
         if (!edgeScrollTimerRef.current) {
-          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(-1), 160);
+          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(-1), 380);
         }
       } else {
         clearEdgeScroll();
