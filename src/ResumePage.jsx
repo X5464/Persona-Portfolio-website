@@ -86,6 +86,7 @@ const PANEL_CONTENT = [
 export default function ResumePage({ src = main2, poster = main2Poster }) {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
+  const [activeRow, setActiveRow] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -441,9 +442,11 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
           background: #c4001a;
           color: #fff;
         }
-        .resume-detail-row:hover {
-          transform: translateX(4px);
-          background: rgba(12, 26, 94, 1);
+        .resume-detail-row:hover,
+        .resume-detail-row.selected {
+          transform: translateX(6px);
+          background: rgba(16, 38, 128, 0.95);
+          box-shadow: inset 3px 0 0 #c4001a, inset 0 0 0 1px rgba(142, 245, 255, 0.55);
         }
         .resume-detail-row-index {
           font-family: 'Bebas Neue', sans-serif;
@@ -656,13 +659,24 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
                 key={item.id}
                 className={`resume-card-wrap${active === index ? " active" : ""}${mounted ? " mounted" : ""}`}
                 data-p3-hover="true"
-                ref={(el) => { if (el) el.__p3Hover = () => setActive(index); }}
+                ref={(el) => {
+                  if (el) {
+                    el.__p3Hover = () => {
+                      if (active !== index) {
+                        setActive(index);
+                        setActiveRow(0);
+                      }
+                    };
+                  }
+                }}
                 style={{ transitionDelay: `${index * 55}ms` }}
                 onMouseEnter={() => {
                   setActive(index);
+                  setActiveRow(0);
                 }}
                 onClick={() => {
                   setActive(index);
+                  setActiveRow(0);
                 }}
               >
                 <div className="resume-card">
@@ -697,10 +711,16 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
             <div className="resume-detail-list">
               {PANEL_CONTENT[active].rows.map((row, idx) => (
                 <div
-                  className={`resume-detail-row${row.href ? " clickable" : ""}`}
+                  className={`resume-detail-row${row.href ? " clickable" : ""}${activeRow === idx ? " selected" : ""}`}
                   key={row.index}
+                  data-p3-hover="true"
+                  ref={(el) => {
+                    if (el) el.__p3Hover = () => setActiveRow(idx);
+                  }}
                   style={{ animationDelay: `${idx * 45}ms` }}
+                  onMouseEnter={() => setActiveRow(idx)}
                   onClick={() => {
+                    setActiveRow(idx);
                     if (row.href) window.open(row.href, "_blank");
                   }}
                 >

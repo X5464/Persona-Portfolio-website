@@ -85,7 +85,41 @@ export default function Certs() {
   const [focus, setFocus] = useState("left");
   const [selectedCert, setSelectedCert] = useState(null);
   const navigate = useNavigate();
-  const touchStartPos = useRef({ x: 0, y: 0 });
+  const inCertPanelRef = useRef(false);
+  const lastDragPosRef = useRef({ x: 0, y: 0 });
+  const edgeScrollTimerRef = useRef(null);
+  const activeCategoryRef = useRef(active);
+  const scrollOffsetRef = useRef(scrollOffset);
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    activeCategoryRef.current = active;
+  }, [active]);
+
+  useEffect(() => {
+    scrollOffsetRef.current = scrollOffset;
+  }, [scrollOffset]);
+
+  const stepCertSelection = (delta) => {
+    const barCount = ITEMS[activeCategoryRef.current].bars;
+    const maxOff = Math.max(0, barCount - VISIBLE);
+    setFocus("right");
+    setActiveInfoBar((prev) => {
+      const next = Math.max(0, Math.min(barCount - 1, prev + delta));
+      setScrollOffset((off) => {
+        if (delta > 0 && next >= off + VISIBLE - 1) {
+          return Math.min(maxOff, next - (VISIBLE - 2));
+        }
+        if (delta < 0 && next <= off) {
+          return Math.max(0, next - 1);
+        }
+        if (next < off) return next;
+        if (next >= off + VISIBLE) return Math.min(maxOff, next - VISIBLE + 1);
+        return off;
+      });
+      return next;
+    });
+  };
 
   const openCert = (link, categoryLabel) => {
     if (link.href && link.href.startsWith("http")) {
@@ -182,9 +216,126 @@ export default function Certs() {
     };
     window.addEventListener("wheel", onWheel, { passive: true });
 
+    const clearEdgeScroll = () => {
+      if (edgeScrollTimerRef.current) {
+        clearInterval(edgeScrollTimerRef.current);
+        edgeScrollTimerRef.current = null;
+      }
+    };
+
+    const handleFingerAt = (clientX, clientY, isStart) => {
+      const hit = document.elementFromPoint(clientX, clientY);
+      const hitCategoryBar = hit ? hit.closest(".ct-bar-outer") : null;
+      const hitPanelEl = hit ? hit.closest(".ct-info-panel-container") : null;
+
+      // If finger touches a left Category bar, exit cert panel drag mode so Category bar selects immediately
+      if (hitCategoryBar) {
+        inCertPanelRef.current = false;
+        clearEdgeScroll();
+        return;
+      }
+
+      const panelEl = hitPanelEl || (inCertPanelRef.current ? panelRef.current : null);
+      if (!panelEl) {
+        inCertPanelRef.current = false;
+        clearEdgeScroll();
+        return;
+      }
+
+      const isRotated =
+        document.body.classList.contains("pc-stage-mode") &&
+        window.innerWidth < window.innerHeight;
+      const barEl = hit ? hit.closest(".ct-info-bar-wrap[data-cert-idx]") : null;
+
+      // Just entered the Certificates panel (either via direct touchstart or sliding in from left category bars)
+      if (isStart || !inCertPanelRef.current) {
+        inCertPanelRef.current = true;
+        lastDragPosRef.current = { x: clientX, y: clientY };
+        setFocus("right");
+        if (barEl && barEl.dataset.certIdx !== undefined) {
+          const idx = Number(barEl.dataset.certIdx);
+          if (!Number.isNaN(idx)) {
+            setActiveInfoBar(idx);
+          }
+        } else {
+          const rect = panelEl.getBoundingClientRect();
+          const relPos = isRotated
+            ? (rect.right - clientX) / Math.max(1, rect.width)
+            : (clientY - rect.top) / Math.max(1, rect.height);
+          const slot = Math.max(0, Math.min(VISIBLE - 1, Math.floor(relPos * VISIBLE)));
+          const maxIdx = ITEMS[activeCategoryRef.current].bars - 1;
+          setActiveInfoBar(Math.min(maxIdx, scrollOffsetRef.current + slot));
+        }
+        return;
+      }
+
+      // Continuous vertical drag inside the Certificates panel:
+      // Dragging finger downwards (visualDy > 0) selects next certificates & scrolls down;
+      // Dragging finger upwards (visualDy < 0) selects previous certificates & scrolls up.
+      const rawDx = clientX - lastDragPosRef.current.x;
+      const rawDy = clientY - lastDragPosRef.current.y;
+      const visualDy = isRotated ? -rawDx : rawDy;
+
+      const STEP_PX = 18;
+      if (Math.abs(visualDy) >= STEP_PX) {
+        const steps = Math.trunc(visualDy / STEP_PX);
+        stepCertSelection(steps);
+        if (isRotated) {
+          lastDragPosRef.current.x -= steps * STEP_PX;
+          lastDragPosRef.current.y = clientY;
+        } else {
+          lastDragPosRef.current.y += steps * STEP_PX;
+          lastDragPosRef.current.x = clientX;
+        }
+      }
+
+      // Edge auto-scroll when holding finger at the bottom or top of the certificate list
+      const rect = panelEl.getBoundingClientRect();
+      const relY = isRotated
+        ? (rect.right - clientX) / Math.max(1, rect.width)
+        : (clientY - rect.top) / Math.max(1, rect.height);
+
+      if (relY > 0.82) {
+        if (!edgeScrollTimerRef.current) {
+          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(1), 155);
+        }
+      } else if (relY < 0.16) {
+        if (!edgeScrollTimerRef.current) {
+          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(-1), 155);
+        }
+      } else {
+        clearEdgeScroll();
+      }
+    };
+
+    const onWindowTouchStart = (e) => {
+      if (!e.touches || e.touches.length !== 1) return;
+      handleFingerAt(e.touches[0].clientX, e.touches[0].clientY, true);
+    };
+
+    const onWindowTouchMove = (e) => {
+      if (!e.touches || e.touches.length !== 1) return;
+      handleFingerAt(e.touches[0].clientX, e.touches[0].clientY, false);
+    };
+
+    const onWindowTouchEnd = () => {
+      inCertPanelRef.current = false;
+      clearEdgeScroll();
+    };
+
+    window.addEventListener("touchstart", onWindowTouchStart, { passive: true });
+    window.addEventListener("touchmove", onWindowTouchMove, { passive: true });
+    window.addEventListener("touchend", onWindowTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onWindowTouchEnd, { passive: true });
+
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onWindowTouchStart);
+      window.removeEventListener("touchmove", onWindowTouchMove);
+      window.removeEventListener("touchend", onWindowTouchEnd);
+      window.removeEventListener("touchcancel", onWindowTouchEnd);
+      clearEdgeScroll();
     };
   }, [active, navigate, focus, activeInfoBar, selectedCert]);
 
@@ -826,24 +977,7 @@ export default function Certs() {
         };
 
         return mounted ? (
-          <div
-            className="ct-info-panel-container"
-            onTouchStart={(e) => {
-              if (!e.touches || !e.touches[0]) return;
-              touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            }}
-            onTouchMove={(e) => {
-              if (!e.touches || !e.touches[0]) return;
-              const rawDx = e.touches[0].clientX - touchStartPos.current.x;
-              const rawDy = e.touches[0].clientY - touchStartPos.current.y;
-              const isRotated = document.body.classList.contains("pc-stage-mode") && window.innerWidth < window.innerHeight;
-              const dy = isRotated ? -rawDx : rawDy;
-              if (Math.abs(dy) > 28) {
-                scrollByStep(dy < 0 ? 1 : -1);
-                touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-              }
-            }}
-          >
+          <div className="ct-info-panel-container" ref={panelRef}>
             {hasMore && (
 
               <>
@@ -893,6 +1027,7 @@ export default function Certs() {
                   className={`ct-info-bar-wrap${activeInfoBar === realIdx ? " selected" : ""}`}
                   key={`bar-${active}-${realIdx}`}
                   data-p3-hover="true"
+                  data-cert-idx={realIdx}
                   ref={(el) => {
                     if (el) {
                       el.__p3Hover = () => {
