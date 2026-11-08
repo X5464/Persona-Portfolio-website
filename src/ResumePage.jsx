@@ -16,14 +16,15 @@ const PANEL_CONTENT = [
   {
     index: "01",
     title: "EDUCATION LOG",
-    progress: "2/3",
+    progress: "3/4",
     rows: [
-      { index: "01", title: "Jain University: BCA Cybersecurity : 9.08/10.0 SGPA (Sem 4)", status: "IN PROGRESS" },
+      { index: "01", title: "Jain University: BCA Cybersecurity : 9.08/10.0 SGPA (Sem 4) | Overall CGPA: 8.04/10", status: "IN PROGRESS" },
       { index: "02", title: "IIT Mandi: CSE & Adv. Tech Minor (2024 - 2025)", status: "COMPLETED" },
       { index: "03", title: "HM Education Centre: Class 12 CBSE : 70.20%", status: "COMPLETED" },
+      { index: "04", title: "HINDMOTOR HIGH SCHOOL (KG1 to class 10)", status: "COMPLETED" },
     ],
     details: [
-      "* Achieving a 9.08/10.0 SGPA in Semester 4 (2024 - 2027) while balancing dual-enrollment coursework.",
+      "* Achieving a 9.08/10.0 SGPA in Semester 4 and Overall CGPA 8.04/10 (2024 - 2027) while balancing dual-enrollment coursework.",
       "* Merging core computer science fundamentals with hands-on offensive security, digital forensics, and threat intelligence.",
       "* Actively engaged as a Core Team Member (Social Media & Content) in the AWS Cloud Club at Jain University."
     ]
@@ -209,7 +210,7 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
           transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
           pointer-events: all;
           cursor: pointer;
-          touch-action: manipulation;
+          touch-action: none;
         }
         .resume-card-wrap.mounted {
           opacity: 1;
@@ -359,7 +360,7 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
             16px 16px 0 rgba(0, 6, 30, 0.45);
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
-          touch-action: pan-y;
+          touch-action: none;
           scrollbar-width: none;
         }
         .resume-detail-panel::-webkit-scrollbar {
@@ -435,10 +436,11 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
           box-shadow: inset 0 0 0 1px rgba(140, 239, 255, 0.16);
           transition: transform 0.16s ease, background 0.16s ease;
           animation: resume-row-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+          touch-action: none;
         }
         .resume-detail-row.clickable {
           cursor: pointer;
-          touch-action: manipulation;
+          touch-action: none;
         }
         .resume-detail-row.clickable .resume-detail-status {
           background: #c4001a;
@@ -505,112 +507,112 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
         /* Portrait Mobile Stacked Layout (when not in rotated PC stage mode) */
         @media (max-width: 768px) {
           body:not(.pc-stage-mode) .resume-stack {
-            top: 42px;
-            left: 4%;
-            width: 92%;
+            top: 38px;
+            left: 3.5%;
+            width: 93%;
             transform: none;
-            gap: 6px;
+            gap: 4px;
             z-index: 15;
           }
           body:not(.pc-stage-mode) .resume-list-tag {
-            font-size: 36px;
+            font-size: 32px;
             margin: 0 0 2px 4px;
           }
           body:not(.pc-stage-mode) .resume-download-btn {
-            font-size: 16px;
-            padding: 5px 14px;
-            margin-bottom: 4px;
+            font-size: 14px;
+            padding: 4px 12px;
+            margin-bottom: 2px;
           }
           body:not(.pc-stage-mode) .resume-cards-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 6px;
           }
           body:not(.pc-stage-mode) .resume-card {
-            height: 58px;
+            height: 50px;
             box-shadow: 0 4px 0 rgba(5, 13, 59, 0.85);
           }
           body:not(.pc-stage-mode) .resume-card-wrap.active .resume-card {
-            box-shadow: 5px 4px 0 #d63232;
+            box-shadow: 4px 4px 0 #d63232;
             transform: translateX(2px);
           }
           body:not(.pc-stage-mode) .resume-badge {
-            top: 5px;
+            top: 4px;
             left: -4px;
-            width: 30px;
-            height: 36px;
+            width: 26px;
+            height: 32px;
             border-width: 2px;
           }
           body:not(.pc-stage-mode) .resume-badge-text {
-            font-size: 18px;
+            font-size: 16px;
           }
           body:not(.pc-stage-mode) .resume-card-inner {
-            padding: 6px 10px 6px 32px;
+            padding: 5px 8px 5px 28px;
           }
           body:not(.pc-stage-mode) .resume-title {
-            font-size: 20px;
+            font-size: 18px;
             letter-spacing: 0.5px;
           }
           body:not(.pc-stage-mode) .resume-rank {
-            gap: 4px;
+            gap: 3px;
           }
           body:not(.pc-stage-mode) .resume-rank-label {
-            font-size: 12px;
-          }
-          body:not(.pc-stage-mode) .resume-rank-number {
-            font-size: 26px;
-          }
-          body:not(.pc-stage-mode) .resume-subtitle-bar {
-            left: 32px;
-            right: 8px;
-            bottom: 5px;
-            height: 17px;
-            padding: 0 8px;
-          }
-          body:not(.pc-stage-mode) .resume-subtitle {
             font-size: 11px;
           }
+          body:not(.pc-stage-mode) .resume-rank-number {
+            font-size: 22px;
+          }
+          body:not(.pc-stage-mode) .resume-subtitle-bar {
+            left: 28px;
+            right: 6px;
+            bottom: 4px;
+            height: 15px;
+            padding: 0 6px;
+          }
+          body:not(.pc-stage-mode) .resume-subtitle {
+            font-size: 10px;
+          }
           body:not(.pc-stage-mode) .resume-detail-panel {
-            top: 220px;
-            left: 4%;
-            right: 4%;
-            width: 92%;
+            top: 192px;
+            left: 3.5%;
+            right: 3.5%;
+            width: 93%;
             min-height: 0;
-            max-height: calc(100% - 275px);
-            padding: 12px 14px 14px 14px;
+            max-height: calc(100% - 238px);
+            padding: 10px 12px 12px 12px;
             clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
           }
           body:not(.pc-stage-mode) .resume-detail-top {
-            grid-template-columns: auto 34px 1fr auto;
-            min-height: 48px;
-            padding: 0 12px;
+            grid-template-columns: auto 30px 1fr auto;
+            min-height: 42px;
+            padding: 0 10px;
             gap: 8px;
           }
           body:not(.pc-stage-mode) .resume-arcana-card {
-            width: 24px;
-            height: 34px;
+            width: 22px;
+            height: 30px;
           }
-          body:not(.pc-stage-mode) .resume-detail-top-index { font-size: 26px; }
-          body:not(.pc-stage-mode) .resume-detail-top-title { font-size: 22px; }
-          body:not(.pc-stage-mode) .resume-detail-top-progress { font-size: 24px; }
+          body:not(.pc-stage-mode) .resume-detail-top-index { font-size: 24px; }
+          body:not(.pc-stage-mode) .resume-detail-top-title { font-size: 20px; }
+          body:not(.pc-stage-mode) .resume-detail-top-progress { font-size: 22px; }
           body:not(.pc-stage-mode) .resume-detail-list {
-            gap: 6px;
-            margin-top: 10px;
+            gap: 5px;
+            margin-top: 8px;
           }
           body:not(.pc-stage-mode) .resume-detail-row {
-            grid-template-columns: 28px 1fr auto;
-            gap: 8px;
-            padding: 6px 10px;
-            min-height: 40px;
+            grid-template-columns: 24px 1fr auto;
+            gap: 6px;
+            padding: 5px 8px;
+            min-height: 36px;
           }
-          body:not(.pc-stage-mode) .resume-detail-row-title { font-size: 13px; }
-          body:not(.pc-stage-mode) .resume-detail-row-index { font-size: 16px; }
-          body:not(.pc-stage-mode) .resume-detail-status { font-size: 11px; padding: 3px 7px; letter-spacing: 0.5px; }
-          body:not(.pc-stage-mode) .resume-detail-bottom { margin-top: 10px; padding: 10px 12px; }
-          body:not(.pc-stage-mode) .resume-detail-bottom-title { font-size: 20px; margin-bottom: 6px; }
-          body:not(.pc-stage-mode) .resume-detail-bullets { gap: 5px; }
-          body:not(.pc-stage-mode) .resume-detail-bullet { font-size: 14px; }
-          body:not(.pc-stage-mode) .sc-back-btn { bottom: 14px; left: 16px; font-size: 18px; }
+          body:not(.pc-stage-mode) .resume-detail-row-title { font-size: 12px; line-height: 1.15; }
+          body:not(.pc-stage-mode) .resume-detail-row-index { font-size: 15px; }
+          body:not(.pc-stage-mode) .resume-detail-status { font-size: 10px; padding: 3px 6px; letter-spacing: 0.5px; }
+          body:not(.pc-stage-mode) .resume-detail-bottom { margin-top: 8px; padding: 8px 10px; }
+          body:not(.pc-stage-mode) .resume-detail-bottom-title { font-size: 18px; margin-bottom: 4px; }
+          body:not(.pc-stage-mode) .resume-detail-bullets { gap: 4px; }
+          body:not(.pc-stage-mode) .resume-detail-bullet { font-size: 13px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 10px; left: 12px; font-size: 16px; padding: 4px 12px; }
         }
 
         .sc-back-btn {

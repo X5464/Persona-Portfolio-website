@@ -178,7 +178,7 @@ export default function Socials() {
           background: #111;
           cursor: pointer;
           pointer-events: all;
-          touch-action: manipulation;
+          touch-action: none;
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
           box-shadow: 0 6px 24px rgba(0,0,0,0.65);
           z-index: 1;
@@ -295,17 +295,12 @@ export default function Socials() {
           gap: 8px;
         }
 
-        .sc-icon {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 20px;
-          width: 26px;
-          text-align: center;
+        .sc-bar-icon-img {
+          height: 18px;
+          width: auto;
+          object-fit: contain;
           flex-shrink: 0;
-          color: rgba(255,255,255,0.2);
-          transition: color 0.2s ease;
-          user-select: none;
         }
-        .sc-bar-outer.active .sc-icon { color: rgba(0,0,0,0.55); }
 
         .sc-label {
           font-family: 'Bebas Neue', sans-serif;
@@ -518,6 +513,7 @@ export default function Socials() {
           100% { opacity: 1; transform: translateX(0); }
         }
         .sc-info-list-panel {
+          --sc-step: 50px;
           position: fixed;
           top: 150px;
           left: 63%;
@@ -525,14 +521,17 @@ export default function Socials() {
           bottom: 60px;
           z-index: 50;
           pointer-events: none;
+          touch-action: none;
         }
         .sc-info-bar-wrap {
           position: absolute;
+          top: calc(var(--bar-i, 0) * var(--sc-step));
           right: 0;
           left: 0;
           height: 46px;
           background: transparent;
           pointer-events: all;
+          touch-action: none;
           cursor: pointer;
           z-index: 50;
           padding: 0;
@@ -664,64 +663,74 @@ export default function Socials() {
         @media (max-width: 768px) {
           body:not(.pc-stage-mode) .sc-root {
             justify-content: flex-start;
-            padding-top: 46px;
+            padding-top: 38px;
             padding-left: 0;
-            gap: 5px;
+            gap: 4px;
           }
           body:not(.pc-stage-mode) .sc-root.dimmed {
             opacity: 1;
           }
-          body:not(.pc-stage-mode) .sc-bar { width: 95cqw; height: 48px; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 58px; }
-          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 58px; }
-          body:not(.pc-stage-mode) .sc-bar-red { width: 95cqw; height: 48px; }
-          body:not(.pc-stage-mode) .sc-bar-content { padding: 0 12px 0 8px; }
-          body:not(.pc-stage-mode) .sc-role { font-size: 26px; padding: 0 4px 0 2px; }
-          body:not(.pc-stage-mode) .sc-char { width: 82px; max-width: 82px; left: 54px; object-position: 18% center; }
-          body:not(.pc-stage-mode) .sc-main { padding-left: 72px; align-items: flex-start; }
-          body:not(.pc-stage-mode) .sc-icon { font-size: 16px; width: 20px; }
-          body:not(.pc-stage-mode) .sc-label { font-size: 19px; letter-spacing: 1.5px; }
-          body:not(.pc-stage-mode) .sc-stats { padding-right: 6px; gap: 6px; }
-          body:not(.pc-stage-mode) .sc-stat-num { font-size: 15px; }
-          body:not(.pc-stage-mode) .sc-stat-tag { font-size: 7.5px; }
+          body:not(.pc-stage-mode) .sc-bar { width: 96cqw; height: 42px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar { height: 48px; }
+          body:not(.pc-stage-mode) .sc-bar-outer.active .sc-bar-red { height: 48px; }
+          body:not(.pc-stage-mode) .sc-bar-red { width: 96cqw; height: 42px; }
+          body:not(.pc-stage-mode) .sc-bar-content { padding: 0 12px 0 6px; }
+          body:not(.pc-stage-mode) .sc-role { font-size: 22px; width: 42px; padding: 0; justify-content: center; }
+          body:not(.pc-stage-mode) .sc-char { width: 68px; max-width: 68px; left: 44px; object-position: 18% center; }
+          body:not(.pc-stage-mode) .sc-main { padding-left: 60px; align-items: flex-start; min-width: 0; }
+          body:not(.pc-stage-mode) .sc-bar-icon-img { height: 15px; }
+          body:not(.pc-stage-mode) .sc-label { font-size: 17px; letter-spacing: 1.5px; }
+          body:not(.pc-stage-mode) .sc-stats { padding-right: 6px; gap: 6px; flex-shrink: 0; }
+          body:not(.pc-stage-mode) .sc-stat-num { font-size: 14px; }
+          body:not(.pc-stage-mode) .sc-stat-tag { font-size: 7.5px; padding: 1px 3px; background: rgba(4, 12, 38, 0.85); }
 
           body:not(.pc-stage-mode) .sc-right-nav {
-            top: 210px;
+            top: 182px;
             left: 3%;
             right: 3%;
+            height: 36px;
             justify-content: center;
-            background: rgba(8, 16, 46, 0.88);
-            border: 1px solid rgba(142, 245, 255, 0.35);
+            background: rgba(8, 16, 46, 0.92);
+            border: 1px solid rgba(142, 245, 255, 0.45);
             border-radius: 6px;
-            padding: 3px 10px;
+            padding: 2px 10px;
             box-shadow: 4px 4px 0 #c4001a;
           }
-          body:not(.pc-stage-mode) .sc-social-portrait-wrap { width: 30px; height: 30px; }
-          body:not(.pc-stage-mode) .sc-social-arcana { width: 18px; height: 26px; }
-          body:not(.pc-stage-mode) .sc-nav-handle { font-size: 8.5px; }
-          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 16px; padding: 1px 6px; }
-          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-label { font-size: 16px; color: #fff; }
+          body:not(.pc-stage-mode) .sc-social-portrait-wrap { width: 26px; height: 26px; }
+          body:not(.pc-stage-mode) .sc-social-arcana { width: 16px; height: 24px; }
+          body:not(.pc-stage-mode) .sc-nav-handle { font-size: 8px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-btn { font-size: 15px; padding: 1px 6px; }
+          body:not(.pc-stage-mode) .sc-right-nav .sc-nav-label { font-size: 15px; color: #fff; }
 
           body:not(.pc-stage-mode) .sc-info-list-panel {
-            top: 256px;
+            --sc-step: 42px;
+            top: 224px;
             left: 3%;
             right: 3%;
-            bottom: 58px;
+            bottom: 48px;
           }
           body:not(.pc-stage-mode) .sc-info-bar-wrap {
             left: 0;
             right: 0;
-            height: 44px;
+            height: 37px;
           }
-          body:not(.pc-stage-mode) .sc-info-bar-new { left: -12px; height: 50%; }
-          body:not(.pc-stage-mode) .sc-info-bar-text { font-size: 13.5px; letter-spacing: 0.8px; }
-          body:not(.pc-stage-mode) .sc-info-bar-box { font-size: 11px; padding: 0 6px; }
-          body:not(.pc-stage-mode) .sc-info-bar-count { font-size: 13px; margin-right: 8px; }
-          body:not(.pc-stage-mode) .sc-acc-badge { font-size: 10px; padding: 1px 5px; }
+          body:not(.pc-stage-mode) .sc-info-bar-icon {
+            height: 56%;
+            margin-left: 8px;
+          }
+          body:not(.pc-stage-mode) .sc-info-bar-new {
+            top: -5px;
+            left: 2px;
+            bottom: auto;
+            height: 16px;
+          }
+          body:not(.pc-stage-mode) .sc-info-bar-text { font-size: 12.5px; letter-spacing: 0.7px; padding: 0 6px; }
+          body:not(.pc-stage-mode) .sc-info-bar-box { font-size: 10.5px; padding: 0 6px; }
+          body:not(.pc-stage-mode) .sc-info-bar-count { font-size: 12px; margin-right: 8px; }
+          body:not(.pc-stage-mode) .sc-acc-badge { font-size: 9.5px; padding: 1px 5px; }
 
-          body:not(.pc-stage-mode) .sc-footer { bottom: 8px; right: 8px; }
-          body:not(.pc-stage-mode) .sc-footer-row { font-size: 10px; }
-          body:not(.pc-stage-mode) .sc-back-btn { bottom: 12px; left: 14px; font-size: 18px; }
+          body:not(.pc-stage-mode) .sc-footer { display: none; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 10px; left: 12px; font-size: 16px; padding: 4px 12px; }
         }
 
         .sc-back-btn {
@@ -792,7 +801,7 @@ export default function Socials() {
                 <div className="sc-role">{ROLES[i].text}</div>
                 <div className="sc-main">
                   <div className="sc-main-top">
-                    <div className="sc-icon">{item.icon}</div>
+                    <img className="sc-bar-icon-img" src={item.barIcon} width="24" height="24" decoding="async" alt="" />
                     <div className="sc-label">{item.label}</div>
                   </div>
                 </div>
@@ -872,7 +881,7 @@ export default function Socials() {
                   };
                 }
               }}
-              style={{ top: `${i * 50}px`, animationDelay: `${i * 50}ms` }}
+              style={{ "--bar-i": i, animationDelay: `${i * 50}ms` }}
               onClick={() => {
                 setFocus("right");
                 setActiveInfoBar(i);

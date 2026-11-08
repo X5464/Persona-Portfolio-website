@@ -70,13 +70,14 @@ export default function App() {
   const [showRotateHint, setShowRotateHint] = useState(true);
   const [forceLandscape, setForceLandscape] = useState(() => {
     try {
-      const saved = sessionStorage.getItem("force-landscape");
+      const saved = sessionStorage.getItem("p3-force-landscape-v2");
       if (saved !== null) return saved === "1";
     } catch {
       // ignore storage errors
     }
-    // Default to true on mobile so NFC scans open directly in the full 16:9 Persona 3 game view!
-    return true;
+    // Default to Portrait mode on mobile so icons and text are large and easy to read;
+    // users can tap "⟳ ROTATE 90° (PC VIEW)" in the top bar anytime for the 16:9 landscape view.
+    return false;
   });
   const [viewport, setViewport] = useState(() => ({
     w: typeof window !== "undefined" ? window.innerWidth : 1280,
@@ -148,7 +149,7 @@ export default function App() {
     const next = typeof val === "boolean" ? val : !forceLandscape;
     setForceLandscape(next);
     try {
-      sessionStorage.setItem("force-landscape", next ? "1" : "0");
+      sessionStorage.setItem("p3-force-landscape-v2", next ? "1" : "0");
     } catch (e) {
       console.warn("Storage write failed:", e);
     }

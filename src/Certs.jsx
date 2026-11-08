@@ -87,6 +87,7 @@ export default function Certs() {
   const navigate = useNavigate();
   const inCertPanelRef = useRef(false);
   const lastDragPosRef = useRef({ x: 0, y: 0 });
+  const lastStepDirRef = useRef(0);
   const edgeScrollTimerRef = useRef(null);
   const activeCategoryRef = useRef(active);
   const scrollOffsetRef = useRef(scrollOffset);
@@ -251,6 +252,8 @@ export default function Certs() {
       if (isStart || !inCertPanelRef.current) {
         inCertPanelRef.current = true;
         lastDragPosRef.current = { x: clientX, y: clientY };
+        lastStepDirRef.current = 0;
+        clearEdgeScroll();
         setFocus("right");
         if (barEl && barEl.dataset.certIdx !== undefined) {
           const idx = Number(barEl.dataset.certIdx);
@@ -262,7 +265,8 @@ export default function Certs() {
           const relPos = isRotated
             ? (rect.right - clientX) / Math.max(1, rect.width)
             : (clientY - rect.top) / Math.max(1, rect.height);
-          const slot = Math.max(0, Math.min(VISIBLE - 1, Math.floor(relPos * VISIBLE)));
+          const clampedRel = Math.max(0, Math.min(0.99, relPos));
+          const slot = Math.max(0, Math.min(VISIBLE - 1, Math.floor(clampedRel * VISIBLE)));
           const maxIdx = ITEMS[activeCategoryRef.current].bars - 1;
           setActiveInfoBar(Math.min(maxIdx, scrollOffsetRef.current + slot));
         }
@@ -279,6 +283,7 @@ export default function Certs() {
       const STEP_PX = 18;
       if (Math.abs(visualDy) >= STEP_PX) {
         const steps = Math.trunc(visualDy / STEP_PX);
+        lastStepDirRef.current = Math.sign(steps);
         stepCertSelection(steps);
         if (isRotated) {
           lastDragPosRef.current.x -= steps * STEP_PX;
@@ -289,19 +294,19 @@ export default function Certs() {
         }
       }
 
-      // Edge auto-scroll when holding finger at the bottom or top of the certificate list
+      // Edge auto-scroll ONLY in the direction the user is actively dragging when holding at the edge
       const rect = panelEl.getBoundingClientRect();
       const relY = isRotated
         ? (rect.right - clientX) / Math.max(1, rect.width)
         : (clientY - rect.top) / Math.max(1, rect.height);
 
-      if (relY > 0.82) {
+      if (lastStepDirRef.current > 0 && relY > 0.84 && relY <= 1.12) {
         if (!edgeScrollTimerRef.current) {
-          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(1), 155);
+          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(1), 160);
         }
-      } else if (relY < 0.16) {
+      } else if (lastStepDirRef.current < 0 && relY >= -0.05 && relY < 0.14 && scrollOffsetRef.current > 0) {
         if (!edgeScrollTimerRef.current) {
-          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(-1), 155);
+          edgeScrollTimerRef.current = setInterval(() => stepCertSelection(-1), 160);
         }
       } else {
         clearEdgeScroll();
@@ -319,7 +324,10 @@ export default function Certs() {
     };
 
     const onWindowTouchEnd = () => {
-      inCertPanelRef.current = false;
+      setTimeout(() => {
+        inCertPanelRef.current = false;
+      }, 120);
+      lastStepDirRef.current = 0;
       clearEdgeScroll();
     };
 
@@ -391,7 +399,7 @@ export default function Certs() {
           background: #111;
           cursor: pointer;
           pointer-events: all;
-          touch-action: manipulation;
+          touch-action: none;
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
           box-shadow: 0 6px 24px rgba(0,0,0,0.65);
         }
@@ -515,12 +523,21 @@ export default function Certs() {
         }
         .ct-bar-outer.active .ct-stat-num { color: #111111; }
 
+        @keyframes ct-arrow-left {
+          0%, 100% { transform: translateX(0); opacity: 1; }
+          50%       { transform: translateX(-5px); opacity: 0.35; }
+        }
+        @keyframes ct-arrow-right {
+          0%, 100% { transform: translateX(0); opacity: 1; }
+          50%       { transform: translateX(5px); opacity: 0.35; }
+        }
         @keyframes ct-infobar-in {
           0%   { opacity: 0; transform: translateX(40px); }
           60%  { opacity: 1; transform: translateX(-4px); }
           100% { opacity: 1; transform: translateX(0); }
         }
         .ct-info-panel-container {
+          --ct-step: 52px;
           position: fixed;
           top: 155px;
           left: 62%;
@@ -528,14 +545,17 @@ export default function Certs() {
           bottom: 50px;
           z-index: 50;
           pointer-events: all;
+          touch-action: none;
         }
         .ct-info-bar-wrap {
           position: absolute;
+          top: calc(var(--bar-vi, 0) * var(--ct-step));
           right: 0;
           left: 0;
           height: 46px;
           background: transparent;
           pointer-events: all;
+          touch-action: none;
           cursor: pointer;
           z-index: 50;
           animation: ct-infobar-in 0.35s cubic-bezier(0.22,1,0.36,1) both;
@@ -604,6 +624,7 @@ export default function Certs() {
           clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
           flex-shrink: 0;
           user-select: none;
+          animation: ct-arrow-right 1.2s ease-in-out infinite;
         }
         .ct-info-bar-box {
           height: 65%;
@@ -661,14 +682,16 @@ export default function Certs() {
           flex-shrink: 0;
         }
         .ct-nav-label { color: #fff; padding: 0 6px; font-size: 24px; }
-        .ct-arrow { color: #c4001a; display: inline-block; }
+        .ct-arrow { color: #c4001a; display: inline-block; font-size: 20px; }
+        .ct-arrow.left  { animation: ct-arrow-left  0.8s ease-in-out infinite; }
+        .ct-arrow.right { animation: ct-arrow-right 0.8s ease-in-out infinite; }
 
         .ct-scroll-track {
           position: absolute;
           right: 10px;
           top: 0;
           width: 3px;
-          height: ${VISIBLE * 52}px;
+          height: calc(${VISIBLE} * var(--ct-step));
           background: rgba(255,255,255,0.12);
           z-index: 60;
           border-radius: 2px;
@@ -679,10 +702,11 @@ export default function Certs() {
           width: 3px;
           background: #c4001a;
           border-radius: 2px;
-          transition: top 0.25s ease, height 0.25s ease;
+          transition: top 0.2s ease, height 0.2s ease;
         }
         .ct-scroll-hint-below {
           position: absolute;
+          top: calc(${VISIBLE} * var(--ct-step) - 30px);
           left: 0;
           right: 16px;
           pointer-events: all;
@@ -772,67 +796,91 @@ export default function Certs() {
         @media (max-width: 768px) {
           body:not(.pc-stage-mode) .ct-root {
             justify-content: flex-start;
-            padding-top: 46px;
-            gap: 5px;
+            padding-top: 38px;
+            gap: 4px;
           }
           body:not(.pc-stage-mode) .ct-root.dimmed {
             opacity: 1;
           }
-          body:not(.pc-stage-mode) .ct-bar { width: 95cqw; height: 48px; }
-          body:not(.pc-stage-mode) .ct-bar-red { width: 95cqw; height: 48px; }
-          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar { height: 58px; }
-          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar-red { height: 58px; }
-          body:not(.pc-stage-mode) .ct-bar-content { padding: 0 12px 0 8px; }
-          body:not(.pc-stage-mode) .ct-role { font-size: 26px; padding: 0 4px 0 2px; }
-          body:not(.pc-stage-mode) .ct-char { width: 82px; max-width: 82px; left: 54px; object-position: 18% center; }
-          body:not(.pc-stage-mode) .ct-main { padding-left: 72px; align-items: flex-start; }
-          body:not(.pc-stage-mode) .ct-label { font-size: 16px; letter-spacing: 1.5px; }
-          body:not(.pc-stage-mode) .ct-subtitle { font-size: 10px; }
-          body:not(.pc-stage-mode) .ct-stats { padding-right: 6px; gap: 6px; }
-          body:not(.pc-stage-mode) .ct-stat-num { font-size: 15px; }
+          body:not(.pc-stage-mode) .ct-bar { width: 96cqw; height: 42px; }
+          body:not(.pc-stage-mode) .ct-bar-red { width: 96cqw; height: 42px; }
+          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar { height: 48px; }
+          body:not(.pc-stage-mode) .ct-bar-outer.active .ct-bar-red { height: 48px; }
+          body:not(.pc-stage-mode) .ct-bar-content { padding: 0 12px 0 6px; }
+          body:not(.pc-stage-mode) .ct-role { font-size: 22px; width: 42px; padding: 0; justify-content: center; }
+          body:not(.pc-stage-mode) .ct-char { width: 68px; max-width: 68px; left: 44px; object-position: 18% center; }
+          body:not(.pc-stage-mode) .ct-main { padding-left: 60px; align-items: flex-start; min-width: 0; overflow: hidden; }
+          body:not(.pc-stage-mode) .ct-label { font-size: 14.5px; letter-spacing: 1px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+          body:not(.pc-stage-mode) .ct-subtitle { font-size: 9px; letter-spacing: 1px; }
+          body:not(.pc-stage-mode) .ct-stats { padding-right: 6px; gap: 6px; flex-shrink: 0; }
+          body:not(.pc-stage-mode) .ct-stat-tag { font-size: 7.5px; padding: 1px 3px; background: rgba(4, 12, 38, 0.85); }
+          body:not(.pc-stage-mode) .ct-stat-num { font-size: 14px; }
 
           body:not(.pc-stage-mode) .ct-right-nav {
-            top: 212px;
+            top: 182px;
             left: 3%;
             right: 3%;
+            height: 34px;
             justify-content: center;
-            background: rgba(8, 16, 46, 0.88);
-            border: 1px solid rgba(142, 245, 255, 0.35);
+            background: rgba(8, 16, 46, 0.92);
+            border: 1px solid rgba(142, 245, 255, 0.45);
             border-radius: 6px;
-            padding: 3px 10px;
-            font-size: 16px;
+            padding: 2px 10px;
+            font-size: 15px;
             box-shadow: 4px 4px 0 #c4001a;
           }
-          body:not(.pc-stage-mode) .ct-nav-arcana { width: 18px; height: 26px; }
-          body:not(.pc-stage-mode) .ct-nav-radar { width: 24px; height: 24px; }
-          body:not(.pc-stage-mode) .ct-nav-label { font-size: 16px; color: #fff; }
+          body:not(.pc-stage-mode) .ct-nav-arcana { width: 16px; height: 24px; }
+          body:not(.pc-stage-mode) .ct-nav-label { font-size: 15px; color: #fff; letter-spacing: 2px; }
 
           body:not(.pc-stage-mode) .ct-info-panel-container {
-            top: 254px;
+            --ct-step: 40px;
+            top: 222px;
             left: 3%;
             right: 3%;
-            bottom: 58px;
+            bottom: 46px;
           }
           body:not(.pc-stage-mode) .ct-info-bar-wrap {
             left: 0;
-            right: 12px;
-            height: 44px;
+            right: 10px;
+            height: 35px;
           }
-          body:not(.pc-stage-mode) .ct-info-bar-new { left: -12px; height: 50%; }
-          body:not(.pc-stage-mode) .ct-scroll-hint-below,
+          body:not(.pc-stage-mode) .ct-info-bar-icon {
+            height: 56%;
+            margin-left: 8px;
+          }
+          body:not(.pc-stage-mode) .ct-info-bar-new {
+            top: -5px;
+            left: 2px;
+            bottom: auto;
+            height: 16px;
+          }
+          body:not(.pc-stage-mode) .ct-scroll-hint-below {
+            top: calc(${VISIBLE} * var(--ct-step) - 2px);
+            left: 0;
+            right: 10px;
+          }
+          body:not(.pc-stage-mode) .ct-scroll-fade {
+            display: none;
+          }
+          body:not(.pc-stage-mode) .ct-scroll-arrow {
+            background: rgba(8, 16, 46, 0.9);
+            border: 1px solid rgba(142, 245, 255, 0.4);
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-size: 11.5px;
+          }
           body:not(.pc-stage-mode) .ct-scroll-hint-above {
             left: 0;
-            right: 12px;
+            right: 10px;
           }
-          body:not(.pc-stage-mode) .ct-info-bar-text { font-size: 12.5px; letter-spacing: 0.8px; }
-          body:not(.pc-stage-mode) .ct-info-bar-box { font-size: 10.5px; padding: 0 6px; }
-          body:not(.pc-stage-mode) .ct-info-bar-count { font-size: 12.5px; margin-right: 6px; }
-          body:not(.pc-stage-mode) .ct-acc-badge { font-size: 10px; padding: 1px 5px; }
+          body:not(.pc-stage-mode) .ct-info-bar-text { font-size: 12px; letter-spacing: 0.6px; padding: 0 6px; }
+          body:not(.pc-stage-mode) .ct-info-bar-box { font-size: 10px; padding: 0 5px; }
+          body:not(.pc-stage-mode) .ct-info-bar-count { font-size: 11.5px; margin-right: 6px; }
+          body:not(.pc-stage-mode) .ct-acc-badge { font-size: 9.5px; padding: 1px 5px; margin-left: 4px; }
 
-          body:not(.pc-stage-mode) .ct-footer { bottom: 8px; right: 8px; }
-          body:not(.pc-stage-mode) .ct-footer-row { font-size: 10px; }
-          body:not(.pc-stage-mode) .ct-scroll-track { right: 2px; }
-          body:not(.pc-stage-mode) .sc-back-btn { bottom: 12px; left: 14px; font-size: 18px; }
+          body:not(.pc-stage-mode) .ct-footer { display: none; }
+          body:not(.pc-stage-mode) .ct-scroll-track { right: 1px; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 10px; left: 12px; font-size: 16px; padding: 4px 12px; }
         }
 
         .sc-back-btn {
@@ -929,7 +977,7 @@ export default function Certs() {
               selectCategory((i) => (i - 1 + ITEMS.length) % ITEMS.length);
             }}
           >
-            <span className="ct-arrow">◄</span>
+            <span className="ct-arrow left">◄</span>
             <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>LB</span>
           </button>
           <span className="ct-nav-label">{ITEMS[active].label}</span>
@@ -943,7 +991,7 @@ export default function Certs() {
             }}
           >
             <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>RB</span>
-            <span className="ct-arrow">►</span>
+            <span className="ct-arrow right">►</span>
           </button>
         </div>
       )}
@@ -953,8 +1001,8 @@ export default function Certs() {
         const currentItem = ITEMS[active];
         const totalBars = currentItem.bars;
         const visibleLinks = currentItem.links.slice(scrollOffset, scrollOffset + VISIBLE);
-        const thumbH = Math.round((VISIBLE / totalBars) * (VISIBLE * 52));
-        const thumbTop = Math.round((scrollOffset / totalBars) * (VISIBLE * 52));
+        const thumbPctH = Math.round((VISIBLE / totalBars) * 100);
+        const thumbPctTop = Math.round((scrollOffset / totalBars) * 100);
         const hasMore = totalBars > VISIBLE;
 
         const scrollByStep = (dir) => {
@@ -974,13 +1022,13 @@ export default function Certs() {
 
               <>
                 <div className="ct-scroll-track">
-                  <div className="ct-scroll-thumb" style={{ top: `${thumbTop}px`, height: `${thumbH}px` }} />
+                  <div className="ct-scroll-thumb" style={{ top: `${thumbPctTop}%`, height: `${thumbPctH}%` }} />
                 </div>
                 {/* More below indicator */}
                 {scrollOffset + VISIBLE < totalBars && (
                   <div
                     className="ct-scroll-hint-below"
-                    style={{ top: `${VISIBLE * 52 - 34}px`, cursor: "pointer" }}
+                    style={{ cursor: "pointer" }}
                     onClick={(e) => {
                       e.stopPropagation();
                       scrollByStep(1);
@@ -1018,23 +1066,18 @@ export default function Certs() {
                 <div
                   className={`ct-info-bar-wrap${activeInfoBar === realIdx ? " selected" : ""}`}
                   key={`bar-${active}-${realIdx}`}
-                  data-p3-hover="true"
                   data-cert-idx={realIdx}
-                  ref={(el) => {
-                    if (el) {
-                      el.__p3Hover = () => {
-                        setFocus("right");
-                        setActiveInfoBar(realIdx);
-                      };
-                    }
-                  }}
-                  style={{ top: `${vi * 52}px`, animationDelay: `${vi * 40}ms` }}
+                  style={{ "--bar-vi": vi, animationDelay: `${vi * 40}ms` }}
                   onClick={() => {
                     setFocus("right");
                     setActiveInfoBar(realIdx);
                     openCert(link, currentItem.label);
                   }}
-                  onMouseEnter={() => { setFocus("right"); setActiveInfoBar(realIdx); }}
+                  onMouseEnter={() => {
+                    if (inCertPanelRef.current) return;
+                    setFocus("right");
+                    setActiveInfoBar(realIdx);
+                  }}
                 >
                   {currentItem.newBars.includes(realIdx) && (
                     <img className="ct-info-bar-new" src={newsign} width="100" height="100" decoding="async" alt="" />

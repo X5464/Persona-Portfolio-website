@@ -21,7 +21,7 @@ const CHAR_NAMES = ["MAKOTO YUKI // LEADER", "JUNPEI IORI // SEES", "YUKARI TAKE
 const REVEAL_CONTENT = [
   {
     name: "Name : Rajarshi Chakraborty",
-    major: "Major : BCA Cybersecurity (9.08 SGPA) · CS Minor (IIT Mandi)",
+    major: "Major : BCA Cybersecurity (9.08 SGPA · 8.04 CGPA) · CS Minor (IIT Mandi)",
     upper: [
       "Class: Cybersecurity Analyst · PenTester · Digital Forensics",
       "Performing live digital forensics & network log analysis on active",
@@ -569,7 +569,7 @@ export default function AboutMe() {
           background: #111;
           cursor: pointer;
           pointer-events: all;
-          touch-action: manipulation;
+          touch-action: none;
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
           box-shadow: 0 6px 24px rgba(0,0,0,0.65);
           z-index: 1;
@@ -886,9 +886,8 @@ export default function AboutMe() {
             padding: 3px 4px;
           }
 
-          body:not(.pc-stage-mode) .sc-footer { bottom: 8px; right: 8px; }
-          body:not(.pc-stage-mode) .sc-footer-row { font-size: 10px; }
-          body:not(.pc-stage-mode) .sc-back-btn { bottom: 12px; left: 14px; font-size: 18px; }
+          body:not(.pc-stage-mode) .sc-footer { display: none; }
+          body:not(.pc-stage-mode) .sc-back-btn { bottom: 10px; left: 12px; font-size: 16px; padding: 4px 12px; }
         }
 
         .sc-back-btn {

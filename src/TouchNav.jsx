@@ -47,15 +47,21 @@ export default function TouchNav({ forceLandscape = false }) {
       if (!hit) return;
 
       // If the user dragged into the Resume detail panel from anywhere (even starting on left Rank cards),
-      // scroll the detail panel smoothly based on their finger movement
+      // scroll the detail panel smoothly in the direction of finger movement while selecting rows
       if (isMove) {
         const resumePanel = hit.closest(".resume-detail-panel");
         if (resumePanel) {
           const rawDx = clientX - lastX.current;
           const rawDy = clientY - lastY.current;
           const visualDy = forceLandscape ? -rawDx : rawDy;
-          // Dragging finger down/up inside resume panel scrolls it smoothly
-          resumePanel.scrollTop += visualDy * 1.2;
+          resumePanel.scrollTop += visualDy * 1.45;
+        }
+        const aboutBio = hit.closest(".ab-reveal-upper-bar");
+        if (aboutBio) {
+          const rawDx = clientX - lastX.current;
+          const rawDy = clientY - lastY.current;
+          const visualDy = forceLandscape ? -rawDx : rawDy;
+          aboutBio.scrollTop += visualDy * 1.25;
         }
       }
 
@@ -131,7 +137,8 @@ export default function TouchNav({ forceLandscape = false }) {
       const absDy = Math.abs(dy);
 
       if (absDy > absDx && absDy > SWIPE_THRESHOLD) {
-        dispatch(dy < 0 ? "ArrowDown" : "ArrowUp");
+        // Dragging finger downwards (dy > 0) moves selection Down; dragging upwards (dy < 0) moves selection Up
+        dispatch(dy > 0 ? "ArrowDown" : "ArrowUp");
       } else if (absDx > absDy && absDx > SWIPE_THRESHOLD) {
         dispatch(dx < 0 ? "ArrowLeft" : "ArrowRight");
       }

@@ -70,6 +70,7 @@ export default function P3Menu({ onNavigate }) {
         .p3-row {
           position: relative;
           cursor: pointer;
+          touch-action: none;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -217,14 +218,16 @@ export default function P3Menu({ onNavigate }) {
 
         @media (max-width: 768px) {
           body:not(.pc-stage-mode) .p3-menu {
-            padding: 20px 12px;
-            transform: scale(0.62);
+            padding: 16px 12px;
+            margin-top: 32px;
+            transform: scale(0.66);
             transform-origin: center center;
           }
           body:not(.pc-stage-mode) .p3-name-tag {
-            font-size: 52px;
-            top: 46px;
-            left: 12px;
+            font-size: 44px;
+            top: 44px;
+            left: 14px;
+            transform: rotate(10deg);
           }
           body:not(.pc-stage-mode) .p3-hint {
             bottom: 14px;
