@@ -27,7 +27,7 @@ main {
   container-type: size;
 }
 
-#menu-screen video {
+#menu-screen > video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -41,14 +41,14 @@ main {
 
 /* On portrait mobile (when not in rotated PC stage mode), position each background video directly on the Persona 3 protagonist */
 @media (max-width: 768px) and (orientation: portrait) {
-  body:not(.pc-stage-mode) #menu-screen video {
+  body:not(.pc-stage-mode) #menu-screen > video {
     object-position: 18% center;
   }
-  body:not(.pc-stage-mode) #menu-screen video.subpage-video-right,
-  body:not(.pc-stage-mode) #menu-screen video.resume-bg-video {
+  body:not(.pc-stage-mode) #menu-screen > video.subpage-video-right,
+  body:not(.pc-stage-mode) #menu-screen > video.resume-bg-video {
     object-position: 78% center;
   }
-  body:not(.pc-stage-mode) #menu-screen video.subpage-video-bottom-right {
+  body:not(.pc-stage-mode) #menu-screen > video.subpage-video-bottom-right {
     object-position: 76% 85%;
   }
 }

@@ -34,33 +34,35 @@ const PANEL_CONTENT = [
     progress: "5/5",
     rows: [
       { index: "01", title: "Security Domains (PenTesting, Forensics, OSINT, CTI, CVE Triage)", status: "MASTERED" },
-      { index: "02", title: "Offensive Tools (Nmap, Metasploit, Burp Suite, Kali, Hash Cracking)", status: "MASTERED" },
-      { index: "03", title: "Forensics & Monitoring (Wireshark, SIEM, VirusTotal, AbuseIPDB)", status: "ACTIVE" },
-      { index: "04", title: "Programming & Cloud (Python, C, REST APIs, Git, AWS, Sarvam API)", status: "ACTIVE" },
-      { index: "05", title: "Frameworks & Defense (OWASP Top 10, IAM, Linux, Zero-Day Response)", status: "EQUIPPED" }
+      { index: "02", title: "Offensive Tools (Nmap, Metasploit, Burp Suite, Kali, SleuthKit, Tor OpSec)", status: "MASTERED" },
+      { index: "03", title: "Forensics & Threat Intel (Wireshark, SIEM, VirusTotal v3, AbuseIPDB v2)", status: "ACTIVE" },
+      { index: "04", title: "AI & AR Engineering (PyTorch, SignDETR, MediaPipe 3D, WebGL, Gemini AI)", status: "ACTIVE" },
+      { index: "05", title: "Full-Stack & Cloud (Python, Flask, React 18, TypeScript, Node, MongoDB, AWS)", status: "EQUIPPED" }
     ],
     details: [
-      "* Hands-on expertise in Network Log Analysis, Vulnerability Assessment, Phishing Simulation, and Chain-of-Custody Logging.",
-      "* Builds custom Python security tooling: TCP port scanners, subdomain enumerators, MD5/SHA-1/SHA-256 hash crackers, and Tor-routed OSINT suites.",
-      "* Experienced in CTI dashboards, IP reputation scoring, and live digital forensics."
+      "* Hands-on expertise in Network Log Analysis, Vulnerability Assessment, Phishing Simulation, and Legal Chain-of-Custody Audit Logging.",
+      "* Builds custom Python & TypeScript security suites: 18-tool LEA OSINT consoles, TCP port scanners, CT-log subdomain finders, AES-256 PDF crackers, and on-device PyTorch/WebGL AI systems.",
+      "* Experienced in real-time CTI dashboards (60+ VirusTotal engines & AbuseIPDB), Fernet encrypted vaults, and live digital forensics."
     ]
   },
   {
     index: "03",
     title: "PROJECTS DEPLOYED",
-    progress: "6/6",
+    progress: "8/8",
     rows: [
-      { index: "01", title: "SENTINEL AI (CTI Platform: VirusTotal & AbuseIPDB Enrichment)", status: "▶ LIVE DEMO", href: "https://sentinel-frontend-rpzi.onrender.com" },
-      { index: "02", title: "ARGUS OSINT (18-Tool OSINT & Forensics Suite + Tor Routing)", status: "▶ REPO", href: "https://github.com/X5464/argus-osint" },
-      { index: "03", title: "VARS AGRI NOVA (IoT Hardware + Sarvam API Voice Alerts)", status: "1ST & 3RD PLACE" },
-      { index: "04", title: "SPIDERWEB (Unified 6-Tool Offensive Security Platform)", status: "▶ REPO", href: "https://github.com/X5464/Spiderweb" },
-      { index: "05", title: "INFOSEC PORT SCANNER (Custom TCP Vulnerability Scanner)", status: "▶ REPO", href: "https://github.com/X5464/InfoSec-Port-Scanner" },
-      { index: "06", title: "AD SHIELD PRO (Privacy & Ad-Blocking Browser Extension)", status: "▶ REPO", href: "https://github.com/X5464/Ad-Shield-Pro" }
+      { index: "01", title: "SENTINEL AI (Enterprise AI Scam Defense & CTI Engine — 51+ Patterns)", status: "▶ REPO / LIVE", href: "https://github.com/X5464/sentinel-ai" },
+      { index: "02", title: "ARGUS OSINT (18-Tool LEA OSINT & Forensics Suite + Tor OpSec)", status: "▶ REPO", href: "https://github.com/X5464/argus-osint" },
+      { index: "03", title: "ML SIGN LANGUAGE (On-Device SignDETR + Deep ISL 3D AR HUD)", status: "▶ REPO", href: "https://github.com/X5464/ml-sign-lang" },
+      { index: "04", title: "SPIDERWEB (Full-Stack 6-Tool Offensive Cybersecurity Suite)", status: "▶ REPO", href: "https://github.com/X5464/Spiderweb" },
+      { index: "05", title: "CTI DASHBOARD (VirusTotal 60+ Engines & AbuseIPDB Threat Portal)", status: "▶ REPO / LIVE", href: "https://github.com/X5464/Cti-dashboard" },
+      { index: "06", title: "FLORAL AURA & INVISIBILITY CLOAK (60FPS WebGL + MediaPipe 3D AR)", status: "▶ REPO / LIVE", href: "https://github.com/X5464/floral-aura" },
+      { index: "07", title: "IC-POKEMON-GAME (Gamified Indian Constitution AI RPG)", status: "▶ REPO", href: "https://github.com/X5464/IC-pokemon-game" },
+      { index: "08", title: "VARS AGRI NOVA (IoT Hardware + Sarvam API — 1st & 3rd Place Winner)", status: "AWARD WINNER" }
     ],
     details: [
-      "* ARGUS OSINT: Local-first intelligence suite with CLI/GUI consoles, 18 OSINT & forensics tools, automated Tor routing, encrypted key vault & chain-of-custody logging.",
-      "* VARS Agri Nova: 1st Place at Research Horizons 2025 & 3rd Place overall among 1,000+ teams at JAIN Launchpad 2025 Glitch Pitch.",
-      "* Completed 60-hour CTF endurance event at Hck4G CTF Con 2025 International (Melbourne, Australia)."
+      "* Sentinel AI (sentinel-ai-lilac.vercel.app) & CTI Dashboard (cti-dashboard-frontend.onrender.com): Real-time 51+ pattern scam defense, VirusTotal v3 (60+ engines) & AbuseIPDB v2 threat hunting.",
+      "* ARGUS OSINT & Spiderweb: 18-tool LEA OSINT/SleuthKit forensics suite with Tor routing & Fernet vault + 6-tool React/Flask security toolkit (TCP Scanner, Subdomain CT-Log, AES-256 PDF & Hash Cracker).",
+      "* AI & WebGL AR: Sub-30ms PyTorch SignDETR + 5-Layer Deep ISL 3D Holographic HUD (ml-sign-lang), 60FPS WebGL + MediaPipe AR Studio (floral-aura.vercel.app), & Gemini AI RPG (IC-pokemon-game)."
     ]
   },
   {

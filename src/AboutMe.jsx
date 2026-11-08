@@ -46,15 +46,15 @@ const REVEAL_CONTENT = [
     lower: "Fun Fact About Me",
   },
   {
-    name: "Offensive & Defensive Security Arsenal",
-    major: "Sentinel AI · ARGUS OSINT (18 Tools) · VARS Agri Nova · Spiderweb",
+    name: "Offensive Security & AI/AR Architecture",
+    major: "Sentinel AI · ARGUS OSINT · ML Sign Lang AR · Spiderweb · CTI · Floral Aura",
     upper: [
-      "Signature Security Architecture",
-      "(Threat Intel): Built Sentinel AI, a real-time CTI platform",
-      "integrating VirusTotal & AbuseIPDB for IP reputation scoring.",
-      "(OSINT & Forensics): Built ARGUS OSINT with 18 tools, automated",
-      "Tor routing, encrypted key vault & chain-of-custody logging.",
-      "(IoT & Offensive): Built VARS Agri Nova (Sarvam API) & Spiderweb."
+      "Signature Security & AI Architecture",
+      "(Threat Intel): Built Sentinel AI (51+ scam patterns) & CTI",
+      "Dashboard integrating VirusTotal (60+ engines) & AbuseIPDB.",
+      "(OSINT & Offensive): Built ARGUS OSINT (18 LEA tools, SleuthKit,",
+      "Tor OpSec, Fernet vault) & Spiderweb (6-tool security suite).",
+      "(AI & WebGL AR): PyTorch SignDETR 3D AR HUD, Floral Aura & IC-RPG."
     ],
     lower: "Wired Fact About Me",
   },
@@ -92,12 +92,12 @@ const ITEMS = [
   {
     id: "wiredfact",
     label: "WIRED FACT ABOUT ME",
-    subtitle: "SECURITY TOOLS",
+    subtitle: "SECURITY & AI",
     barIcon: icon3,
     isNew: true,
     stats: [
-      { tag: "TLS", value: "18+", color: "#ff2a6d" },
-      { tag: "PRJ", value: "06", color: "#bf94ff" },
+      { tag: "TLS", value: "24+", color: "#ff2a6d" },
+      { tag: "PRJ", value: "08", color: "#bf94ff" },
     ],
   },
 ];

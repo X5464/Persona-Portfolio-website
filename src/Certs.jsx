@@ -932,14 +932,6 @@ export default function Certs() {
             <span className="ct-arrow">◄</span>
             <span style={{ background: "#fff", border: "1px solid #000", padding: "1px 8px", fontSize: "14px", color: "#111" }}>LB</span>
           </button>
-          <video
-            className="ct-nav-radar"
-            src={circleRadar}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
           <span className="ct-nav-label">{ITEMS[active].label}</span>
           <img className="ct-nav-arcana" src={arcanaCard} width="24" height="34" decoding="async" alt="" />
           <button
