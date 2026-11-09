@@ -4,6 +4,7 @@ import main2 from "./assets/main2.mp4";
 import main2Poster from "./assets/main2_poster.jpg";
 import arcanaCard from "./assets/card.png";
 import heroIcon from "./assets/hero.png";
+import SmartVideo from "./SmartVideo";
 
 const ITEMS = [
   { id: "i", badge: "I", title: "EDUCATION", subtitle: "ACADEMIC / THEORETICAL BASE", rank: 1 },
@@ -111,29 +112,12 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
 
   return (
     <div id="menu-screen" style={{ background: "#0047FF" }}>
-      <video
+      <SmartVideo
         className="resume-bg-video"
         src={src}
         poster={poster}
-        autoPlay
-        loop
-        muted
-        playsInline
-        disablePictureInPicture
-        controlsList="nodownload"
-        onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
       />
       <style>{`
-        .resume-bg-video {
-          clip-path: circle(0 at 50% 50%);
-          animation: resume-entry-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes resume-entry-reveal {
-          from { clip-path: circle(0 at 50% 50%); }
-          to { clip-path: circle(150% at 50% 50%); }
-        }
-
         .resume-overlay {
           position: absolute;
           inset: 0;
@@ -352,8 +336,7 @@ export default function ResumePage({ src = main2, poster = main2Poster }) {
           max-height: 87%;
           z-index: 12;
           padding: 18px 22px 20px 22px;
-          background: linear-gradient(180deg, rgba(12, 24, 92, 0.68) 0%, rgba(6, 12, 54, 0.74) 100%);
-          backdrop-filter: blur(3px);
+          background: linear-gradient(180deg, rgba(10, 22, 86, 0.86) 0%, rgba(5, 11, 50, 0.90) 100%);
           clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
           box-shadow:
             inset 0 0 0 1px rgba(133, 244, 255, 0.22),

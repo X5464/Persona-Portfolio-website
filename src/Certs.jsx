@@ -11,6 +11,7 @@ import icon2 from "./assets/icon2.png";
 import icon3 from "./assets/icon3.png";
 import arcanaCard from "./assets/card.png";
 import circleRadar from "./assets/circletransition.mp4";
+import SmartVideo from "./SmartVideo";
 
 const CHARS = [char1, char2, char3];
 
@@ -342,17 +343,11 @@ export default function Certs() {
 
   return (
     <div id="menu-screen">
-      <video 
+      <SmartVideo
         className="subpage-video-bottom-right"
-        src={bgVideo} 
-        poster={bgPoster} 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
-        disablePictureInPicture
-        controlsList="nodownload"
-        onCanPlay={(e) => e.currentTarget.play()}
+        src={bgVideo}
+        poster={bgPoster}
+        preload="auto"
       />
       <style>{`
         .ct-root {
@@ -413,12 +408,15 @@ export default function Certs() {
         .ct-bar-fill {
           position: absolute;
           inset: 0;
+          width: 100%;
           background: #ffffff;
-          clip-path: polygon(100% 0, 100% 0, calc(100% - 32px) 100%, calc(100% - 32px) 100%);
-          transition: clip-path 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+          clip-path: polygon(22% 0, 100% 0, calc(100% - 14px) 100%, calc(22% + 138px) 100%);
+          transform: translateX(85%);
+          will-change: transform;
+          transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .ct-bar-outer.active .ct-bar-fill {
-          clip-path: polygon(22% 0, 100% 0, calc(100% - 14px) 100%, calc(22% + 138px) 100%);
+          transform: translateX(0);
         }
         .ct-bar::after {
           content: '';
@@ -1058,9 +1056,9 @@ export default function Certs() {
               return (
                 <div
                   className={`ct-info-bar-wrap${activeInfoBar === realIdx ? " selected" : ""}`}
-                  key={`bar-${active}-${realIdx}`}
+                  key={`slot-${active}-${vi}`}
                   data-cert-idx={realIdx}
-                  style={{ "--bar-vi": vi, animationDelay: `${vi * 40}ms` }}
+                  style={{ "--bar-vi": vi, animationDelay: `${vi * 35}ms` }}
                   onClick={() => {
                     setFocus("right");
                     setActiveInfoBar(realIdx);

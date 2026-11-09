@@ -40,7 +40,6 @@ main {
   height: 100%;
   object-fit: cover;
   object-position: center center;
-  filter: contrast(1.04) saturate(1.05);
   transform: translateZ(0);
   backface-visibility: hidden;
 }
@@ -90,8 +89,7 @@ main {
   cursor: pointer;
   pointer-events: all;
   clip-path: polygon(12% 0, 100% 0, 88% 100%, 0 100%);
-  transition: all 0.2s ease;
-  backdrop-filter: blur(5px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   text-transform: uppercase;
   white-space: nowrap;

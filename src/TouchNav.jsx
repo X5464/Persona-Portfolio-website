@@ -14,6 +14,8 @@ export default function TouchNav({ forceLandscape = false }) {
   const ignoreSwipe = useRef(false);
   const lastHoveredEl = useRef(null);
   const hoveredCount = useRef(0);
+  const rafId = useRef(null);
+  const pendingTouch = useRef(null);
 
   useEffect(() => {
     const dispatch = (key) => {
@@ -108,12 +110,25 @@ export default function TouchNav({ forceLandscape = false }) {
       if (totalMove.current > DRAG_CLICK_GUARD_PX) {
         wasTouchDrag.current = true;
       }
-      triggerTouchHover(t.clientX, t.clientY, true);
-      lastX.current = t.clientX;
-      lastY.current = t.clientY;
+      pendingTouch.current = { x: t.clientX, y: t.clientY };
+      if (!rafId.current) {
+        rafId.current = requestAnimationFrame(() => {
+          rafId.current = null;
+          if (!pendingTouch.current) return;
+          const { x, y } = pendingTouch.current;
+          triggerTouchHover(x, y, true);
+          lastX.current = x;
+          lastY.current = y;
+        });
+      }
     };
 
     const onTouchEnd = (e) => {
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+        rafId.current = null;
+      }
+      pendingTouch.current = null;
       if (wasTouchDrag.current) {
         dragGuardTimeout.current = setTimeout(() => {
           wasTouchDrag.current = false;
@@ -165,6 +180,7 @@ export default function TouchNav({ forceLandscape = false }) {
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("click", onClickCapture, { capture: true });
       if (dragGuardTimeout.current) clearTimeout(dragGuardTimeout.current);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
     };
   }, [forceLandscape]);
 

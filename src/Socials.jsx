@@ -13,6 +13,7 @@ import mainm from "./assets/mainm.jpeg";
 import mainm2 from "./assets/mainm2.jpeg";
 import mainf from "./assets/mainf.jpeg";
 import arcanaCard from "./assets/card.png";
+import SmartVideo from "./SmartVideo";
 
 const CHARS = [char1, char2, char3];
 const MAIN_IMAGES = [mainm, mainm2, mainf];
@@ -141,16 +142,11 @@ export default function Socials() {
 
   return (
     <div id="menu-screen">
-      <video 
+      <SmartVideo
         className="subpage-video-bottom-right"
         src={bgVideo}
         poster={bgPoster}
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
         preload="auto"
-        onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
       />
       <style>{`
         .sc-root {
@@ -214,18 +210,20 @@ export default function Socials() {
         }
         .sc-bar-outer.active .sc-bar-red { opacity: 1; }
 
-        /* white fill — skewed parallelogram on the right 25% */
+        /* white fill — skewed parallelogram on the right, GPU-composited slide */
         .sc-bar-fill {
           position: absolute;
           inset: 0;
           width: 100%;
           background: #ffffff;
-          clip-path: polygon(100% 0, 100% 0, calc(100% - 32px) 100%, calc(100% - 32px) 100%);
-          transition: clip-path 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+          clip-path: polygon(22% 0, 100% 0, calc(100% - 14px) 100%, calc(22% + 138px) 100%);
+          transform: translateX(85%);
+          will-change: transform;
+          transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
           z-index: 0;
         }
         .sc-bar-outer.active .sc-bar-fill {
-          clip-path: polygon(22% 0, 100% 0, calc(100% - 14px) 100%, calc(22% + 138px) 100%);
+          transform: translateX(0);
         }
 
         /* shade on the left edge of the white fill */

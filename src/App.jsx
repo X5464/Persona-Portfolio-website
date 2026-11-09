@@ -1,12 +1,12 @@
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect, lazy, Suspense } from 'react'
-import { AnimatePresence } from 'framer-motion'
 import menuVideo from './assets/Mainn.mp4'
 import menuPoster from './assets/Mainn_poster.jpg'
 import P3Menu from './P3Menu'
 import PageTransition from './PageTransition'
 import WelcomeModal from './WelcomeModal'
 import TouchNav from './TouchNav'
+import SmartVideo from './SmartVideo'
 import './App.css'
 
 const ResumePage = lazy(() => import('./ResumePage'))
@@ -19,13 +19,9 @@ function MenuScreen() {
 
   return (
     <div id="menu-screen">
-      <video 
+      <SmartVideo
         src={menuVideo}
         poster={menuPoster}
-        autoPlay 
-        loop 
-        muted 
-        playsInline
         preload="auto"
         fetchPriority="high"
       />
@@ -52,29 +48,27 @@ function AnimatedRoutes() {
   const location = useLocation()
   return (
     <Suspense fallback={<div style={{ width: '100%', height: '100%', background: '#08102e' }} />}>
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={
-            <PageTransition><MenuScreen /></PageTransition>
-          } />
-          <Route path="/about" element={
-            <PageTransition variant="about"><AboutMe /></PageTransition>
-          } />
-          <Route path="/resume" element={
-            <PageTransition><ResumePage /></PageTransition>
-          } />
-          <Route path="/socials" element={
-            <PageTransition variant="socials"><Socials /></PageTransition>
-          } />
-          <Route path="/certs" element={
-            <PageTransition variant="socials"><Certs /></PageTransition>
-          } />
-          <Route path="/github" element={<GithubRedirect />} />
-          <Route path="*" element={
-            <PageTransition><MenuScreen /></PageTransition>
-          } />
-        </Routes>
-      </AnimatePresence>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={
+          <PageTransition><MenuScreen /></PageTransition>
+        } />
+        <Route path="/about" element={
+          <PageTransition variant="about"><AboutMe /></PageTransition>
+        } />
+        <Route path="/resume" element={
+          <PageTransition variant="resume"><ResumePage /></PageTransition>
+        } />
+        <Route path="/socials" element={
+          <PageTransition variant="socials"><Socials /></PageTransition>
+        } />
+        <Route path="/certs" element={
+          <PageTransition variant="socials"><Certs /></PageTransition>
+        } />
+        <Route path="/github" element={<GithubRedirect />} />
+        <Route path="*" element={
+          <PageTransition><MenuScreen /></PageTransition>
+        } />
+      </Routes>
     </Suspense>
   )
 }
@@ -110,25 +104,35 @@ export default function App() {
     };
   }, []);
 
-  // Ensure background videos always play on iOS Safari & Android Chrome
+  // Ensure background videos always autoplay immediately on iOS/macOS Safari & Chrome
   useEffect(() => {
     const playAllVideos = () => {
       document.querySelectorAll("video").forEach((v) => {
+        v.defaultMuted = true;
         v.muted = true;
         v.playsInline = true;
-        v.setAttribute("playsinline", "");
-        v.setAttribute("webkit-playsinline", "");
+        if (!v.hasAttribute("muted")) v.setAttribute("muted", "");
+        if (!v.hasAttribute("playsinline")) v.setAttribute("playsinline", "");
+        if (!v.hasAttribute("webkit-playsinline")) v.setAttribute("webkit-playsinline", "");
+        if (!v.hasAttribute("autoplay")) v.setAttribute("autoplay", "");
         if (v.paused) {
           v.play().catch(() => {});
         }
       });
     };
     playAllVideos();
+    const obs = new MutationObserver(playAllVideos);
+    obs.observe(document.body, { childList: true, subtree: true });
     window.addEventListener("touchstart", playAllVideos, { passive: true });
+    window.addEventListener("pointermove", playAllVideos, { passive: true });
     window.addEventListener("click", playAllVideos, { passive: true });
+    window.addEventListener("keydown", playAllVideos, { passive: true });
     return () => {
+      obs.disconnect();
       window.removeEventListener("touchstart", playAllVideos);
+      window.removeEventListener("pointermove", playAllVideos);
       window.removeEventListener("click", playAllVideos);
+      window.removeEventListener("keydown", playAllVideos);
     };
   }, []);
 
@@ -139,7 +143,7 @@ export default function App() {
       import('./ResumePage');
       import('./Socials');
       import('./Certs');
-    }, 2200);
+    }, 800);
     return () => {
       clearTimeout(timer);
       clearTimeout(prefetchTimer);

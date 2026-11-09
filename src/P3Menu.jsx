@@ -22,8 +22,11 @@ export default function P3Menu({ onNavigate }) {
   const [animKey, setAnimKey] = useState(0);
 
   const activate = (idx) => {
-    setActive(idx);
-    setAnimKey(k => k + 1);
+    setActive((prev) => {
+      if (prev === idx) return prev;
+      setAnimKey((k) => k + 1);
+      return idx;
+    });
   };
 
   useEffect(() => {
@@ -88,14 +91,14 @@ export default function P3Menu({ onNavigate }) {
         .p3-glow {
           position: absolute;
           top: 50%; left: 50%;
-          transform: translate(-50%, -50%);
-          width: 120%; height: 200%;
-          background: radial-gradient(ellipse at center, rgba(255,100,180,0.35) 0%, transparent 70%);
-          filter: blur(18px);
+          transform: translate(-50%, -50%) translateZ(0);
+          width: 135%; height: 220%;
+          background: radial-gradient(ellipse at center, rgba(255,100,180,0.34) 0%, rgba(255,100,180,0.12) 45%, transparent 72%);
           z-index: 0;
-          pointer-events: all;
+          pointer-events: none;
           opacity: 0;
-          transition: opacity 0.3s ease;
+          will-change: opacity;
+          transition: opacity 0.25s ease;
         }
         .p3-row.active .p3-glow { opacity: 1; }
 
@@ -119,7 +122,8 @@ export default function P3Menu({ onNavigate }) {
           transform-origin: left center;
           background: rgba(235, 80, 120, 0.85);
           z-index: 1;
-          pointer-events: all;
+          pointer-events: none;
+          will-change: transform;
           transform: translateY(-40%) translateX(-12px) scaleX(0);
           transition: transform 0.18s ease;
         }
@@ -133,8 +137,9 @@ export default function P3Menu({ onNavigate }) {
           transform-origin: left center;
           background: #ffffff;
           z-index: 2;
+          will-change: transform;
           transition: transform 0.22s cubic-bezier(0.22,1,0.36,1);
-          pointer-events: all;
+          pointer-events: none;
         }
 
         .p3-label-wrap {
